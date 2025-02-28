@@ -1,0 +1,4 @@
+name: polaris-uhc
+version: '1.0-SNAPSHOT'
+main: us.polarismc.polarisuhc.Main
+api-version: '1.21'
