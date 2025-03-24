@@ -116,7 +116,7 @@
         <dependency>
             <groupId>com.github.polaris-mc</groupId>
             <artifactId>polaris-api</artifactId>
-            <version>master-db196c1e49-1</version>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 </project>
