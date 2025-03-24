@@ -113,5 +113,10 @@
             <artifactId>HikariCP</artifactId>
             <version>6.2.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.polaris-mc</groupId>
+            <artifactId>polaris-api</artifactId>
+            <version>master-db196c1e49-1</version>
+        </dependency>
     </dependencies>
 </project>
