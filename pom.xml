@@ -77,7 +77,7 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.21.4-R0.1-SNAPSHOT</version>
+            <version>1.21.5-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -114,9 +114,9 @@
             <version>6.2.1</version>
         </dependency>
         <dependency>
-            <groupId>com.github.polaris-mc</groupId>
+            <groupId>us.polarismc</groupId>
             <artifactId>polaris-api</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </dependency>
     </dependencies>
 </project>
