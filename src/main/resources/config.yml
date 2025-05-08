@@ -1,0 +1,61 @@
+# Please read the notes before editing this file :)
+
+# Default worlds configurations
+worlds:
+  overworld: uhc
+  nether: uhc_nether
+  end: uhc_the_end
+  arena: arena
+  lobby: lobby
+
+# Default toggleable configurations
+toggle:
+  advancements: false
+  antiburn: true
+  autols: true
+  bookshelves: false
+  customcrafts: true
+  end: false
+  explosives: true
+  horses: true
+  mobs: false
+  nether: false
+  notch: true
+  pots: false
+  starterbooks: true
+  stats: true
+  strengthnerf: true
+  trades: true
+
+# Default durations
+duration: # in minutes
+  pvp: 15
+  meetup: 15
+  finalheal: -1
+
+# Default border configurations
+border:
+  overworld: 2000
+  nether: 1500
+  meetup: 200
+  nethermeetup: 100
+  tpborder: true
+  timer: 5 # minutes
+  speed: 2 # blocks per minute
+  borderlist:
+    - 1000
+    - 500
+    - 200
+  netherborderlist:
+    - 750
+    - 375
+    - 150
+
+# Default rates
+rates:
+  xpkill: 3 # levels
+  flint: 30 # %
+  apple: 2 # %
+  glass: 40 # %
+
+# Default ???

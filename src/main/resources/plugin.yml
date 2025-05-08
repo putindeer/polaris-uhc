@@ -1,4 +1,12 @@
 name: polaris-uhc
-version: '1.0-SNAPSHOT'
+version: ${project.version}
 main: us.polarismc.polarisuhc.Main
 api-version: '1.21'
+authors: [putindeer, tmpst]
+description: UHC Plugin for PolarisMC
+website: https://github.com/polaris-mc
+
+commands:
+  createworld:
+    description: Command used for creating worlds [overworld, nether, end]
+    permission: uhc.staff

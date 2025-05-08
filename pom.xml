@@ -6,7 +6,7 @@
 
     <groupId>us.polarismc</groupId>
     <artifactId>polarisuhc</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0-dev</version>
     <packaging>jar</packaging>
 
     <name>polarisuhc</name>
@@ -71,6 +71,10 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+        <repository>
+            <id>codemc</id>
+            <url>https://repo.codemc.io/repository/maven-public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -114,9 +118,15 @@
             <version>6.2.1</version>
         </dependency>
         <dependency>
+            <groupId>org.popcraft</groupId>
+            <artifactId>chunky-common</artifactId>
+            <version>1.3.38</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>us.polarismc</groupId>
             <artifactId>polaris-api</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.3</version>
         </dependency>
     </dependencies>
 </project>
