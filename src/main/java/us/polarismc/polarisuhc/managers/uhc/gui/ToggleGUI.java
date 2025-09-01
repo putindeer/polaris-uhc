@@ -1,13 +1,11 @@
 package us.polarismc.polarisuhc.managers.uhc.gui;
 
 import fr.mrmicky.fastinv.FastInv;
-import io.papermc.paper.datacomponent.DataComponentTypes;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.potion.PotionType;
-import us.polarismc.api.util.builder.ItemBuilder;
+import me.putindeer.api.util.builder.ItemBuilder;
 import us.polarismc.polarisuhc.Main;
 import us.polarismc.polarisuhc.enums.ToggleSetting;
 
@@ -18,7 +16,7 @@ public class ToggleGUI extends FastInv {
     private final Player player;
 
     public ToggleGUI(Player player, Main plugin) {
-        super(owner -> Bukkit.createInventory(owner, 54, plugin.utils.chat("<blue>[lang]toggle.gui_title[/lang]</blue>", player)));
+        super(owner -> Bukkit.createInventory(owner, 54, plugin.utils.chat("<blue>[lang]toggle.gui_title[/lang]</blue>")));
         this.plugin = plugin;
         this.player = player;
 
@@ -27,7 +25,7 @@ public class ToggleGUI extends FastInv {
         setItem(49, plugin.uhc.goBack(player), e -> new UHCGUI(player, plugin));
 
         addToggle(2, ToggleSetting.BOOKSHELVES, ib -> {});
-        addToggle(3, ToggleSetting.AUTOLS, ib -> ib.owner(player));
+        addToggle(3, ToggleSetting.AUTOLS, ib -> ib.profile(player));
         addToggle(4, ToggleSetting.ADVANCEMENTS, ib -> {});
         addToggle(5, ToggleSetting.STATS, ib -> {});
         addToggle(6, ToggleSetting.HORSES, ib -> {});
@@ -47,9 +45,9 @@ public class ToggleGUI extends FastInv {
     }
 
     private void addToggle(int slot, ToggleSetting setting, Consumer<ItemBuilder> iconConfig) {
-        ItemBuilder ib = setting.buildIcon(plugin, player);
+        ItemBuilder ib = setting.buildIcon(plugin);
         iconConfig.accept(ib);
         setItem(slot, ib.build(), e -> plugin.uhc.toggleSetting(player, setting, ToggleGUI::new));
-        setItem(slot + 9, setting.buildToggleGlass(plugin, player).build(), e -> plugin.uhc.toggleSetting(player, setting, ToggleGUI::new));
+        setItem(slot + 9, setting.buildToggleGlass(plugin).build(), e -> plugin.uhc.toggleSetting(player, setting, ToggleGUI::new));
     }
 }

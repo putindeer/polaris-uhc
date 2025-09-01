@@ -1,13 +1,10 @@
 package us.polarismc.polarisuhc.enums;
 
-import io.papermc.paper.datacomponent.DataComponentTypes;
-import io.papermc.paper.datacomponent.item.TooltipDisplay;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.potion.PotionType;
-import us.polarismc.api.util.builder.ItemBuilder;
+import me.putindeer.api.util.builder.ItemBuilder;
 import us.polarismc.polarisuhc.Main;
 import us.polarismc.polarisuhc.managers.uhc.UHCManager;
 
@@ -60,7 +57,7 @@ public enum PotionSetting {
         set(manager, get(manager).next());
     }
 
-    public ItemBuilder buildIcon(Main plugin, Player player) {
+    public ItemBuilder buildIcon(Main plugin) {
         PotionBoolean value = get(plugin.uhc);
         String color;
         String loreKey = switch (value) {
@@ -77,16 +74,16 @@ public enum PotionSetting {
                 yield "potion.to_tier1";
             }
         };
-        return plugin.utils.ib(material, player).customName(color + "[lang]potion." + name().toLowerCase() + "[/lang]").lore("[lang]" + loreKey + "[/lang]").potionType(type).hidePotionEffects();
+        return plugin.utils.ib(material).customName(color + "[lang]potion." + name().toLowerCase() + "[/lang]").lore("[lang]" + loreKey + "[/lang]").potionType(type).hidePotionEffects();
     }
 
-    public ItemBuilder buildToggleGlass(Main plugin, Player player) {
+    public ItemBuilder buildToggleGlass(Main plugin) {
         PotionBoolean value = get(plugin.uhc);
         Material glassMaterial = switch (value) {
             case ON -> Material.LIME_STAINED_GLASS_PANE;
             case TIER1 -> Material.YELLOW_STAINED_GLASS_PANE;
             default -> Material.RED_STAINED_GLASS_PANE;
         };
-        return plugin.utils.ib(glassMaterial, player).hideTooltip();
+        return plugin.utils.ib(glassMaterial).hideTooltip();
     }
 }

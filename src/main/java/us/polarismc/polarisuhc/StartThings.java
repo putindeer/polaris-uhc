@@ -1,10 +1,8 @@
 package us.polarismc.polarisuhc;
 
 import fr.mrmicky.fastinv.FastInvManager;
-import us.polarismc.api.managers.StartupManager;
 import us.polarismc.polarisuhc.commands.debug.Debug;
 import us.polarismc.polarisuhc.commands.debug.GUI;
-import us.polarismc.polarisuhc.commands.debug.LangTest;
 import us.polarismc.polarisuhc.commands.host.CreateWorld;
 import us.polarismc.polarisuhc.managers.uhc.UHCManager;
 
@@ -19,10 +17,6 @@ public class StartThings {
         registerCommands();
         registerListeners();
         registerManagers();
-        StartupManager.registerMessage(plugin, "hola");
-        StartupManager.registerMessage(plugin, "holaasdfa");
-        StartupManager.registerMessage(plugin, "holaweagweg");
-        StartupManager.registerMessage(plugin, "holaasdfgdvc");
         registerLanguage();
     }
 
@@ -34,7 +28,6 @@ public class StartThings {
         // Dev commands (uhc.dev)
         new Debug(plugin);
         new GUI(plugin);
-        new LangTest(plugin);
         // Host commands (uhc.host)
         new CreateWorld(plugin);
     }
@@ -49,7 +42,6 @@ public class StartThings {
     }
 
     public void registerLanguage() {
-        plugin.utils.lang.registerLanguageResource("languages/en-US.yml", "en-US");
-        plugin.utils.lang.registerLanguageResource("languages/es-ES.yml", "es-ES");
+        //TODO - rehacer esto pls
     }
 }

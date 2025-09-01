@@ -14,7 +14,7 @@ public class DurationRatesGUI extends FastInv {
     private final Player player;
 
     public DurationRatesGUI(Player player, Main plugin) {
-        super(owner -> Bukkit.createInventory(owner, 54, plugin.utils.chat("<gold>[lang]dandrgui.gui_title[/lang]", player)));
+        super(owner -> Bukkit.createInventory(owner, 54, plugin.utils.chat("<gold>[lang]dandrgui.gui_title[/lang]")));
         this.plugin = plugin;
         this.player = player;
 
@@ -62,25 +62,25 @@ public class DurationRatesGUI extends FastInv {
      */
     private void placeControl(int slot, Supplier<Integer> getter, Consumer<Integer> setter, Material icon, String name, String desc, String controlDesc, String suffix, int minimum, int maximum) {
         int value = getter.get();
-        setItem(slot, plugin.utils.ib(icon, player).name(name).lore(desc).build(),
+        setItem(slot, plugin.utils.ib(icon).name(name).lore(desc).build(),
                 e -> plugin.uhc.openIntInputSign(player, getter, setter, minimum, maximum, DurationRatesGUI::new)
         );
         boolean isMinimum = getter.get() <= minimum;
         boolean isMaximum = getter.get() >= maximum;
 
         int belowSlot = slot + 9;
-        setItem(belowSlot - 1, plugin.utils.ib(isMinimum ? Material.BLACK_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE, player).name("<red>-")
+        setItem(belowSlot - 1, plugin.utils.ib(isMinimum ? Material.BLACK_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE).name("<red>-")
                         .lore(controlDesc + ": <red>" + getter.get() + suffix,
                         "[lang]common.decrease_timer_1m[/lang]",
                         "[lang]common.decrease_timer_5m[/lang]").build(),
                 e -> plugin.uhc.decrease(e, getter, setter, minimum, DurationRatesGUI::new)
         );
 
-        setItem(belowSlot, plugin.utils.ib(Material.PAPER, player).name("<yellow>" + value + suffix).lore("[lang]common.custom_value[/lang]").build(),
+        setItem(belowSlot, plugin.utils.ib(Material.PAPER).name("<yellow>" + value + suffix).lore("[lang]common.custom_value[/lang]").build(),
                 e -> plugin.uhc.openIntInputSign(player, getter, setter, minimum, maximum, DurationRatesGUI::new)
         );
 
-        setItem(belowSlot + 1, plugin.utils.ib(isMaximum ? Material.BLACK_STAINED_GLASS_PANE : Material.LIME_STAINED_GLASS_PANE, player).name("<green>+")
+        setItem(belowSlot + 1, plugin.utils.ib(isMaximum ? Material.BLACK_STAINED_GLASS_PANE : Material.LIME_STAINED_GLASS_PANE).name("<green>+")
                         .lore(controlDesc + ": <green>" + getter.get() + suffix,
                         "[lang]common.increase_timer_1m[/lang]",
                         "[lang]common.increase_timer_5m[/lang]").build(),

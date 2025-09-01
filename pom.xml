@@ -89,7 +89,7 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.21.5-R0.1-SNAPSHOT</version>
+            <version>1.21.8-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -132,9 +132,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>us.polarismc</groupId>
-            <artifactId>polaris-api</artifactId>
-            <version>1.0.3</version>
+            <groupId>com.github.putindeer</groupId>
+            <artifactId>mcdev-utils</artifactId>
+            <version>1.0.4</version>
         </dependency>
         <dependency>
             <groupId>de.rapha149.signgui</groupId>

@@ -2,7 +2,7 @@ package us.polarismc.polarisuhc;
 
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
-import us.polarismc.api.util.PluginUtils;
+import me.putindeer.api.util.PluginUtils;
 import us.polarismc.polarisuhc.managers.uhc.UHCManager;
 
 public final class Main extends JavaPlugin {

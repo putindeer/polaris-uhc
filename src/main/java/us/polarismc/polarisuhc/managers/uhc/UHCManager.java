@@ -14,7 +14,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import us.polarismc.api.util.builder.WorldBuilder;
+import me.putindeer.api.util.builder.WorldBuilder;
 import us.polarismc.polarisuhc.Main;
 import us.polarismc.polarisuhc.enums.PotionBoolean;
 import us.polarismc.polarisuhc.enums.PotionSetting;
@@ -145,7 +145,7 @@ public class UHCManager {
 
     private World createWorld(String name, Long seed, World.Environment env, boolean amplified) {
         WorldType type = amplified ? WorldType.AMPLIFIED : WorldType.NORMAL;
-        return new WorldBuilder(name, plugin)
+        return new WorldBuilder(name)
                 .seed(seed)
                 .type(type)
                 .environment(env)
@@ -326,7 +326,7 @@ public class UHCManager {
     //endregion
 
     public ItemStack goBack(Player player) {
-        return plugin.utils.ib(Material.BARRIER, player).name("[lang]common.go_back[/lang]").lore("[lang]common.go_back_desc[/lang]").build();
+        return plugin.utils.ib(Material.BARRIER).name("[lang]common.go_back[/lang]").lore("[lang]common.go_back_desc[/lang]").build();
     }
 
     public void toggleSetting(Player p, ToggleSetting setting, BiFunction<Player, Main, FastInv> guiCreator) {
@@ -384,10 +384,10 @@ public class UHCManager {
     public void openIntInputSign(Player player, Supplier<Integer> getter, Consumer<Integer> setter, int minimum, int maximum, BiFunction<Player, Main, FastInv> guiCreator) {
         try {
             Object[] lines = new Object[] {
-                    plugin.utils.chat("", player),
-                    plugin.utils.chat("[lang]common.new_value[/lang]", player),
-                    plugin.utils.chat("[lang]common.current_value[/lang]", player),
-                    plugin.utils.chat(String.valueOf(getter.get()), player)
+                    plugin.utils.chat(""),
+                    plugin.utils.chat("[lang]common.new_value[/lang]"),
+                    plugin.utils.chat("[lang]common.current_value[/lang]"),
+                    plugin.utils.chat(String.valueOf(getter.get()))
             };
             //TODO - cambia esto a pale oak sign cuando lo añadan xdd
 

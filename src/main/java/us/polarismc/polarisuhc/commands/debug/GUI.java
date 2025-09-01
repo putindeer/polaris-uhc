@@ -41,9 +41,6 @@ public class GUI implements TabExecutor {
             case "customcrafts" -> new CustomCraftsGUI(player, plugin);
             case "potions" -> new PotionsGUI(player, plugin);
             case "duration" -> new DurationRatesGUI(player, plugin);
-            case "givehead" -> player.give(plugin.utils.ib(Material.PLAYER_HEAD).owner(player).glint().name("<gold>Golden Head")
-                    .edible(ConsumeEffect.applyStatusEffects
-                            (List.of(new PotionEffect(PotionEffectType.REGENERATION, 200, 1), new PotionEffect(PotionEffectType.ABSORPTION, 2000, 2)), 1)).build());
             default -> plugin.utils.message(player, "&cUnknown GUI.");
         }
         return true;

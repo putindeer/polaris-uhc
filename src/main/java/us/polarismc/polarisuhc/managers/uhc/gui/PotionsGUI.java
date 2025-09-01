@@ -4,7 +4,7 @@ import fr.mrmicky.fastinv.FastInv;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import us.polarismc.api.util.builder.ItemBuilder;
+import me.putindeer.api.util.builder.ItemBuilder;
 import us.polarismc.polarisuhc.Main;
 import us.polarismc.polarisuhc.enums.PotionSetting;
 
@@ -15,7 +15,7 @@ public class PotionsGUI extends FastInv {
     private final Player player;
 
     public PotionsGUI(Player player, Main plugin) {
-        super(owner -> Bukkit.createInventory(owner, 54, plugin.utils.chat("<blue>[lang]potion.gui_title[/lang]</blue>", player)));
+        super(owner -> Bukkit.createInventory(owner, 54, plugin.utils.chat("<blue>[lang]potion.gui_title[/lang]</blue>")));
         this.plugin = plugin;
         this.player = player;
 
@@ -47,9 +47,9 @@ public class PotionsGUI extends FastInv {
     }
 
     private void addPotion(int slot, PotionSetting setting, Consumer<ItemBuilder> iconConfig) {
-        ItemBuilder ib = setting.buildIcon(plugin, player);
+        ItemBuilder ib = setting.buildIcon(plugin);
         iconConfig.accept(ib);
         setItem(slot, ib.build(), e -> plugin.uhc.toggleSetting(player, setting, PotionsGUI::new));
-        setItem(slot + 9, setting.buildToggleGlass(plugin, player).build(), e -> plugin.uhc.toggleSetting(player, setting, PotionsGUI::new));
+        setItem(slot + 9, setting.buildToggleGlass(plugin).build(), e -> plugin.uhc.toggleSetting(player, setting, PotionsGUI::new));
     }
 }

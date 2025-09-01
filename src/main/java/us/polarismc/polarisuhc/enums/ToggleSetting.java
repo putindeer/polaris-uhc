@@ -2,7 +2,7 @@ package us.polarismc.polarisuhc.enums;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import us.polarismc.api.util.builder.ItemBuilder;
+import me.putindeer.api.util.builder.ItemBuilder;
 import us.polarismc.polarisuhc.Main;
 import us.polarismc.polarisuhc.managers.uhc.UHCManager;
 
@@ -62,15 +62,15 @@ public enum ToggleSetting {
         set(manager, !get(manager));
     }
 
-    public ItemBuilder buildIcon(Main plugin, Player player) {
+    public ItemBuilder buildIcon(Main plugin) {
         boolean enabled = get(plugin.uhc);
         String section = key.startsWith("customcrafts.") ? "customcrafts" : "toggle";
         String loreKey = section + "." + (enabled ? "to_off" : "to_on");
-        return plugin.utils.ib(icon, player).customName((enabled ? "<green>" : "<red>") + "[lang]" + key + "[/lang]").lore("[lang]" + loreKey + "[/lang]");
+        return plugin.utils.ib(icon).customName((enabled ? "<green>" : "<red>") + "[lang]" + key + "[/lang]").lore("[lang]" + loreKey + "[/lang]");
     }
 
-    public ItemBuilder buildToggleGlass(Main plugin, Player player) {
-        return plugin.utils.ib(get(plugin.uhc) ? Material.LIME_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE, player).hideTooltip();
+    public ItemBuilder buildToggleGlass(Main plugin) {
+        return plugin.utils.ib(get(plugin.uhc) ? Material.LIME_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE).hideTooltip();
     }
 }
 

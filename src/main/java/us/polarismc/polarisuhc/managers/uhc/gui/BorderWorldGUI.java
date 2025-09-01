@@ -11,7 +11,7 @@ import us.polarismc.polarisuhc.managers.border.BorderHandler;
 
 public class BorderWorldGUI extends FastInv {
     public BorderWorldGUI(Player player, Main plugin) {
-        super(owner -> Bukkit.createInventory(owner, 54, plugin.utils.chat("<blue>[lang]bandwgui.gui_title[/lang]", player)));
+        super(owner -> Bukkit.createInventory(owner, 54, plugin.utils.chat("<blue>[lang]bandwgui.gui_title[/lang]")));
 
         BorderHandler overworld = new BorderHandler(plugin, "border.guidefaultlist.overworld", player, plugin.uhc::getBorder, plugin.uhc::setBorder, BorderWorldGUI::new);
         BorderHandler nether = new BorderHandler(plugin, "border.guidefaultlist.nether", player, plugin.uhc::getNetherBorder, plugin.uhc::setNetherBorder, BorderWorldGUI::new);
@@ -21,9 +21,9 @@ public class BorderWorldGUI extends FastInv {
 
         // Create Worlds & TP Border
 
-        setItem(10, plugin.utils.ib(plugin.uhc.areWorldsCreated() ? Material.GRASS_BLOCK : Material.BEDROCK, player).name("<blue>[lang]bandwgui.create_worlds[/lang]")
+        setItem(10, plugin.utils.ib(plugin.uhc.areWorldsCreated() ? Material.GRASS_BLOCK : Material.BEDROCK).name("<blue>[lang]bandwgui.create_worlds[/lang]")
                 .lore(plugin.uhc.areWorldsCreated() ? "<green>[lang]bandwgui.already_created[/lang]" : "[lang]bandwgui.create_needed_worlds[/lang]").build(), e -> plugin.uhc.createWorlds(player));
-        setItem(28, plugin.utils.ib(Material.CHORUS_FRUIT, player).name("<light_purple>[lang]bandwgui.tpborder[/lang]")
+        setItem(28, plugin.utils.ib(Material.CHORUS_FRUIT).name("<light_purple>[lang]bandwgui.tpborder[/lang]")
                         .lore("[lang]bandwgui.tpborder_desc[/lang]").build(),
                 e -> plugin.uhc.toggleSetting(player, ToggleSetting.TP_BORDER, BorderWorldGUI::new));
         setItem(37, plugin.utils.ib(plugin.uhc.isTpBorder() ? Material.LIME_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE).name("").hideTooltip().build(),
@@ -31,18 +31,18 @@ public class BorderWorldGUI extends FastInv {
 
         // Overworld Border
         int border = plugin.uhc.getBorder();
-        setItem(12, plugin.utils.ib(Material.GRASS_BLOCK, player).name("<green>[lang]bandwgui.overworld_border[/lang]")
+        setItem(12, plugin.utils.ib(Material.GRASS_BLOCK).name("<green>[lang]bandwgui.overworld_border[/lang]")
                 .lore("[lang]bandwgui.overworld_border_desc[/lang]").build());
-        setItem(13, plugin.utils.ib(overworld.isMinimum() ? Material.BLACK_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE, player)
+        setItem(13, plugin.utils.ib(overworld.isMinimum() ? Material.BLACK_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE)
                         .name(overworld.isMinimum() ? "<dark_gray>-" : "<red>-")
                         .lore("[lang]bandwgui.current_border[/lang] <red>" + formatBorder(border))
                         .addLoreIf(!overworld.isMinimum(), "[lang]bandwgui.decrease_border[/lang] <red>" + formatBorder(overworld.closestLowestValue()) + "</red>.").build(),
                 e -> overworld.decrease());
-        setItem(14, plugin.utils.ib(Material.PAPER, player)
+        setItem(14, plugin.utils.ib(Material.PAPER)
                         .name("<yellow>" + formatBorder(border))
                         .lore("[lang]common.custom_value[/lang]").build(),
                 e -> plugin.uhc.openIntInputSign(player, plugin.uhc::getBorder, plugin.uhc::setBorder, BorderWorldGUI::new));
-        setItem(15, plugin.utils.ib(overworld.isMaximum() ? Material.BLACK_STAINED_GLASS_PANE : Material.LIME_STAINED_GLASS_PANE, player)
+        setItem(15, plugin.utils.ib(overworld.isMaximum() ? Material.BLACK_STAINED_GLASS_PANE : Material.LIME_STAINED_GLASS_PANE)
                         .name(overworld.isMaximum() ? "<dark_gray>+" : "<green>+")
                         .lore("[lang]bandwgui.current_border[/lang] <green>" + formatBorder(border))
                         .addLoreIf(!overworld.isMaximum(), "[lang]bandwgui.increase_border[/lang] <green>" + formatBorder(overworld.closestHighestValue()) + "</green>.").build(),
@@ -50,18 +50,18 @@ public class BorderWorldGUI extends FastInv {
 
         // Nether Border
         int netherBorder = plugin.uhc.getNetherBorder();
-        setItem(21, plugin.utils.ib(Material.CRIMSON_NYLIUM, player).name("<red>[lang]bandwgui.nether_border[/lang]")
+        setItem(21, plugin.utils.ib(Material.CRIMSON_NYLIUM).name("<red>[lang]bandwgui.nether_border[/lang]")
                 .lore("[lang]bandwgui.nether_border_desc[/lang]").build());
-        setItem(22, plugin.utils.ib(nether.isMinimum() ? Material.BLACK_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE, player)
+        setItem(22, plugin.utils.ib(nether.isMinimum() ? Material.BLACK_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE)
                         .name(nether.isMinimum() ? "<dark_gray>-" : "<red>-")
                         .lore("[lang]bandwgui.current_border[/lang] <red>" + formatBorder(netherBorder))
                         .addLoreIf(!nether.isMinimum(), "[lang]bandwgui.decrease_border[/lang] <red>" + formatBorder(nether.closestLowestValue()) + "</red>.").build(),
                 e -> nether.decrease());
-        setItem(23, plugin.utils.ib(Material.PAPER, player)
+        setItem(23, plugin.utils.ib(Material.PAPER)
                         .name("<yellow>" + formatBorder(netherBorder))
                         .lore("[lang]common.custom_value[/lang]").build(),
                 e -> plugin.uhc.openIntInputSign(player, plugin.uhc::getNetherBorder, plugin.uhc::setNetherBorder, BorderWorldGUI::new));
-        setItem(24, plugin.utils.ib(nether.isMaximum() ? Material.BLACK_STAINED_GLASS_PANE : Material.LIME_STAINED_GLASS_PANE, player)
+        setItem(24, plugin.utils.ib(nether.isMaximum() ? Material.BLACK_STAINED_GLASS_PANE : Material.LIME_STAINED_GLASS_PANE)
                         .name(nether.isMaximum() ? "<dark_gray>+" : "<green>+")
                         .lore("[lang]bandwgui.current_border[/lang] <green>" + formatBorder(netherBorder))
                         .addLoreIf(!nether.isMaximum(), "[lang]bandwgui.increase_border[/lang] <green>" + formatBorder(nether.closestHighestValue()) + "</green>.").build(),
@@ -70,19 +70,19 @@ public class BorderWorldGUI extends FastInv {
         if (plugin.uhc.isTpBorder()) {
             // Time between TP Borders
             int timer = plugin.uhc.getBorderTimer();
-            setItem(30, plugin.utils.ib(Material.CLOCK, player).name("<yellow>[lang]bandwgui.time[/lang]")
+            setItem(30, plugin.utils.ib(Material.CLOCK).name("<yellow>[lang]bandwgui.time[/lang]")
                     .lore("[lang]bandwgui.time_desc[/lang]").build());
-            setItem(31, plugin.utils.ib(timer <= 1 ? Material.BLACK_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE, player)
+            setItem(31, plugin.utils.ib(timer <= 1 ? Material.BLACK_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE)
                     .name(timer <= 1 ? "<dark_gray>-" : "<red>-")
                     .lore("[lang]bandwgui.current_timer[/lang] <red>" + timer + (timer == 1 ? " [lang]terms.minute[/lang]" : " [lang]terms.minutes[/lang]"))
                     .addLoreIf(timer > 1, "[lang]common.decrease_timer_1m[/lang]",
                             "[lang]common.decrease_timer_5m[/lang]").build(),
                     e -> plugin.uhc.decrease(e, plugin.uhc::getBorderTimer, plugin.uhc::setBorderTimer, BorderWorldGUI::new));
-            setItem(32, plugin.utils.ib(Material.PAPER, player)
+            setItem(32, plugin.utils.ib(Material.PAPER)
                             .name("<yellow>" + timer + (timer == 1 ? " [lang]terms.minute[/lang]" : " [lang]terms.minutes[/lang]"))
                             .lore("[lang]common.custom_value[/lang]").build(),
                     e -> plugin.uhc.openIntInputSign(player, plugin.uhc::getBorderTimer, plugin.uhc::setBorderTimer, BorderWorldGUI::new));
-            setItem(33, plugin.utils.ib(Material.LIME_STAINED_GLASS_PANE, player)
+            setItem(33, plugin.utils.ib(Material.LIME_STAINED_GLASS_PANE)
                     .name("<green>+").lore("[lang]bandwgui.current_timer[/lang] <green>" + timer + (timer == 1 ? " [lang]terms.minute[/lang]" : " [lang]terms.minutes[/lang]"),
                             "[lang]common.increase_timer_1m[/lang]",
                             "[lang]common.increase_timer_5m[/lang]").build(),
