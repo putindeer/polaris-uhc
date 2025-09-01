@@ -14,7 +14,7 @@ public final class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        utils = new PluginUtils(this, "<blue><bold>UHC <dark_gray>» <reset>");
+        utils = new PluginUtils(this, "<blue><bold>UHC</bold></blue> <dark_gray>»</dark_gray> <reset>");
         start = new StartThings(this);
     }
 

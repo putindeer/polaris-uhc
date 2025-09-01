@@ -1,17 +1,30 @@
 package us.polarismc.polarisuhc.managers.uhc;
 
+import de.rapha149.signgui.SignGUI;
+import de.rapha149.signgui.SignGUIResult;
+import de.rapha149.signgui.exception.SignGUIVersionException;
+import fr.mrmicky.fastinv.FastInv;
+import io.papermc.paper.registry.keys.SoundEventKeys;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.GameRule;
-import org.bukkit.World;
-import org.bukkit.WorldType;
+import net.kyori.adventure.sound.Sound;
+import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
 import us.polarismc.api.util.builder.WorldBuilder;
 import us.polarismc.polarisuhc.Main;
+import us.polarismc.polarisuhc.enums.PotionBoolean;
+import us.polarismc.polarisuhc.enums.PotionSetting;
+import us.polarismc.polarisuhc.enums.ToggleSetting;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 @Getter
 @Setter
@@ -65,41 +78,72 @@ public class UHCManager {
     }
 
     public void createWorlds(CommandSender sender) {
-        if (uhcWorld != null && (!nether || netherWorld != null) && (!end || endWorld != null)) {
-            plugin.utils.message(sender, "All worlds have already been created.");
+        if (areWorldsCreated()) {
+            plugin.utils.message(sender, "[lang]worlds.already_created[/lang]");
             return;
         }
 
         if (uhcWorld == null) {
-            plugin.utils.message(sender, "Creating <green>" + (amplified ? "amplified " : "") + "overworld <gray>with " + (seed == null ? "random seed." : "seed: <green>" + seed));
+            if (amplified) {
+                if (seed == null) {
+                    plugin.utils.message(sender, "[lang]worlds.creating_overworld_amplified_random[/lang]");
+                } else {
+                    plugin.utils.message(sender, "[lang]worlds.creating_overworld_amplified_set[/lang] <green>" + seed);
+                }
+            } else {
+                if (seed == null) {
+                    plugin.utils.message(sender, "[lang]worlds.creating_overworld_random[/lang]");
+                } else {
+                    plugin.utils.message(sender, "[lang]worlds.creating_overworld_set[/lang] <green>" + seed);
+                }
+            }
+
             uhcWorld = createWorld(uhcWorldString, seed, World.Environment.NORMAL, amplified);
-            plugin.utils.message(sender, "Overworld created succesfully.");
+            plugin.utils.message(sender, "[lang]worlds.overworld_created[/lang]");
         } else {
-            plugin.utils.message(sender, "Overworld has already been created, skipping it...");
+            plugin.utils.message(sender, "[lang]worlds.overworld_exists[/lang]");
         }
 
         if (nether) {
             if (netherWorld == null) {
-                plugin.utils.message(sender, "Creating <red>nether <gray>with " + (seed == null ? "random seed." : netherSeed.equals(seed) ? "the same seed as overworld: <red>" + netherSeed : "seed: <red>" + netherSeed));
+                if (seed == null) {
+                    plugin.utils.message(sender, "[lang]worlds.creating_nether_random[/lang]");
+                } else if (netherSeed.equals(seed)) {
+                    plugin.utils.message(sender, "[lang]worlds.creating_nether_same[/lang] <red>" + netherSeed);
+                } else {
+                    plugin.utils.message(sender, "[lang]worlds.creating_nether_set[/lang] <red>" + netherSeed);
+                }
+
                 netherWorld = createWorld(netherWorldString, netherSeed, World.Environment.NETHER, false);
-                plugin.utils.message(sender, "Nether created succesfully.");
+                plugin.utils.message(sender, "[lang]worlds.nether_created[/lang]");
             } else {
-                plugin.utils.message(sender, "Nether has already been created, skipping it...");
+                plugin.utils.message(sender, "[lang]worlds.nether_exists[/lang]");
             }
         }
 
         if (end) {
             if (endWorld == null) {
-                plugin.utils.message(sender, "Creating <purple>end <gray>with " + (seed == null ? "random seed." : endSeed.equals(seed) ? "the same seed as overworld: <purple>" + endSeed : "seed: <purple>" + endSeed));
+                if (seed == null) {
+                    plugin.utils.message(sender, "[lang]worlds.creating_end_random[/lang]");
+                } else if (endSeed.equals(seed)) {
+                    plugin.utils.message(sender, "[lang]worlds.creating_end_same[/lang] <purple>" + endSeed);
+                } else {
+                    plugin.utils.message(sender, "[lang]worlds.creating_end_set[/lang] <purple>" + endSeed);
+                }
+
                 endWorld = createWorld(endWorldString, endSeed, World.Environment.THE_END, false);
-                plugin.utils.message(sender, "End created succesfully.");
+                plugin.utils.message(sender, "[lang]worlds.end_created[/lang]");
             } else {
-                plugin.utils.message(sender, "End has already been created, skipping it...");
+                plugin.utils.message(sender, "[lang]worlds.end_exists[/lang]");
             }
         }
     }
 
-    private World createWorld(String name, long seed, World.Environment env, boolean amplified) {
+    public boolean areWorldsCreated() {
+        return uhcWorld != null && (!nether || netherWorld != null) && (!end || endWorld != null);
+    }
+
+    private World createWorld(String name, Long seed, World.Environment env, boolean amplified) {
         WorldType type = amplified ? WorldType.AMPLIFIED : WorldType.NORMAL;
         return new WorldBuilder(name, plugin)
                 .seed(seed)
@@ -116,55 +160,126 @@ public class UHCManager {
 
     //region [Toggle]
     private boolean advancements;
-    private boolean antiburn;
-    private boolean autols;
+    private boolean antiBurn;
+    private boolean autoLS;
     private boolean bookshelves;
-    private boolean customcrafts;
     private boolean end;
     private boolean explosives;
+    private boolean fireAspect;
+    private boolean flame;
     private boolean horses;
     private boolean mobs;
+    private boolean nerfedStrength;
     private boolean nether;
     private boolean notch;
-    private boolean pots;
-    private boolean starterbooks;
+    private boolean starterBooks;
     private boolean stats;
-    private boolean strengthnerf;
     private boolean trades;
 
     private void initializeToggle() {
         ConfigurationSection config = plugin.getConfig().getConfigurationSection("toggle");
         assert config != null;
         advancements = config.getBoolean("advancements");
-        antiburn = config.getBoolean("antiburn");
-        autols = config.getBoolean("autols");
+        antiBurn = config.getBoolean("antiburn");
+        autoLS = config.getBoolean("autols");
         bookshelves = config.getBoolean("bookshelves");
-        customcrafts = config.getBoolean("customcrafts");
         end = config.getBoolean("end");
         explosives = config.getBoolean("explosives");
+        fireAspect = config.getBoolean("fireaspect");
+        flame = config.getBoolean("flame");
         horses = config.getBoolean("horses");
         mobs = config.getBoolean("mobs");
+        nerfedStrength = config.getBoolean("nerfedstrength");
         nether = config.getBoolean("nether");
         notch = config.getBoolean("notch");
-        pots = config.getBoolean("pots");
-        starterbooks = config.getBoolean("starterbooks");
+        starterBooks = config.getBoolean("starterbooks");
         stats = config.getBoolean("stats");
-        strengthnerf = config.getBoolean("strengthnerf");
         trades = config.getBoolean("trades");
+        initializePotions();
+        initializeCustomCrafts();
+    }
+
+    // Pots
+    private PotionBoolean poisonPotion;
+    private PotionBoolean swiftnessPotion;
+    private PotionBoolean fireResistancePotion;
+    private PotionBoolean turtleMasterPotion;
+    private PotionBoolean slownessPotion;
+    private PotionBoolean invisibilityPotion;
+    private PotionBoolean regenerationPotion;
+    private PotionBoolean strengthPotion;
+    private PotionBoolean healingPotion;
+    private PotionBoolean harmingPotion;
+    private PotionBoolean waterBreathingPotion;
+    private PotionBoolean weaknessPotion;
+    private PotionBoolean leapingPotion;
+    private PotionBoolean slowFallingPotion;
+    private PotionBoolean infestationPotion;
+    private PotionBoolean windChargingPotion;
+    private PotionBoolean oozingPotion;
+    private PotionBoolean weavingPotion;
+
+    private void initializePotions() {
+        ConfigurationSection potions = plugin.getConfig().getConfigurationSection("toggle.potions");
+        assert potions != null;
+        poisonPotion = PotionBoolean.valueOf(potions.getString("poison", "OFF").toUpperCase());
+        swiftnessPotion = PotionBoolean.valueOf(potions.getString("swiftness", "OFF").toUpperCase());
+        fireResistancePotion = PotionBoolean.valueOf(potions.getString("fireresistance", "OFF").toUpperCase());
+        turtleMasterPotion = PotionBoolean.valueOf(potions.getString("turtlemaster", "OFF").toUpperCase());
+        slownessPotion = PotionBoolean.valueOf(potions.getString("slowness", "OFF").toUpperCase());
+        invisibilityPotion = PotionBoolean.valueOf(potions.getString("invisibility", "OFF").toUpperCase());
+        regenerationPotion = PotionBoolean.valueOf(potions.getString("regeneration", "OFF").toUpperCase());
+        strengthPotion = PotionBoolean.valueOf(potions.getString("strength", "OFF").toUpperCase());
+        healingPotion = PotionBoolean.valueOf(potions.getString("healing", "OFF").toUpperCase());
+        harmingPotion = PotionBoolean.valueOf(potions.getString("harming", "OFF").toUpperCase());
+        waterBreathingPotion = PotionBoolean.valueOf(potions.getString("waterbreathing", "OFF").toUpperCase());
+        weaknessPotion = PotionBoolean.valueOf(potions.getString("weakness", "OFF").toUpperCase());
+        leapingPotion = PotionBoolean.valueOf(potions.getString("leaping", "OFF").toUpperCase());
+        slowFallingPotion = PotionBoolean.valueOf(potions.getString("slowfalling", "OFF").toUpperCase());
+        infestationPotion = PotionBoolean.valueOf(potions.getString("infestation", "OFF").toUpperCase());
+        windChargingPotion = PotionBoolean.valueOf(potions.getString("windcharging", "OFF").toUpperCase());
+        oozingPotion = PotionBoolean.valueOf(potions.getString("oozing", "OFF").toUpperCase());
+        weavingPotion = PotionBoolean.valueOf(potions.getString("weaving", "OFF").toUpperCase());
+    }
+
+    // Custom Crafts
+    private boolean totemCraft;
+    private boolean maceCraft;
+    private boolean breezeRodCraft;
+    private boolean tridentCraft;
+    private boolean elytraCraft;
+    private boolean goldenHeadCraft;
+    private boolean spectralArrowCraft;
+    private boolean glisteringMelonCraft;
+    private boolean tntMinecartCraft;
+    private boolean lecternCraft;
+    private void initializeCustomCrafts() {
+        ConfigurationSection config = plugin.getConfig().getConfigurationSection("toggle.customcrafts");
+        assert config != null;
+        totemCraft = config.getBoolean("totem");
+        maceCraft = config.getBoolean("mace");
+        breezeRodCraft = config.getBoolean("breezerod");
+        tridentCraft = config.getBoolean("trident");
+        elytraCraft = config.getBoolean("elytra");
+        goldenHeadCraft = config.getBoolean("goldenhead");
+        spectralArrowCraft = config.getBoolean("spectralarrow");
+        glisteringMelonCraft = config.getBoolean("glisteringmelon");
+        tntMinecartCraft = config.getBoolean("tntminecart");
+        lecternCraft = config.getBoolean("lectern");
     }
     //endregion
 
     //region [Duración]
     private int pvpTime;
     private int meetupTime;
-    private int finalhealTime;
+    private int finalHealTime;
 
     private void initializeDuration() {
         ConfigurationSection config = plugin.getConfig().getConfigurationSection("rates");
         assert config != null;
         pvpTime = config.getInt("pvp");
         meetupTime = config.getInt("meetup");
-        finalhealTime = config.getInt("finalheal");
+        finalHealTime = config.getInt("finalheal");
     }
     //endregion
 
@@ -175,7 +290,7 @@ public class UHCManager {
     private int netherMeetupBorder;
     private int borderTimer;
     private boolean tpBorder;
-    private int borderSpeed;
+    private double borderSpeed;
     private List<Integer> borderList;
     private List<Integer> netherBorderList;
 
@@ -188,14 +303,14 @@ public class UHCManager {
         netherMeetupBorder = config.getInt("nethermeetup");
         tpBorder = config.getBoolean("tpborder");
         borderTimer = config.getInt("timer");
-        borderSpeed = config.getInt("speed");
+        borderSpeed = config.getDouble("speed");
         borderList = config.getIntegerList("borderlist");
         netherBorderList = config.getIntegerList("netherborderlist");
     }
     //endregion
 
     //region [Rates]
-    private int xpkillRate;
+    private int xpKillRate;
     private int flintRate;
     private int appleRate;
     private int glassRate;
@@ -203,10 +318,123 @@ public class UHCManager {
     private void initializeRates() {
         ConfigurationSection config = plugin.getConfig().getConfigurationSection("rates");
         assert config != null;
-        xpkillRate = config.getInt("xpkill");
+        xpKillRate = config.getInt("xpkill");
         flintRate = config.getInt("flint");
         appleRate = config.getInt("apple");
         glassRate = config.getInt("glass");
     }
     //endregion
+
+    public ItemStack goBack(Player player) {
+        return plugin.utils.ib(Material.BARRIER, player).name("[lang]common.go_back[/lang]").lore("[lang]common.go_back_desc[/lang]").build();
+    }
+
+    public void toggleSetting(Player p, ToggleSetting setting, BiFunction<Player, Main, FastInv> guiCreator) {
+        setting.toggle(this);
+
+        if (setting.get(this)) {
+            p.playSound(Sound.sound(SoundEventKeys.BLOCK_STONE_BUTTON_CLICK_ON, Sound.Source.MASTER, 10, 1));
+        } else {
+            p.playSound(Sound.sound(SoundEventKeys.BLOCK_STONE_BUTTON_CLICK_OFF, Sound.Source.MASTER, 10, 1));
+        }
+
+        guiCreator.apply(p, plugin);
+    }
+
+    public void toggleSetting(Player p, PotionSetting setting, BiFunction<Player, Main, FastInv> guiCreator) {
+        setting.next(this);
+
+        switch (setting.get(this)) {
+            case ON -> p.playSound(Sound.sound(SoundEventKeys.BLOCK_STONE_BUTTON_CLICK_ON, Sound.Source.MASTER, 10, 1));
+            case TIER1 -> p.playSound(Sound.sound(SoundEventKeys.BLOCK_STONE_BUTTON_CLICK_OFF, Sound.Source.MASTER, 10, 1.5f));
+            case OFF -> p.playSound(Sound.sound(SoundEventKeys.BLOCK_STONE_BUTTON_CLICK_OFF, Sound.Source.MASTER, 10, 1));
+        }
+
+        guiCreator.apply(p, plugin);
+    }
+
+    public void increase(InventoryClickEvent event, Supplier<Integer> getter, Consumer<Integer> setter, int maximum, BiFunction<Player, Main, FastInv> guiCreator) {
+        Player player = (Player) event.getWhoClicked();
+        if (getter.get() >= maximum) {
+            player.playSound(Sound.sound(SoundEventKeys.BLOCK_BAMBOO_WOOD_BUTTON_CLICK_OFF, Sound.Source.MASTER, 10, 1));
+            return;
+        }
+        int value = event.getClick().isRightClick() ? 5 : 1;
+        int newValue = Math.min(getter.get() + value, maximum);
+        float pitch = event.getClick().isRightClick() ? 1.5f : 1;
+        setter.accept(newValue);
+        player.playSound(Sound.sound(SoundEventKeys.BLOCK_STONE_BUTTON_CLICK_ON, Sound.Source.MASTER, 10, pitch));
+        guiCreator.apply(player, plugin);
+    }
+
+    public void decrease(InventoryClickEvent event, Supplier<Integer> getter, Consumer<Integer> setter, int minimum, BiFunction<Player, Main, FastInv> guiCreator) {
+        Player player = (Player) event.getWhoClicked();
+        if (getter.get() <= minimum) {
+            player.playSound(Sound.sound(SoundEventKeys.BLOCK_BAMBOO_WOOD_BUTTON_CLICK_OFF, Sound.Source.MASTER, 10, 1));
+            return;
+        }
+        int value = event.getClick().isRightClick() ? 5 : 1;
+        int newValue = Math.max(getter.get() - value, minimum);
+        float pitch = event.getClick().isRightClick() ? 1.5f : 1;
+        setter.accept(newValue);
+        player.playSound(Sound.sound(SoundEventKeys.BLOCK_STONE_BUTTON_CLICK_OFF, Sound.Source.MASTER, 10, pitch));
+        guiCreator.apply(player, plugin);
+    }
+
+    public void openIntInputSign(Player player, Supplier<Integer> getter, Consumer<Integer> setter, int minimum, int maximum, BiFunction<Player, Main, FastInv> guiCreator) {
+        try {
+            Object[] lines = new Object[] {
+                    plugin.utils.chat("", player),
+                    plugin.utils.chat("[lang]common.new_value[/lang]", player),
+                    plugin.utils.chat("[lang]common.current_value[/lang]", player),
+                    plugin.utils.chat(String.valueOf(getter.get()), player)
+            };
+            //TODO - cambia esto a pale oak sign cuando lo añadan xdd
+
+            SignGUI gui = SignGUI.builder().setAdventureLines(lines).setType(Material.CHERRY_SIGN).setHandler((p, result) -> {
+                Bukkit.getScheduler().runTask(plugin, () -> {
+                    try {
+                        int value = extractFirstNumber(result);
+                        value = Math.max(minimum, Math.min(value, maximum));
+                        setter.accept(value);
+                        p.playSound(Sound.sound(SoundEventKeys.BLOCK_NOTE_BLOCK_PLING, Sound.Source.MASTER, 10, 2));
+                        guiCreator.apply(p, plugin);
+                    } catch (NumberFormatException e) {
+                        plugin.utils.message(p, "[lang]common.invalid_number[/lang]");
+                        guiCreator.apply(p, plugin);
+                    }
+                });
+                return Collections.emptyList();
+            }).build();
+
+            gui.open(player);
+        } catch (SignGUIVersionException e) {
+            plugin.utils.message(player, "[lang]common.error[/lang]");
+            plugin.utils.severe(e.getMessage());
+        }
+    }
+
+    public void increase(InventoryClickEvent event, Supplier<Integer> getter, Consumer<Integer> setter, BiFunction<Player, Main, FastInv> guiCreator) {
+        increase(event, getter, setter, Integer.MAX_VALUE, guiCreator);
+    }
+
+    public void decrease(InventoryClickEvent event, Supplier<Integer> getter, Consumer<Integer> setter, BiFunction<Player, Main, FastInv> guiCreator) {
+        decrease(event, getter, setter, 1, guiCreator);
+    }
+
+    public void openIntInputSign(Player player, Supplier<Integer> getter, Consumer<Integer> setter, BiFunction<Player, Main, FastInv> guiCreator) {
+        openIntInputSign(player, getter, setter, 1, Integer.MAX_VALUE, guiCreator);
+    }
+
+    private int extractFirstNumber(SignGUIResult result) throws NumberFormatException {
+        String line = result.getLineWithoutColor(0).trim();
+        String numeric = line.replaceAll("[^0-9]", "");
+
+        if (!numeric.isEmpty()) {
+            int value = Integer.parseInt(numeric);
+            if (value > 0) return value;
+        }
+
+        throw new NumberFormatException("The first line does not contain a valid positive integer.");
+    }
 }

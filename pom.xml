@@ -38,6 +38,14 @@
                         <goals>
                             <goal>shade</goal>
                         </goals>
+                        <configuration>
+                            <relocations>
+                                <relocation>
+                                    <pattern>de.rapha149.signgui</pattern>
+                                    <shadedPattern>us.polarismc.polarisuhc.signgui</shadedPattern>
+                                </relocation>
+                            </relocations>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -127,6 +135,11 @@
             <groupId>us.polarismc</groupId>
             <artifactId>polaris-api</artifactId>
             <version>1.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>de.rapha149.signgui</groupId>
+            <artifactId>signgui</artifactId>
+            <version>2.5.1</version>
         </dependency>
     </dependencies>
 </project>

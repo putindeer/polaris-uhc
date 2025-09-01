@@ -1,5 +1,7 @@
-package us.polarismc.polarisuhc.commands.staff;
+package us.polarismc.polarisuhc.commands.host;
 
+import io.papermc.paper.registry.keys.SoundEventKeys;
+import net.kyori.adventure.sound.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -54,7 +56,7 @@ public class CreateWorld implements CommandExecutor {
                 }
             }
         } catch (NumberFormatException e) {
-            plugin.utils.message(sender, "&cInvalid seed format. Please enter a valid number.");
+            plugin.utils.message(sender, "<red>[lang]worlds.invalid_seed_format[/lang]");
             return false;
         }
         plugin.uhc.createWorlds(sender);
@@ -62,10 +64,10 @@ public class CreateWorld implements CommandExecutor {
     }
 
     private void sendUsage(CommandSender sender) {
-        plugin.utils.message(sender, "&cUsage: /createworld <seed> [-a] <netherseed>");
-        plugin.utils.message(sender, "&cExample: /createworld");
-        plugin.utils.message(sender, "&cExample: /createworld 12345");
-        plugin.utils.message(sender, "&cExample: /createworld 12345 -a");
-        plugin.utils.message(sender, "&cExample: /createworld 12345 67890");
+        plugin.utils.message(sender, "<red>[lang]common.usage[/lang]: /createworld <[lang]terms.seed[/lang]> [-a] <[lang]terms.netherseed[/lang]>");
+        plugin.utils.message(sender, "<red>[lang]common.example[/lang]: /createworld");
+        plugin.utils.message(sender, "<red>[lang]common.example[/lang]: /createworld 12345");
+        plugin.utils.message(sender, "<red>[lang]common.example[/lang]: /createworld 12345 -a");
+        plugin.utils.message(sender, "<red>[lang]common.example[/lang]: /createworld 12345 67890");
     }
 }

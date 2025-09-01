@@ -10,3 +10,12 @@ commands:
   createworld:
     description: Command used for creating worlds [overworld, nether, end]
     permission: uhc.staff
+  debug:
+    description: Command used for debug info
+    permission: uhc.dev
+  gui:
+    description: Command used to debug GUIs that might not be integrated into other GUIs or commands.
+    permission: uhc.dev
+  langtest:
+    description: Test and gestion of LangManager
+    permission: uhc.dev

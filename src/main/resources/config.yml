@@ -7,41 +7,71 @@ worlds:
   end: uhc_the_end
   arena: arena
   lobby: lobby
-
 # Default toggleable configurations
 toggle:
   advancements: false
   antiburn: true
   autols: true
-  bookshelves: false
-  customcrafts: true
+  bookshelves: true
   end: false
   explosives: true
+  fireaspect: false
+  flame: true
   horses: true
   mobs: false
+  nerfedstrength: true
   nether: false
   notch: true
-  pots: false
   starterbooks: true
   stats: true
-  strengthnerf: true
   trades: true
-
+  potions: # Three possible values: ON, OFF or TIER1
+    poison: "ON"
+    swiftness: "ON"
+    fireresistance: "ON"
+    turtlemaster: "ON"
+    slowness: "ON"
+    invisibility: "ON"
+    regeneration: "OFF"
+    strength: "TIER1"
+    healing: "OFF"
+    harming: "ON"
+    waterbreathing: "ON"
+    weakness: "ON"
+    leaping: "ON"
+    slowfalling: "ON"
+    infestation: "ON"
+    windcharging: "ON"
+    oozing: "ON"
+    weaving: "ON"
+  customcrafts:
+    totem: true
+    mace: false
+    breezerod: true
+    trident: true
+    elytra: false
+    goldenhead: true
+    spectralarrow: true
+    glisteringmelon: true
+    tntminecart: true
+    lectern: true
 # Default durations
 duration: # in minutes
   pvp: 15
   meetup: 15
-  finalheal: -1
-
+  finalheal: 0
 # Default border configurations
 border:
+  guidefaultlist:
+    overworld: [600, 1000, 1600, 2000, 3000, 4000]
+    nether: [500, 1000, 1500, 2000]
   overworld: 2000
   nether: 1500
   meetup: 200
   nethermeetup: 100
   tpborder: true
   timer: 5 # minutes
-  speed: 2 # blocks per minute
+  speed: 2.0 # blocks per minute
   borderlist:
     - 1000
     - 500
@@ -50,12 +80,10 @@ border:
     - 750
     - 375
     - 150
-
 # Default rates
 rates:
   xpkill: 3 # levels
   flint: 30 # %
   apple: 2 # %
   glass: 40 # %
-
 # Default ???
