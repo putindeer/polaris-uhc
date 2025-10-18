@@ -4,6 +4,7 @@ import fr.mrmicky.fastinv.FastInvManager;
 import us.polarismc.polarisuhc.commands.debug.Debug;
 import us.polarismc.polarisuhc.commands.debug.GUI;
 import us.polarismc.polarisuhc.commands.host.CreateWorld;
+import us.polarismc.polarisuhc.managers.scenario.ScenarioManager;
 import us.polarismc.polarisuhc.managers.uhc.UHCManager;
 
 public class StartThings {
@@ -39,6 +40,7 @@ public class StartThings {
     public void registerManagers() {
         FastInvManager.register(plugin);
         plugin.uhc = new UHCManager(plugin);
+        plugin.scen = new ScenarioManager(plugin);
     }
 
     public void registerLanguage() {

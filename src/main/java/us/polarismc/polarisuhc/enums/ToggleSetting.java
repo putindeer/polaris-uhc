@@ -1,7 +1,6 @@
 package us.polarismc.polarisuhc.enums;
 
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import me.putindeer.api.util.builder.ItemBuilder;
 import us.polarismc.polarisuhc.Main;
 import us.polarismc.polarisuhc.managers.uhc.UHCManager;
