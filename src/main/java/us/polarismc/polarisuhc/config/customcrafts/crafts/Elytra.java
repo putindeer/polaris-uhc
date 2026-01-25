@@ -3,21 +3,18 @@ package us.polarismc.polarisuhc.config.customcrafts.crafts;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
-import us.polarismc.polarisuhc.Main;
 import us.polarismc.polarisuhc.config.customcrafts.CraftInfo;
 import us.polarismc.polarisuhc.config.customcrafts.CustomCraft;
 
-@CraftInfo(configPath = "elytra", icon = Material.ELYTRA, displayName = "Elytra (50% Durability)")
+@CraftInfo(id = "elytra", icon = Material.ELYTRA, displayName = "Elytra")
 public class Elytra extends CustomCraft {
-    public Elytra(Main plugin) {
-        super(plugin, NamespacedKey.minecraft("elytra"), build(plugin));
-    }
-
-    private static ShapedRecipe build(Main plugin) {
-        ItemStack result = plugin.utils.ib(new org.bukkit.inventory.ItemStack(Material.ELYTRA, 1)).durability(175).build();
-
-        ShapedRecipe recipe = new ShapedRecipe(NamespacedKey.minecraft("elytra"), result);
+    @Override
+    protected Recipe buildRecipe() {
+        ItemStack result = plugin.utils.ib(new ItemStack(Material.ELYTRA, 1)).lore("Maximum durability reduced by 50%.").maxDurabilityPercentage(50).build();
+        NamespacedKey key = new NamespacedKey(plugin, "elytra");
+        ShapedRecipe recipe = new ShapedRecipe(key, result);
         recipe.shape(" D ", "CSC", "F F");
         recipe.setIngredient('D', Material.DIAMOND_CHESTPLATE);
         recipe.setIngredient('C', Material.AMETHYST_SHARD);

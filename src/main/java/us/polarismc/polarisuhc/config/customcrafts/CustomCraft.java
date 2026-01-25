@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.*;
@@ -15,17 +16,31 @@ import java.util.*;
 
 @Getter
 public abstract class CustomCraft {
-    protected final Main plugin;
+    protected final Main plugin = Main.getInstance();
     protected final NamespacedKey key;
     protected final Recipe recipe;
     @Getter private boolean enabled = false;
     private final Map<NamespacedKey, List<Recipe>> vanillaBackup = new HashMap<>();
+    private final Set<NamespacedKey> overriddenVanilla = new HashSet<>();
 
-    protected CustomCraft(Main plugin, NamespacedKey key, Recipe recipe) {
-        this.plugin = plugin;
-        this.key = key;
-        this.recipe = recipe;
+    protected CustomCraft() {
+        CraftInfo info = getClass().getAnnotation(CraftInfo.class);
+        if (info == null) {
+            throw new IllegalStateException("Missing @CraftInfo on " + getClass().getSimpleName());
+        }
+
+        this.key = new NamespacedKey(plugin, info.id());
+
+        for (String recipeId : info.removedVanillaRecipes()) {
+            NamespacedKey vanillaKey = NamespacedKey.minecraft(recipeId);
+            removeVanillaRecipe(vanillaKey);
+        }
+
+        this.recipe = buildRecipe();
+        setDefault(info);
     }
+
+    protected abstract Recipe buildRecipe();
 
     public final void enable() {
         enabled = true;
@@ -37,14 +52,21 @@ public abstract class CustomCraft {
         unregister();
     }
 
-    public final void removeVanillaRecipe(NamespacedKey key) {
+    private void setDefault(CraftInfo info) {
+        ConfigurationSection config = plugin.getConfig().getConfigurationSection("toggle.customcrafts");
+        if (config == null) return;
+        enabled = config.getBoolean(info.id());
+    }
+
+    private void removeVanillaRecipe(NamespacedKey key) {
         List<Recipe> recipes = getRecipesByKey(key);
         vanillaBackup.put(key, recipes);
     }
 
     private void register() {
-        Bukkit.addRecipe(recipe);
         removeRecipes();
+        Bukkit.removeRecipe(key);
+        Bukkit.addRecipe(recipe);
     }
 
     private void unregister() {
@@ -53,12 +75,23 @@ public abstract class CustomCraft {
     }
 
     private void removeRecipes() {
-        vanillaBackup.forEach((namespacedKey, recipes) -> Bukkit.removeRecipe(namespacedKey));
+        vanillaBackup.forEach((namespacedKey, recipes) -> {
+            if (Bukkit.getRecipe(namespacedKey) != null) {
+                Bukkit.removeRecipe(namespacedKey);
+                overriddenVanilla.add(namespacedKey);
+            }
+        });
     }
 
     private void restoreRecipes() {
-        vanillaBackup.forEach(((namespacedKey, recipes) -> recipes.forEach(Bukkit::addRecipe)));
+        vanillaBackup.forEach((namespacedKey, recipes) -> {
+            if (!overriddenVanilla.remove(namespacedKey)) return;
+
+            Bukkit.removeRecipe(namespacedKey);
+            recipes.forEach(Bukkit::addRecipe);
+        });
     }
+
 
     private List<Recipe> getRecipesByKey(NamespacedKey key) {
         List<Recipe> list = new ArrayList<>();

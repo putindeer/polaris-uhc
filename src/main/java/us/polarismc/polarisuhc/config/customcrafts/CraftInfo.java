@@ -7,11 +7,13 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface CraftInfo {
-    String configPath();
+    String id();
 
     Material icon();
 
     String displayName();
 
     String[] lore() default {};
+
+    String[] removedVanillaRecipes() default {};
 }

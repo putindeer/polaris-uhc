@@ -17,14 +17,16 @@ public class CustomCraftManager {
         this.plugin = plugin;
 
         for (CustomCraftSetting setting : CustomCraftSetting.values()) {
-            CustomCraft craft = setting.create(plugin);
-            if (setting.getDefault(plugin)) {
+            CustomCraft craft = setting.create();
+            if (craft.isEnabled()) {
                 craft.enable();
-            } else {
-                craft.disable();
             }
-            crafts.put(setting, setting.create(plugin));
+            crafts.put(setting, setting.create());
         }
+    }
+
+    public void disableAll() {
+        crafts.values().stream().filter(CustomCraft::isEnabled).forEach(CustomCraft::disable);
     }
 
     public @Nullable CustomCraft getCraft(CustomCraftSetting setting) {
@@ -35,7 +37,7 @@ public class CustomCraftManager {
         return crafts.get(setting).isEnabled();
     }
 
-    public void setCraftEnabled(CustomCraftSetting setting, boolean value) {
+    private void setCraftEnabled(CustomCraftSetting setting, boolean value) {
         CustomCraft craft = crafts.get(setting);
         if (value) {
             craft.enable();
@@ -52,6 +54,6 @@ public class CustomCraftManager {
         CustomCraft craft = crafts.get(setting);
         if (craft == null) return;
 
-        craft.openPreview(player, "<blue>" + setting.info().displayName() + " Recipe</blue>");
+        craft.openPreview(player, "<blue>" + setting.getInfo().displayName() + " Recipe</blue>");
     }
 }

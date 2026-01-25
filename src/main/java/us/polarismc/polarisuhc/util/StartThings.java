@@ -29,7 +29,7 @@ public class StartThings {
     }
 
     public void disable() {
-
+        plugin.uhc.crafts.disableAll();
     }
 
     public void registerCommands() {

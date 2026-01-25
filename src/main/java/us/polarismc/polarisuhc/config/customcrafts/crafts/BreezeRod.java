@@ -8,16 +8,16 @@ import org.bukkit.inventory.ShapedRecipe;
 import us.polarismc.polarisuhc.config.customcrafts.CraftInfo;
 import us.polarismc.polarisuhc.config.customcrafts.CustomCraft;
 
-@CraftInfo(id = "golden_head", icon = Material.GOLDEN_APPLE, displayName = "Golden Head")
-public class GoldenHead extends CustomCraft {
+@CraftInfo(id = "breeze_rod", icon = Material.BREEZE_ROD, displayName = "Breeze Rods")
+public class BreezeRod extends CustomCraft {
     @Override
     protected Recipe buildRecipe() {
-        ItemStack result = plugin.utils.head();
-        NamespacedKey key = new NamespacedKey(plugin, "golden_head");
+        ItemStack result = new ItemStack(Material.BREEZE_ROD, 2);
+        NamespacedKey key = new NamespacedKey(plugin, "breeze_rod");
         ShapedRecipe recipe = new ShapedRecipe(key, result);
-        recipe.shape("GGG", "GHG", "GGG");
-        recipe.setIngredient('G', Material.GOLD_INGOT);
-        recipe.setIngredient('H', Material.PLAYER_HEAD);
+        recipe.shape("  C", " D ", "C  ");
+        recipe.setIngredient('D', Material.DIAMOND_BLOCK);
+        recipe.setIngredient('C', Material.LIGHTNING_ROD);
         return recipe;
     }
 }

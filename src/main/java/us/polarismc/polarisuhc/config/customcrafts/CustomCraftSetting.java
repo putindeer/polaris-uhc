@@ -1,38 +1,29 @@
 package us.polarismc.polarisuhc.config.customcrafts;
 
+import lombok.Getter;
 import me.putindeer.api.util.builder.ItemBuilder;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import us.polarismc.polarisuhc.Main;
-import us.polarismc.polarisuhc.config.customcrafts.crafts.Totem;
-import us.polarismc.polarisuhc.config.customcrafts.crafts.Trident;
-import us.polarismc.polarisuhc.config.customcrafts.crafts.Elytra;
-import us.polarismc.polarisuhc.config.customcrafts.crafts.GoldenHead;
-import us.polarismc.polarisuhc.config.customcrafts.crafts.SpectralArrows;
-import us.polarismc.polarisuhc.config.customcrafts.crafts.GlisteringMelon;
-import us.polarismc.polarisuhc.config.customcrafts.crafts.TntMinecart;
-import us.polarismc.polarisuhc.config.customcrafts.crafts.Lectern;
-
-import java.util.function.Function;
+import us.polarismc.polarisuhc.config.customcrafts.crafts.*;
 
 public enum CustomCraftSetting {
-    TOTEM_CRAFT(Totem.class, Totem::new),
-    TRIDENT_CRAFT(Trident.class, Trident::new),
-    ELYTRA_CRAFT(Elytra.class, Elytra::new),
-    GOLDEN_HEAD_CRAFT(GoldenHead.class, GoldenHead::new),
-    SPECTRAL_ARROW_CRAFT(SpectralArrows.class, SpectralArrows::new),
-    GLISTERING_MELON_CRAFT(GlisteringMelon.class, GlisteringMelon::new),
-    TNT_MINECART_CRAFT(TntMinecart.class, TntMinecart::new),
-    LECTERN_CRAFT(Lectern.class, Lectern::new),
-    // MACE_CRAFT(Mace.class, Mace::new),
-    // BREEZE_ROD_CRAFT(BreezeRod.class, BreezeRod::new),
-    ;
+    TOTEM_CRAFT(Totem.class),
+    TRIDENT_CRAFT(Trident.class),
+    ELYTRA_CRAFT(Elytra.class),
+    GOLDEN_HEAD_CRAFT(GoldenHead.class),
+    SPECTRAL_ARROW_CRAFT(SpectralArrows.class),
+    GLISTERING_MELON_CRAFT(GlisteringMelon.class),
+    TNT_MINECART_CRAFT(TntMinecart.class),
+    LECTERN_CRAFT(Lectern.class),
+    MACE_CRAFT(Mace.class),
+    BREEZE_ROD_CRAFT(BreezeRod.class);
 
-    private final Function<Main, ? extends CustomCraft> factory;
-    private final CraftInfo info;
+    private final Class<? extends CustomCraft> craftClass;
+    @Getter private final CraftInfo info;
 
-    CustomCraftSetting(Class<? extends CustomCraft> craftClass, Function<Main, ? extends CustomCraft> factory) {
-        this.factory = factory;
+    CustomCraftSetting(Class<? extends CustomCraft> craftClass) {
+        this.craftClass = craftClass;
 
         CraftInfo found = craftClass.getAnnotation(CraftInfo.class);
         if (found == null) {
@@ -41,18 +32,12 @@ public enum CustomCraftSetting {
         this.info = found;
     }
 
-    public @NotNull CustomCraft create(Main plugin) {
-        return factory.apply(plugin);
-    }
-
-    private final String path = "toggle.customcrafts.";
-
-    public boolean getDefault(Main plugin) {
-        return plugin.getConfig().getBoolean(info.configPath());
-    }
-
-    public CraftInfo info() {
-        return info;
+    public @NotNull CustomCraft create() {
+        try {
+            return craftClass.getDeclaredConstructor().newInstance();
+        } catch (ReflectiveOperationException e) {
+            throw new IllegalStateException("Invalid craft class: " + craftClass.getName() + " (needs a public no-args constructor)", e);
+        }
     }
 
     public ItemBuilder buildIcon(Main plugin, boolean enabled) {

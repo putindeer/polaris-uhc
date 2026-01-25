@@ -32,8 +32,8 @@ public class CustomCraftsGUI extends FastInv {
         addToggle(29, CustomCraftSetting.GOLDEN_HEAD_CRAFT, ib -> {});
         addToggle(30, CustomCraftSetting.TRIDENT_CRAFT, ib -> {});
         addToggle(31, CustomCraftSetting.ELYTRA_CRAFT, ib -> {});
-        // addToggle(32, CustomCraftSetting.MACE_CRAFT, ib -> {});
-        // addToggle(33, CustomCraftSetting.BREEZE_ROD_CRAFT, ib -> {});
+        addToggle(32, CustomCraftSetting.MACE_CRAFT, ib -> {});
+        addToggle(33, CustomCraftSetting.BREEZE_ROD_CRAFT, ib -> {});
 
         addClickHandler(e -> e.setCancelled(true));
         open(player);
