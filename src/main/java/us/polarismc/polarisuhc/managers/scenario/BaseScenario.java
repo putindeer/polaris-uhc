@@ -1,21 +1,20 @@
 package us.polarismc.polarisuhc.managers.scenario;
 
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.PluginCommand;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import us.polarismc.polarisuhc.Main;
 
 import java.util.Arrays;
-import java.util.List;
 
-@Slf4j
-public abstract class BaseScenario {
-    @Getter
-    private boolean enabled = false;
+public abstract class BaseScenario implements Listener {
+    @Getter private boolean enabled = false;
     protected final Main plugin = Main.getInstance();
 
     private final Scenario annotation;
@@ -25,62 +24,130 @@ public abstract class BaseScenario {
         if (annotation == null) {
             throw new RuntimeException("Scenario must be annotated with @Scenario: " + getClass().getSimpleName());
         }
-
-        log.debug("Scenario '{}' initialized", getName());
     }
 
     public final String getName() {
         return annotation.name();
     }
 
-    public final String getAuthor() {
-        return annotation.author();
+    public final String getDisplayName() {
+        String display = annotation.displayName();
+        return display.isEmpty() ? annotation.name() : display;
     }
 
-    public final List<Component> getDescription() {
-        return Arrays.stream(getDescriptionLines())
-                .map(plugin.utils::chat)
-                .toList();
+    public final String[] getAuthors() {
+        if (annotation.authors().length > 0) {
+            return annotation.authors();
+        }
+        return new String[]{annotation.author()};
+    }
+
+    public final String getAuthorString() {
+        String[] authors = getAuthors();
+
+        if (authors.length == 0) {
+            return "Unknown";
+        }
+
+        return String.join(", ", authors);
+    }
+
+    public final String[] getCommandNames() {
+        if (annotation.commands().length > 0) {
+            return annotation.commands();
+        }
+
+        return new String[]{annotation.command()};
     }
 
     public final ItemStack getIcon() {
-        return new ItemStack(annotation.icon());
+        return getIconStack();
     }
 
-    /**
-     * Override para descripciones dinámicas
-     */
+    public final int getPriority() {
+        return annotation.priority();
+    }
+
+    public final Component[] getDescription() {
+        return Arrays.stream(getDescriptionLines())
+                .map(plugin.utils::chat)
+                .toArray(Component[]::new);
+    }
+
+    public final ScenarioType[] getIncompatibleScenarios() {
+        return annotation.incompatibleWith();
+    }
+
+    public final boolean isInDevelopment() {
+        return annotation.inDevelopment();
+    }
+
     protected String[] getDescriptionLines() {
         return annotation.description();
+    }
+
+    protected ItemStack getIconStack() {
+        return new ItemStack(annotation.icon());
     }
 
     public final void enable() {
         if (enabled) return;
 
-        if (this instanceof Listener) {
-            Bukkit.getPluginManager().registerEvents((Listener) this, plugin);
-            log.debug("Auto-registered events for: {}", getName());
-        }
+        Bukkit.getPluginManager().registerEvents(this, plugin);
 
         enabled = true;
+        plugin.utils.broadcast(getDisplayName() + " has been <blue>enabled</blue>.");
+
+        registerScenarioCommands();
         onEnable();
-        log.info("Enabled scenario: {}", getName());
     }
 
     public final void disable() {
         if (!enabled) return;
 
-        if (this instanceof Listener) {
-            HandlerList.unregisterAll((Listener) this);
-            log.debug("Auto-unregistered events for: {}", getName());
-        }
+        unregisterScenarioCommands();
+        HandlerList.unregisterAll(this);
 
         enabled = false;
+        plugin.utils.broadcast(getDisplayName() + " has been <blue>disabled</blue>.");
         onDisable();
-        log.info("Disabled scenario: {}", getName());
     }
 
-    // ===== MÉTODOS OPCIONALES =====
-    protected void onEnable() { /* Override if needed */ }
-    protected void onDisable() { /* Override if needed */ }
+    private void registerScenarioCommands() {
+        for (String name : getCommandNames()) {
+            if (name.isBlank()) continue;
+
+            PluginCommand command = plugin.getCommand(name);
+            if (command == null) {
+                plugin.getLogger().warning("Command '" + name + "' not found in plugin.yml (scenario " + getName() + ")");
+                continue;
+            }
+
+            if (this instanceof CommandExecutor executor) {
+                command.setExecutor(executor);
+            }
+            if (this instanceof TabCompleter completer) {
+                command.setTabCompleter(completer);
+            }
+        }
+    }
+
+    private void unregisterScenarioCommands() {
+        for (String name : getCommandNames()) {
+            if (name.isBlank()) continue;
+
+            PluginCommand command = plugin.getCommand(name);
+            if (command == null) continue;
+
+            command.setExecutor((sender, cmd, label, args) -> {
+                plugin.utils.message(sender, "<red>" + getDisplayName() + " isn't enabled.");
+                return true;
+            });
+            command.setTabCompleter((sender, cmd, alias, args) -> java.util.Collections.emptyList());
+        }
+    }
+
+
+    protected void onEnable() {}
+    protected void onDisable() {}
 }

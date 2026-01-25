@@ -1,16 +1,12 @@
 package us.polarismc.polarisuhc.commands.debug;
 
-import io.papermc.paper.datacomponent.item.consumable.ConsumeEffect;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import us.polarismc.polarisuhc.Main;
-import us.polarismc.polarisuhc.managers.uhc.gui.*;
+import us.polarismc.polarisuhc.managers.gui.ui.*;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -31,7 +27,7 @@ public class GUI implements TabExecutor {
         if (!(sender instanceof Player player)) return false;
 
         if (args.length == 0) {
-            plugin.utils.message(player, "<red>[lang]terms.usage[/lang]: /gui <gui name>");
+            plugin.utils.message(player, "<red>Usage: /gui <gui name>");
             return true;
         }
 
@@ -41,7 +37,7 @@ public class GUI implements TabExecutor {
             case "customcrafts" -> new CustomCraftsGUI(player, plugin);
             case "potions" -> new PotionsGUI(player, plugin);
             case "duration" -> new DurationRatesGUI(player, plugin);
-            default -> plugin.utils.message(player, "&cUnknown GUI.");
+            default -> plugin.utils.message(player, "<red>Unknown GUI.");
         }
         return true;
     }
@@ -49,7 +45,7 @@ public class GUI implements TabExecutor {
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
         if (args.length == 1) {
-            List<String> guis = Arrays.asList("createworld", "toggle", "customcrafts", "potions", "givehead", "duration");
+            List<String> guis = Arrays.asList("createworld", "toggle", "customcrafts", "potions", "duration");
             return guis.stream()
                     .filter(s -> s.startsWith(args[0].toLowerCase()))
                     .collect(Collectors.toList());

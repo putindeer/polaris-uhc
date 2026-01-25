@@ -7,15 +7,55 @@ description: UHC Plugin for PolarisMC
 website: https://github.com/polaris-mc
 
 commands:
-  createworld:
-    description: Command used for creating worlds [overworld, nether, end]
-    permission: uhc.staff
   debug:
     description: Command used for debug info
     permission: uhc.dev
   gui:
     description: Command used to debug GUIs that might not be integrated into other GUIs or commands.
     permission: uhc.dev
-  langtest:
-    description: Test and gestion of LangManager
+  hex:
+    description: Ccommand used to test hex colors.
     permission: uhc.dev
+  teamhex:
+    description: Command used to test team hex colors.
+    permission: uhc.dev
+  testteams:
+    description: Command used to test teams.
+    permission: uhc.dev
+  createworld:
+    description: Used for creating overworld/nether/end worlds.
+    permission: uhc.host
+  togglescenario:
+    description: Used for toggling scenarios.
+    permission: uhc.host
+  emojiteam:
+    description: Change the emoji of other team.
+    permission: uhc.host
+  maketeams:
+    description: Used for messaging players about creating teams.
+    permission: uhc.host
+  solo:
+    description: Used for giving a team to a player or making a solo team for every player without a team.
+    permission: uhc.host
+  bookstuff:
+    description: Send the book-related items you have on your inventory to your teammates.
+    aliases: bs
+  colorteam:
+    description: Change the color of your team.
+  minedores:
+    description: Send the ores you have mined to your teammates.
+    aliases: pmminedores
+  ores:
+    description: Send the ores you have on your inventory to your teammates.
+    aliases: pmores
+  teamchat:
+    description: Enables your teamchat, allowing you to send private messages to your teammates.
+    aliases: [chat, c, tc]
+  team:
+    description: Used for all kind of team commands.
+  teamlocation:
+    description: Sends your location to your teammates.
+    aliases: tl
+  teaminventory:
+    description: Access a shared inventory for your team.
+    aliases: ti

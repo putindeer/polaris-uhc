@@ -3,10 +3,13 @@ package us.polarismc.polarisuhc.commands.debug;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import us.polarismc.polarisuhc.Main;
 
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Debug implements CommandExecutor {
     private final Main plugin;
@@ -18,6 +21,55 @@ public class Debug implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
+        if (args.length == 0) {
+            sendDebug();
+            return true;
+        }
+        switch (args[0].toLowerCase()) {
+            case "scenario" -> listScenarios(sender);
+            case "actionbar" -> actionBar(sender);
+            case "start" -> start();
+        }
+        return true;
+    }
+
+    private void listScenarios(CommandSender sender) {
+        plugin.utils.message(sender, "<red>Scenarios:");
+
+        plugin.scen.getAll().values().forEach(scenario -> {
+            String status = scenario.isEnabled() ? "<green>✓ Enabled</green>" : "<red>✗ Disabled</red>";
+            String devTag = scenario.isInDevelopment() ? " <yellow>[DEV]</yellow>" : "";
+
+            plugin.utils.message(sender, "<gray>• <white>" + scenario.getName() + "</white> " + devTag
+                    + " (display: " + scenario.getDisplayName() + ") "
+                    + status + " <gray>(by " + scenario.getAuthorString() + ") (priority: " + scenario.getPriority() + ")");
+
+            // Mostrar descripción
+            plugin.utils.message(sender, scenario.getDescription());
+
+            // Mostrar incompatibilidades si existen
+            if (scenario.getIncompatibleScenarios().length > 0) {
+                String incompatible = Arrays.stream(scenario.getIncompatibleScenarios())
+                        .map(Enum::name)
+                        .collect(Collectors.joining(", "));
+                plugin.utils.message(sender, "  <red>⚠ Incompatible with: " + incompatible);
+            }
+        });
+    }
+
+    private void actionBar(CommandSender sender) {
+        if (!(sender instanceof Player player)) return;
+        plugin.utils.bar.setDefault(player, p -> "Timer: " + plugin.timer.getFormatted());
+        plugin.utils.delay(40, () -> plugin.utils.bar.sendTemporary(player, "Este es un mensaje temporal de 3 segundos", 3));
+        plugin.utils.delay(200, () -> plugin.utils.bar.sendTemporary(player, "Este es un mensaje temporal de 2 segundos con variable" + player.getName(), 2));
+        plugin.utils.delay(2000, () -> plugin.utils.bar.clear(player));
+    }
+
+    private void start() {
+        plugin.timer.start();
+    }
+
+    private void sendDebug() {
         plugin.utils.log("=== UHC STATUS ===",
                 "Started: " + plugin.uhc.isStarted(),
                 "Starting: " + plugin.uhc.isStarting(),
@@ -27,55 +79,54 @@ public class Debug implements CommandExecutor {
                 "UHC Number: " + plugin.uhc.getNumber(),
                 "",
                 "=== WORLDS ===",
-                "UHC World: " + plugin.uhc.getUhcWorldString() + " (Loaded: " + (plugin.uhc.getUhcWorld() != null) + ")",
-                "Nether World: " + plugin.uhc.getNetherWorldString() + " (Loaded: " + (plugin.uhc.getNetherWorld() != null) + ")",
-                "End World: " + plugin.uhc.getEndWorldString() + " (Loaded: " + (plugin.uhc.getEndWorld() != null) + ")",
-                "Arena World: " + plugin.uhc.getArenaWorldString() + " (Loaded: " + (plugin.uhc.getArenaWorld() != null) + ")",
-                "Lobby World: " + plugin.uhc.getLobbyWorldString() + " (Loaded: " + (plugin.uhc.getLobbyWorld() != null) + ")",
-                "Seed: " + (plugin.uhc.getSeed() != null ? plugin.uhc.getSeed() : "Random"),
-                "Nether Seed: " + (plugin.uhc.getNetherSeed() != null ? plugin.uhc.getNetherSeed() : "Random"),
-                "End Seed: " + (plugin.uhc.getEndSeed() != null ? plugin.uhc.getEndSeed() : "Random"),
-                "Amplified: " + plugin.uhc.isAmplified(),
+                "UHC World: " + plugin.uhc.world.getUhcWorldString() + " (Loaded: " + (plugin.uhc.world.getUhcWorld() != null) + ")",
+                "Nether World: " + plugin.uhc.world.getNetherWorldString() + " (Loaded: " + (plugin.uhc.world.getNetherWorld() != null) + ")",
+                "End World: " + plugin.uhc.world.getEndWorldString() + " (Loaded: " + (plugin.uhc.world.getEndWorld() != null) + ")",
+                "Arena World: " + plugin.uhc.world.getArenaWorldString() + " (Loaded: " + (plugin.uhc.world.getArenaWorld() != null) + ")",
+                "Lobby World: " + plugin.uhc.world.getLobbyWorldString() + " (Loaded: " + (plugin.uhc.world.getLobbyWorld() != null) + ")",
+                "Seed: " + (plugin.uhc.world.getSeed() != null ? plugin.uhc.world.getSeed() : "Random"),
+                "Nether Seed: " + (plugin.uhc.world.getNetherSeed() != null ? plugin.uhc.world.getNetherSeed() : "Random"),
+                "End Seed: " + (plugin.uhc.world.getEndSeed() != null ? plugin.uhc.world.getEndSeed() : "Random"),
+                "Amplified: " + plugin.uhc.world.isAmplified(),
                 "",
                 "=== TOGGLE ===",
-                "Advancements: " + plugin.uhc.isAdvancements(),
-                "Anti Burn: " + plugin.uhc.isAntiBurn(),
-                "Auto LS: " + plugin.uhc.isAutoLS(),
-                "Bookshelves: " + plugin.uhc.isBookshelves(),
-                "End: " + plugin.uhc.isEnd(),
-                "Explosives: " + plugin.uhc.isExplosives(),
-                "Fire: " + plugin.uhc.isFireAspect(),
-                "Flame: " + plugin.uhc.isFlame(),
-                "Horses: " + plugin.uhc.isHorses(),
-                "Mobs: " + plugin.uhc.isMobs(),
-                "Nether: " + plugin.uhc.isNether(),
-                "Notch: " + plugin.uhc.isNotch(),
-                "Starter Books: " + plugin.uhc.isStarterBooks(),
-                "Stats: " + plugin.uhc.isStats(),
-                "Strength Nerf: " + plugin.uhc.isNerfedStrength(),
-                "Trades: " + plugin.uhc.isTrades(),
+                "Advancements: " + plugin.uhc.toggle.isAdvancements(),
+                "Anti Burn: " + plugin.uhc.toggle.isAntiBurn(),
+                "Auto LS: " + plugin.uhc.toggle.isAutoLS(),
+                "Bookshelves: " + plugin.uhc.toggle.isBookshelves(),
+                "End: " + plugin.uhc.toggle.isEnd(),
+                "Explosives: " + plugin.uhc.toggle.isExplosives(),
+                "Fire: " + plugin.uhc.toggle.isFireAspect(),
+                "Flame: " + plugin.uhc.toggle.isFlame(),
+                "Horses: " + plugin.uhc.toggle.isHorses(),
+                "Mobs: " + plugin.uhc.toggle.isMobs(),
+                "Nether: " + plugin.uhc.toggle.isNether(),
+                "Notch: " + plugin.uhc.toggle.isNotch(),
+                "Starter Books: " + plugin.uhc.toggle.isStarterBooks(),
+                "Stats: " + plugin.uhc.toggle.isStats(),
+                "Strength Nerf: " + plugin.uhc.toggle.isNerfedStrength(),
+                "Trades: " + plugin.uhc.toggle.isTrades(),
                 "",
                 "=== DURATION ===",
-                "PvP Time: " + plugin.uhc.getPvpTime() + " minutes",
-                "Meetup Time: " + plugin.uhc.getMeetupTime() + " minutes",
-                "Final Heal Time: " + plugin.uhc.getFinalHealTime() + " minutes",
+                "PvP Time: " + plugin.uhc.duration.getPvpTime() + " minutes",
+                "Meetup Time: " + plugin.uhc.duration.getMeetupTime() + " minutes",
+                "Final Heal Time: " + plugin.uhc.duration.getFinalHealTime() + " minutes",
                 "",
                 "=== BORDER ===",
-                "Overworld Border: " + plugin.uhc.getBorder() + " blocks",
-                "Nether Border: " + plugin.uhc.getNetherBorder() + " blocks",
-                "Meetup Border: " + plugin.uhc.getMeetupBorder() + " blocks",
-                "Nether Meetup Border: " + plugin.uhc.getNetherMeetupBorder() + " blocks",
-                "Border Timer: " + plugin.uhc.getBorderTimer() + " minutes",
-                "TP Border: " + plugin.uhc.isTpBorder(),
-                "Border Speed: " + plugin.uhc.getBorderSpeed() + " blocks/second",
-                "Border List: " + plugin.uhc.getBorderList().toString(),
-                "Nether Border List: " + plugin.uhc.getNetherBorderList().toString(),
+                "Overworld Border: " + plugin.uhc.border.getBorder() + " blocks",
+                "Nether Border: " + plugin.uhc.border.getNetherBorder() + " blocks",
+                "Meetup Border: " + plugin.uhc.border.getMeetupBorder() + " blocks",
+                "Nether Meetup Border: " + plugin.uhc.border.getNetherMeetupBorder() + " blocks",
+                "Border Timer: " + plugin.uhc.border.getBorderTimer() + " minutes",
+                "TP Border: " + plugin.uhc.border.isTpBorder(),
+                "Border Speed: " + plugin.uhc.border.getBorderSpeed() + " blocks/second",
+                "Border List: " + plugin.uhc.border.getBorderList().toString(),
+                "Nether Border List: " + plugin.uhc.border.getNetherBorderList().toString(),
                 "",
                 "=== RATES ===",
-                "XP Kill Rate: " + plugin.uhc.getXpKillRate() + "x",
-                "Flint Rate: " + plugin.uhc.getFlintRate() + "%",
-                "Apple Rate: " + plugin.uhc.getAppleRate() + "%",
-                "Glass Rate: " + plugin.uhc.getGlassRate() + "%");
-        return true;
+                "XP Kill Rate: " + plugin.uhc.rates.getXpKillRate() + "x",
+                "Flint Rate: " + plugin.uhc.rates.getFlintRate() + "%",
+                "Apple Rate: " + plugin.uhc.rates.getAppleRate() + "%",
+                "Glass Rate: " + plugin.uhc.rates.getGlassRate() + "%");
     }
 }

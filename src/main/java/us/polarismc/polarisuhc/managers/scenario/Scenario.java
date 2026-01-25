@@ -11,7 +11,14 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Scenario {
     String name();
+    String displayName() default "";
     String author() default "Unknown";
+    String command() default "";
+    String[] authors() default {};
+    String[] commands() default {};
     Material icon() default Material.BEDROCK;
     String[] description() default {};
+    ScenarioType[] incompatibleWith() default {};
+    boolean inDevelopment() default false;
+    int priority() default 1;
 }

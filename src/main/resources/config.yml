@@ -26,40 +26,35 @@ toggle:
   stats: true
   trades: true
   potions: # Three possible values: ON, OFF or TIER1
-    poison: "ON"
-    swiftness: "ON"
-    fireresistance: "ON"
-    turtlemaster: "ON"
-    slowness: "ON"
-    invisibility: "ON"
-    regeneration: "OFF"
-    strength: "TIER1"
-    healing: "OFF"
-    harming: "ON"
-    waterbreathing: "ON"
-    weakness: "ON"
-    leaping: "ON"
-    slowfalling: "ON"
-    infestation: "ON"
-    windcharging: "ON"
-    oozing: "ON"
-    weaving: "ON"
+    poison: ON
+    swiftness: ON
+    fireresistance: ON
+    turtlemaster: ON
+    slowness: ON
+    invisibility: ON
+    regeneration: OFF
+    strength: TIER1
+    healing: OFF
+    harming: ON
+    waterbreathing: ON
+    weakness: ON
+    leaping: ON
+    slowfalling: ON
+    infestation: ON
+    windcharging: ON
+    oozing: ON
+    weaving: ON
   customcrafts:
     totem: true
     mace: false
-    breezerod: true
+    breeze_rod: true
     trident: true
     elytra: false
-    goldenhead: true
-    spectralarrow: true
-    glisteringmelon: true
-    tntminecart: true
+    golden_head: true
+    spectral_arrows: true
+    glistering_melon: true
+    tnt_minecart: true
     lectern: true
-# Default durations
-duration: # in minutes
-  pvp: 15
-  meetup: 15
-  finalheal: 0
 # Default border configurations
 border:
   guidefaultlist:
@@ -80,6 +75,11 @@ border:
     - 750
     - 375
     - 150
+# Default durations
+duration: # in minutes
+  pvp: 15
+  meetup: 15
+  finalheal: 0
 # Default rates
 rates:
   xpkill: 3 # levels

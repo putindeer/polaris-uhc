@@ -12,7 +12,7 @@
     <name>polarisuhc</name>
 
     <properties>
-        <java.version>23</java.version>
+        <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -67,6 +67,10 @@
 
     <repositories>
         <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+        <repository>
             <id>papermc-repo</id>
             <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
@@ -83,10 +87,6 @@
             <url>https://repo.dmulloy2.net/repository/public/</url>
         </repository>
         <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-        <repository>
             <id>codemc</id>
             <url>https://repo.codemc.io/repository/maven-public/</url>
         </repository>
@@ -96,7 +96,7 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.21.8-R0.1-SNAPSHOT</version>
+            <version>1.21.11-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -146,7 +146,7 @@
         <dependency>
             <groupId>com.github.putindeer</groupId>
             <artifactId>mcdev-utils</artifactId>
-            <version>1.0.4</version>
+            <version>1.0.14</version>
         </dependency>
         <dependency>
             <groupId>de.rapha149.signgui</groupId>
