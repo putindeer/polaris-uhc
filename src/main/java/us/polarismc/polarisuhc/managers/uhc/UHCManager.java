@@ -8,7 +8,7 @@ import us.polarismc.polarisuhc.Main;
 import us.polarismc.polarisuhc.config.border.BorderManager;
 import us.polarismc.polarisuhc.config.customcrafts.CustomCraftManager;
 import us.polarismc.polarisuhc.config.duration.DurationManager;
-import us.polarismc.polarisuhc.managers.gui.GUIManager;
+import us.polarismc.polarisuhc.managers.info.GUIManager;
 import us.polarismc.polarisuhc.config.potion.PotionManager;
 import us.polarismc.polarisuhc.config.rates.RatesManager;
 import us.polarismc.polarisuhc.config.toggle.ToggleManager;

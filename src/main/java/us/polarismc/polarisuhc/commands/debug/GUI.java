@@ -6,7 +6,11 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import us.polarismc.polarisuhc.Main;
-import us.polarismc.polarisuhc.managers.gui.ui.*;
+import us.polarismc.polarisuhc.config.customcrafts.CustomCraftsGUI;
+import us.polarismc.polarisuhc.config.duration.DurationRatesGUI;
+import us.polarismc.polarisuhc.config.potion.PotionsGUI;
+import us.polarismc.polarisuhc.config.toggle.ToggleGUI;
+import us.polarismc.polarisuhc.config.border.BorderWorldGUI;
 
 import java.util.Arrays;
 import java.util.Collections;

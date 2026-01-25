@@ -1,10 +1,11 @@
-package us.polarismc.polarisuhc.managers.gui.ui;
+package us.polarismc.polarisuhc.config.duration;
 
 import fr.mrmicky.fastinv.FastInv;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import us.polarismc.polarisuhc.Main;
+import us.polarismc.polarisuhc.managers.uhc.UHCGUI;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;

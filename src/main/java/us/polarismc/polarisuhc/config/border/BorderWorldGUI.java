@@ -1,4 +1,4 @@
-package us.polarismc.polarisuhc.managers.gui.ui;
+package us.polarismc.polarisuhc.config.border;
 
 import fr.mrmicky.fastinv.FastInv;
 import io.papermc.paper.registry.keys.SoundEventKeys;
@@ -7,7 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import us.polarismc.polarisuhc.Main;
-import us.polarismc.polarisuhc.config.border.BorderGUIHandler;
+import us.polarismc.polarisuhc.managers.uhc.UHCGUI;
 
 public class BorderWorldGUI extends FastInv {
     private final Main plugin;

@@ -1,4 +1,4 @@
-package us.polarismc.polarisuhc.managers.gui;
+package us.polarismc.polarisuhc.managers.info;
 
 import de.rapha149.signgui.SignGUI;
 import de.rapha149.signgui.SignGUIResult;
