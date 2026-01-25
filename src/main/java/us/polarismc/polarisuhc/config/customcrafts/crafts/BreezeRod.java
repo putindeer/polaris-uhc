@@ -1,7 +1,6 @@
 package us.polarismc.polarisuhc.config.customcrafts.crafts;
 
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
@@ -13,7 +12,6 @@ public class BreezeRod extends CustomCraft {
     @Override
     protected Recipe buildRecipe() {
         ItemStack result = new ItemStack(Material.BREEZE_ROD, 2);
-        NamespacedKey key = new NamespacedKey(plugin, "breeze_rod");
         ShapedRecipe recipe = new ShapedRecipe(key, result);
         recipe.shape("  C", " D ", "C  ");
         recipe.setIngredient('D', Material.DIAMOND_BLOCK);

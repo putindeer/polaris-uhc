@@ -1,7 +1,6 @@
 package us.polarismc.polarisuhc.config.customcrafts.crafts;
 
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
@@ -15,7 +14,6 @@ public class TntMinecart extends CustomCraft {
     @Override
     protected Recipe buildRecipe() {
         ItemStack result = new ItemStack(Material.TNT_MINECART, 1);
-        NamespacedKey key = new NamespacedKey(plugin, "tnt_minecart");
         ShapedRecipe recipe = new ShapedRecipe(key, result);
         recipe.shape("III", "ITI", "RRR");
         recipe.setIngredient('R', Material.REDSTONE_BLOCK);

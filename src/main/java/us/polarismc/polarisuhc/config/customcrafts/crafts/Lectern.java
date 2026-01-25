@@ -1,7 +1,6 @@
 package us.polarismc.polarisuhc.config.customcrafts.crafts;
 
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.RecipeChoice;
@@ -14,7 +13,6 @@ public class Lectern extends CustomCraft {
     @Override
     protected Recipe buildRecipe() {
         ItemStack result = new ItemStack(Material.LECTERN, 1);
-        NamespacedKey key = new NamespacedKey(plugin, "lectern");
         ShapedRecipe recipe = new ShapedRecipe(key, result);
         recipe.shape("WWW", "BBB", "WWW");
 

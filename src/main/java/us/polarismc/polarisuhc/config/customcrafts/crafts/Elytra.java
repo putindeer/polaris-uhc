@@ -1,7 +1,6 @@
 package us.polarismc.polarisuhc.config.customcrafts.crafts;
 
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
@@ -13,7 +12,6 @@ public class Elytra extends CustomCraft {
     @Override
     protected Recipe buildRecipe() {
         ItemStack result = plugin.utils.ib(new ItemStack(Material.ELYTRA, 1)).lore("Maximum durability reduced by 50%.").maxDurabilityPercentage(50).build();
-        NamespacedKey key = new NamespacedKey(plugin, "elytra");
         ShapedRecipe recipe = new ShapedRecipe(key, result);
         recipe.shape(" D ", "CSC", "F F");
         recipe.setIngredient('D', Material.DIAMOND_CHESTPLATE);

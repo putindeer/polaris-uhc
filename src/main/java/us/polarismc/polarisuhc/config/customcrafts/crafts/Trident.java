@@ -1,7 +1,6 @@
 package us.polarismc.polarisuhc.config.customcrafts.crafts;
 
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
@@ -14,7 +13,6 @@ public class Trident extends CustomCraft {
     @Override
     protected Recipe buildRecipe() {
         ItemStack result = plugin.utils.ib(Material.TRIDENT).enchant(Enchantment.LOYALTY, 1).build();
-        NamespacedKey key = new NamespacedKey(plugin, "trident");
         ShapedRecipe recipe = new ShapedRecipe(key, result);
         recipe.shape(" dd", " sd", "s  ");
         recipe.setIngredient('d', Material.DIAMOND);
