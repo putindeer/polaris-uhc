@@ -2,7 +2,9 @@ package us.polarismc.polarisuhc.managers.player;
 
 import lombok.Getter;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TextDisplay;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +24,7 @@ public class PlayerManager implements Listener {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         if (getUHCPlayer(player) == null) {
@@ -34,7 +36,7 @@ public class PlayerManager implements Listener {
         return getUHCPlayer(player.getUniqueId());
     }
 
-    public UHCPlayer getUHCPlayer(String name) {
+    public @Nullable UHCPlayer getUHCPlayer(String name) {
         return playerList.stream().filter(player -> player.getName().equals(name)).findFirst().orElse(null);
     }
 
@@ -52,5 +54,16 @@ public class PlayerManager implements Listener {
 
     public List<UHCPlayer> getPlayingOnlinePlayers() {
         return playerList.stream().filter(UHCPlayer::isOnline).filter(UHCPlayer::isPlaying).toList();
+    }
+
+
+    public void removeAllDisplays() {
+        for (UHCPlayer uhcPlayer : getOnlinePlayers()) {
+            TextDisplay display = uhcPlayer.getNametag();
+            if (display != null && display.isValid()) {
+                display.remove();
+                uhcPlayer.setNametag(null);
+            }
+        }
     }
 }

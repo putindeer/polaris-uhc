@@ -1,11 +1,14 @@
 package us.polarismc.polarisuhc.util;
 
 import fr.mrmicky.fastinv.FastInvManager;
+import org.bukkit.Bukkit;
+import org.bukkit.scoreboard.Team;
 import us.polarismc.polarisuhc.Main;
 import us.polarismc.polarisuhc.commands.debug.*;
 import us.polarismc.polarisuhc.commands.host.legacy.CreateWorld;
 import us.polarismc.polarisuhc.commands.host.legacy.ToggleScenario;
 import us.polarismc.polarisuhc.managers.channel.ChannelManager;
+import us.polarismc.polarisuhc.managers.info.InfoManager;
 import us.polarismc.polarisuhc.managers.player.PlayerManager;
 import us.polarismc.polarisuhc.managers.team.TeamManager;
 import us.polarismc.polarisuhc.managers.team.commands.*;
@@ -29,7 +32,9 @@ public class StartThings {
     }
 
     public void disable() {
+        plugin.team.disableAndDeleteTeams();
         plugin.uhc.crafts.disableAll();
+        plugin.player.removeAllDisplays();
     }
 
     public void registerCommands() {
@@ -67,6 +72,7 @@ public class StartThings {
         plugin.team = new TeamManager(plugin);
         plugin.timer = new GameTimer(plugin);
         plugin.channel = new ChannelManager(plugin);
+        plugin.info = new InfoManager(plugin);
     }
 
     public void registerLanguage() {

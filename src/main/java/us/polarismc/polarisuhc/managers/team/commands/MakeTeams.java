@@ -23,7 +23,7 @@ public class MakeTeams implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (plugin.uhc.isStarted()) {
+        if (plugin.uhc.hasStarted()) {
             plugin.utils.message(sender, sound, "<red>You can't use this after the UHC has started.");
             return true;
         }

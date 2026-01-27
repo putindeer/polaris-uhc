@@ -1,7 +1,11 @@
 package us.polarismc.polarisuhc.managers.team;
 
 import lombok.Data;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Team;
+import org.jetbrains.annotations.Nullable;
 import us.polarismc.polarisuhc.Main;
 import us.polarismc.polarisuhc.managers.player.UHCPlayer;
 
@@ -28,13 +32,23 @@ public class TeamManager {
         this.plugin = plugin;
     }
 
+    public @Nullable UHCTeam getTeam(UUID uuid) {
+        return teams.stream().filter(team -> team.getUniqueId() == uuid).findFirst().orElse(null);
+    }
+
     public int getNewTeamNumber() {
         return ++lastTeamNumber;
     }
 
     public void deleteTeam(UHCTeam team) {
         team.getTeam().unregister();
-        team.getMembers().forEach(p -> p.setTeam(null));
+        team.getMembers().forEach(uhcPlayer -> {
+            uhcPlayer.setTeam(null);
+            Player player = uhcPlayer.getPlayer();
+            if (player != null) {
+                plugin.info.nametag.ensureDisplay(player);
+            }
+        });
         teams.remove(team);
     }
 
@@ -228,5 +242,9 @@ public class TeamManager {
             case 10 -> "Deca " + base;
             default -> n + "x " + base;
         };
+    }
+
+    public void disableAndDeleteTeams() {
+        Bukkit.getScoreboardManager().getMainScoreboard().getTeams().forEach(Team::unregister);
     }
 }

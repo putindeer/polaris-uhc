@@ -82,7 +82,7 @@ public class TeamInventory extends BaseScenario implements TabExecutor {
             return true;
         }
 
-        if (!plugin.uhc.isStarted()) {
+        if (!plugin.uhc.hasStarted()) {
             plugin.utils.message(viewer, "<red>The UHC hasn't started yet.");
             return true;
         }

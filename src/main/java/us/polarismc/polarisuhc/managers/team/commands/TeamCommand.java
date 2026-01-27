@@ -183,7 +183,7 @@ public class TeamCommand implements TabExecutor {
     }
 
     private void handleLeave(Player player) {
-        if (plugin.uhc.isStarted()) {
+        if (plugin.uhc.hasStarted()) {
             plugin.utils.message(player, SOUND_NO, "<red>You can't leave a team after the UHC has started.");
             return;
         }
@@ -204,7 +204,7 @@ public class TeamCommand implements TabExecutor {
 
     private void handleEnable(Player host) {
         if (doesntHasHostPermission(host)) return;
-        if (plugin.uhc.isStarted()) {
+        if (plugin.uhc.hasStarted()) {
             plugin.utils.message(host, SOUND_NO, "<red>You can't toggle team management after start.");
             return;
         }
@@ -214,7 +214,7 @@ public class TeamCommand implements TabExecutor {
 
     private void handleDisable(Player host) {
         if (doesntHasHostPermission(host)) return;
-        if (plugin.uhc.isStarted()) {
+        if (plugin.uhc.hasStarted()) {
             plugin.utils.message(host, SOUND_NO, "<red>You can't toggle team management after start.");
             return;
         }
@@ -225,7 +225,7 @@ public class TeamCommand implements TabExecutor {
     private void handleSize(Player host, String[] args) {
         if (!doesntHasHostPermission(host)) return;
 
-        if (plugin.uhc.isStarted()) {
+        if (plugin.uhc.hasStarted()) {
             plugin.utils.message(host, SOUND_NO, "<red>You can't change team size after start.");
             return;
         }

@@ -59,10 +59,10 @@ public class Debug implements CommandExecutor {
 
     private void actionBar(CommandSender sender) {
         if (!(sender instanceof Player player)) return;
-        plugin.utils.bar.setDefault(player, p -> "Timer: " + plugin.timer.getFormatted());
-        plugin.utils.delay(40, () -> plugin.utils.bar.sendTemporary(player, "Este es un mensaje temporal de 3 segundos", 3));
-        plugin.utils.delay(200, () -> plugin.utils.bar.sendTemporary(player, "Este es un mensaje temporal de 2 segundos con variable" + player.getName(), 2));
-        plugin.utils.delay(2000, () -> plugin.utils.bar.clear(player));
+        plugin.info.bar.setDefault(player, p -> "Timer: " + plugin.timer.getFormatted());
+        plugin.utils.delay(40, () -> plugin.info.bar.sendTemporary(player, "Este es un mensaje temporal de 3 segundos", 3));
+        plugin.utils.delay(200, () -> plugin.info.bar.sendTemporary(player, "Este es un mensaje temporal de 2 segundos con variable" + player.getName(), 2));
+        plugin.utils.delay(2000, () -> plugin.info.bar.clear(player));
     }
 
     private void start() {
@@ -71,10 +71,10 @@ public class Debug implements CommandExecutor {
 
     private void sendDebug() {
         plugin.utils.log("=== UHC STATUS ===",
-                "Started: " + plugin.uhc.isStarted(),
+                "Started: " + plugin.uhc.hasStarted(),
                 "Starting: " + plugin.uhc.isStarting(),
                 "Finalized: " + plugin.uhc.isFinalized(),
-                "Host: " + (plugin.uhc.getHost() != null ? plugin.uhc.getHost().getName() : "None"),
+                "Host: " + (plugin.uhc.getHost() != null ? plugin.uhc.getHost() : "None"),
                 "Host Number: " + plugin.uhc.getHostNumber(),
                 "UHC Number: " + plugin.uhc.getNumber(),
                 "",

@@ -6,13 +6,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import us.polarismc.polarisuhc.Main;
-import us.polarismc.polarisuhc.managers.info.actionbar.ActionBarManager;
 
 public class Utils extends PluginUtils {
-    public final ActionBarManager bar;
     public Utils(Main plugin, String prefix) {
         super(plugin, prefix);
-        bar = new ActionBarManager(plugin);
     }
 
     public ItemStack goBack() {

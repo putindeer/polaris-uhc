@@ -39,7 +39,7 @@ public class ColorTeam implements TabExecutor {
             return true;
         }
 
-        if (plugin.uhc.isStarted() && !isHost) {
+        if (plugin.uhc.hasStarted() && !isHost) {
             plugin.utils.message(executor, "<red>You can't change team colors after the UHC has started.");
             return true;
         }
@@ -106,7 +106,7 @@ public class ColorTeam implements TabExecutor {
         boolean canSelf = executor.hasPermission(changeColorPermission);
 
         if (!isHost && !canSelf) return list;
-        if (plugin.uhc.isStarted() && !isHost) return list;
+        if (plugin.uhc.hasStarted() && !isHost) return list;
 
         if (args.length == 1) {
             if (isHost) {

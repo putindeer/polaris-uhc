@@ -55,7 +55,8 @@ public class TestTeams implements CommandExecutor {
         messages.add("");
 
         for (int i = 0; i < amount; i++) {
-            UHCTeam team = new UHCTeam(new UHCPlayer(player));
+            UHCPlayer uhcPlayer = plugin.player.getUHCPlayer(player);
+            UHCTeam team = new UHCTeam(uhcPlayer);
             String displayText = team.getPrefix() + player.getName();
             messages.add(displayText);
         }

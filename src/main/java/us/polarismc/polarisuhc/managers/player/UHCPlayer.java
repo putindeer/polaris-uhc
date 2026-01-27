@@ -7,6 +7,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TextDisplay;
 import org.jetbrains.annotations.Nullable;
 import us.polarismc.polarisuhc.Main;
 import us.polarismc.polarisuhc.managers.channel.ChannelKey;
@@ -29,6 +30,7 @@ public class UHCPlayer {
 
     private ChannelKey sendChannel = new GlobalChannel();
     private final Set<ChannelKey> receiveChannels = new HashSet<>();
+    private TextDisplay nametag = null;
 
     private boolean arena = false;
     private boolean isEditingKit = false;
@@ -59,7 +61,11 @@ public class UHCPlayer {
             return player.getName();
         }
 
-        return team.getPrefix() + player.getName() + "</hex>";
+        return team.getPrefix() + player.getName();
+    }
+
+    public void updateDisplayName() {
+        plugin.info.nametag.updateText(this);
     }
 
     public Component getDisplayNameComponent() {

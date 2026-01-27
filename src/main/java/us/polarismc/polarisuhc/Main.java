@@ -3,6 +3,7 @@ package us.polarismc.polarisuhc;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 import us.polarismc.polarisuhc.managers.channel.ChannelManager;
+import us.polarismc.polarisuhc.managers.info.InfoManager;
 import us.polarismc.polarisuhc.managers.player.PlayerManager;
 import us.polarismc.polarisuhc.managers.team.TeamManager;
 import us.polarismc.polarisuhc.managers.uhc.GameTimer;
@@ -22,6 +23,7 @@ public class Main extends JavaPlugin {
     public TeamManager team;
     public GameTimer timer;
     public ChannelManager channel;
+    public InfoManager info;
     @Override
     public void onEnable() {
         instance = this;

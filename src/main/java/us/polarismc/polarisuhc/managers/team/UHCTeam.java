@@ -19,11 +19,13 @@ import us.polarismc.polarisuhc.managers.player.UHCPlayer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Getter
 public class UHCTeam {
     private final Main plugin;
     private final Team team;
+    private final UUID uniqueId;
 
     private final List<UHCPlayer> members = new ArrayList<>();
 
@@ -42,6 +44,7 @@ public class UHCTeam {
 
     public UHCTeam(UHCPlayer leader) {
         this.plugin = Main.getInstance();
+        this.uniqueId = UUID.randomUUID();
 
         members.add(leader);
         leader.setTeam(this);
@@ -74,6 +77,7 @@ public class UHCTeam {
     private void applyScoreboardStyle() {
         team.prefix(getPrefixComponent());
         team.color(fallbackColor);
+        team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.NEVER);
     }
 
     private void updatePlayerDisplay(Player player) {
@@ -83,6 +87,7 @@ public class UHCTeam {
 
         player.playerListName(tag);
         player.displayName(tag);
+        plugin.player.getUHCPlayer(player).updateDisplayName();
     }
 
     private void updateAllPlayersDisplay() {
@@ -119,6 +124,7 @@ public class UHCTeam {
                 Component base = Component.text(player.getName());
                 player.playerListName(base);
                 player.displayName(base);
+                plugin.info.nametag.ensureDisplay(player);
             }
         }
 
