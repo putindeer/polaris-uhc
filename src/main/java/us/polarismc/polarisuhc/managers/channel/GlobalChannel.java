@@ -5,6 +5,6 @@ public record GlobalChannel() implements ChannelKey {
         return ChannelType.GLOBAL;
     }
     public boolean sendable() {
-        return true;
+        return false;
     }
 }
