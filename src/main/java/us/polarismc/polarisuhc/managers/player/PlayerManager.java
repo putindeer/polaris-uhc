@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class PlayerManager implements Listener {
     private final Main plugin;
     @Getter private final List<UHCPlayer> playerList = new ArrayList<>();

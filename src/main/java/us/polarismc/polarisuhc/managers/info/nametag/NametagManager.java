@@ -18,7 +18,6 @@ import us.polarismc.polarisuhc.managers.player.UHCPlayer;
 
 public class NametagManager implements Listener {
     private final Main plugin;
-    private final String hideTeam = "nametag_hide";
 
     public NametagManager(Main plugin) {
         this.plugin = plugin;
@@ -160,6 +159,7 @@ public class NametagManager implements Listener {
 
     private Team checkTeam() {
         Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
+        String hideTeam = "nametag_hide";
         Team team = scoreboard.getTeam(hideTeam);
         if (team == null) {
             team = scoreboard.registerNewTeam(hideTeam);

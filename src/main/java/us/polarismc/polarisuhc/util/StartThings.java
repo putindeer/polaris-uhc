@@ -1,8 +1,6 @@
 package us.polarismc.polarisuhc.util;
 
 import fr.mrmicky.fastinv.FastInvManager;
-import org.bukkit.Bukkit;
-import org.bukkit.scoreboard.Team;
 import us.polarismc.polarisuhc.Main;
 import us.polarismc.polarisuhc.commands.debug.*;
 import us.polarismc.polarisuhc.commands.host.legacy.CreateWorld;
