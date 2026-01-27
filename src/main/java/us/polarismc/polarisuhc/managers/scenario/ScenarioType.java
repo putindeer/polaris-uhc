@@ -12,6 +12,7 @@ public enum ScenarioType {
     HASTEY_BABIES(HasteyBabies.class),
     HASTEY_BOYS(HasteyBoys.class),
     HASTEY_BOYS_PLUS(HasteyBoysPlus.class),
+    TEAM_INVENTORY(TeamInventory.class),
     UNBREAKABLE(Unbreakable.class);
 
     private final Class<? extends BaseScenario> scenarioClass;
