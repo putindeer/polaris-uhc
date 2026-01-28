@@ -10,6 +10,7 @@ import us.polarismc.polarisuhc.Main;
 import us.polarismc.polarisuhc.managers.player.UHCPlayer;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 @Data
@@ -26,7 +27,7 @@ public class TeamManager {
     private int lastTeamNumber = 0;
     private boolean randomized = false;
 
-    private final Random random = new Random();
+    private final Random random = ThreadLocalRandom.current();
 
     public TeamManager(Main plugin) {
         this.plugin = plugin;
