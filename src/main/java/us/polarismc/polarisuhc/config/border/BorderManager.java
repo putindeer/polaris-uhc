@@ -13,6 +13,7 @@ public class BorderManager {
     private final Main plugin;
     public BorderManager(Main plugin) {
         this.plugin = plugin;
+        initializeBorder();
     }
 
     private int border;

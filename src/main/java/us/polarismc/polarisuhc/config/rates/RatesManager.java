@@ -11,6 +11,7 @@ public class RatesManager {
     private final Main plugin;
     public RatesManager(Main plugin) {
         this.plugin = plugin;
+        initializeRates();
     }
 
     private int xpKillRate;

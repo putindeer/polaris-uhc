@@ -11,6 +11,7 @@ public class DurationManager {
     private final Main plugin;
     public DurationManager(Main plugin) {
         this.plugin = plugin;
+        initializeDuration();
     }
 
     public void handleFinalHeal() {
