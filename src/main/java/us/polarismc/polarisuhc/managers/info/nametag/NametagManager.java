@@ -7,10 +7,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerGameModeChangeEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import us.polarismc.polarisuhc.Main;
@@ -74,6 +72,20 @@ public class NametagManager implements Listener {
             if (display == null || !display.isValid()) continue;
             display.text(uhcPlayer.getDisplayNameComponent());
         }
+    }
+
+    @EventHandler
+    public void onDeath(PlayerDeathEvent event) {
+        UHCPlayer uhcPlayer = plugin.player.getUHCPlayer(event.getEntity());
+        TextDisplay display = uhcPlayer.getNametag();
+        display.remove();
+        uhcPlayer.setNametag(null);
+    }
+
+    @EventHandler
+    public void onRespawn(PlayerRespawnEvent event) {
+        UHCPlayer uhcPlayer = plugin.player.getUHCPlayer(event.getPlayer());
+        ensureDisplay(event.getPlayer());
     }
 
     @EventHandler
