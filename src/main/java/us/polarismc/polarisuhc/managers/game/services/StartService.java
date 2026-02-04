@@ -1,0 +1,137 @@
+package us.polarismc.polarisuhc.managers.game.services;
+
+import io.papermc.paper.registry.keys.SoundEventKeys;
+import org.bukkit.*;
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitTask;
+import us.polarismc.polarisuhc.Main;
+
+import java.util.List;
+
+import net.kyori.adventure.sound.Sound;
+import us.polarismc.polarisuhc.events.UHCPlayerStartEvent;
+import us.polarismc.polarisuhc.events.UHCStartEvent;
+import us.polarismc.polarisuhc.managers.player.UHCPlayer;
+import us.polarismc.polarisuhc.managers.uhc.UHCState;
+
+public class StartService {
+    private final Main plugin;
+
+    private BukkitTask countdownTask;
+    private BukkitTask pvpCountdownTask;
+
+    public StartService(Main plugin) {
+        this.plugin = plugin;
+    }
+
+    public void start(Player host) {
+        if (plugin.uhc.hasStarted()) {
+            plugin.utils.message(host, "<red>The UHC has already started.");
+            return;
+        }
+
+        countdown(host);
+    }
+
+    private void handleStart(Player host) {
+        plugin.uhc.setState(UHCState.STARTED);
+        plugin.utils.broadcast("<green>The UHC has started!");
+
+        plugin.info.handleInfoStart();
+
+        prepareWorlds(host);
+
+        List<UHCPlayer> uhcPlayers = plugin.player.getPlayingOnlinePlayers();
+        List<Player> players = plugin.player.getPlayingOnlinePlayersAsPlayers();
+        players.forEach(player -> {
+            player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
+            plugin.game.resetPrestartAttributes(player);
+            player.setInvulnerable(false);
+            //TODO - add immunity for 5 seconds
+        });
+
+        plugin.utils.broadcastTitle("<gold>The UHC has started", "<green>GL!",
+                Sound.sound(SoundEventKeys.BLOCK_ANCIENT_DEBRIS_BREAK, Sound.Source.MASTER, 10, 1),
+                plugin.utils.timesFromTicks(10, 40, 10));
+        UHCStartEvent startEvent = new UHCStartEvent(plugin.player.getPlayingPlayers(), uhcPlayers);
+        Bukkit.getPluginManager().callEvent(startEvent);
+        uhcPlayers.forEach(player -> {
+            UHCPlayerStartEvent playerStartEvent = new UHCPlayerStartEvent(player, plugin);
+            Bukkit.getPluginManager().callEvent(playerStartEvent);
+            playerStartEvent.give();
+        });
+
+        //TODO - add starter books implementation
+
+        cancelCountdown();
+    }
+
+    private void countdown(Player host) {
+        cancelCountdown();
+
+        countdownTask = Bukkit.getScheduler().runTaskTimer(plugin, new Runnable() {
+            int time = 6;
+
+            @Override
+            public void run() {
+                time--;
+
+                if (time >= 1 && time <= 5) {
+                    String color = switch (time) {
+                        case 5 -> "<dark_red>";
+                        case 4 -> "<red>";
+                        case 3 -> "<yellow>";
+                        case 2 -> "<dark_green>";
+                        default -> "<green>";
+                    };
+
+                    plugin.utils.broadcast(Sound.sound(SoundEventKeys.BLOCK_NOTE_BLOCK_HARP, Sound.Source.MASTER, 1, 1),
+                            color + time + "<dark_gray> seconds until the UHC starts...");
+                    plugin.utils.broadcastTitle(color + time);
+                    return;
+                }
+
+                if (time > 0) return;
+
+                handleStart(host);
+            }
+        }, 0L, 20L);
+    }
+
+    private void prepareWorlds(Player host) {
+        World world = plugin.uhc.world.getUhcWorld();
+
+        world.setGameRule(GameRules.PVP, false);
+        world.setGameRule(GameRules.SHOW_ADVANCEMENT_MESSAGES, plugin.uhc.toggle.isAdvancements());
+        world.setGameRule(GameRules.NATURAL_HEALTH_REGENERATION, false);
+        world.setGameRule(GameRules.SPAWN_PHANTOMS, false);
+        world.setGameRule(GameRules.SPAWN_MOBS, plugin.uhc.toggle.isMobs());
+        world.setHardcore(true);
+        world.setDifficulty(Difficulty.HARD);
+        world.getWorldBorder().setSize(plugin.uhc.border.getBorder());
+
+        if (plugin.uhc.toggle.isNether()) {
+            World netherWorld = plugin.uhc.world.getNetherWorld();
+            if (netherWorld == null) {
+                plugin.uhc.toggle.setNether(false);
+                plugin.utils.message(host, "Nether <red>disabled</red> because the nether world was <red>not created</red>.");
+            } else {
+                netherWorld.setGameRule(GameRules.PVP, false);
+                netherWorld.setGameRule(GameRules.SHOW_ADVANCEMENT_MESSAGES, plugin.uhc.toggle.isAdvancements());
+                netherWorld.setGameRule(GameRules.NATURAL_HEALTH_REGENERATION, false);
+                netherWorld.setGameRule(GameRules.SPAWN_PHANTOMS, false);
+                netherWorld.setGameRule(GameRules.SPAWN_MOBS, plugin.uhc.toggle.isMobs());
+                netherWorld.setHardcore(true);
+                netherWorld.setDifficulty(Difficulty.HARD);
+                netherWorld.getWorldBorder().setSize(plugin.uhc.border.getNetherBorder());
+            }
+        }
+    }
+
+    public void cancelCountdown() {
+        if (countdownTask != null) {
+            countdownTask.cancel();
+            countdownTask = null;
+        }
+    }
+}

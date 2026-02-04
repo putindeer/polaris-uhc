@@ -17,8 +17,7 @@ import java.util.stream.Collectors;
 public class TeamManager {
     //TODO - port auction/captains/incaptains/drafters
     private final Main plugin;
-    private boolean managementEnabled = false;
-    private TeamSize teamSize;
+    private TeamSize teamSize = TeamSize.FFA;
     private int teamLimit = 0;
     private final List<UHCTeam> teams = new ArrayList<>();
 
@@ -102,8 +101,8 @@ public class TeamManager {
 
     public void randomForce() {
         List<UHCPlayer> players = plugin.player.getOnlinePlayers().stream()
-                .filter(p -> p.getPlayer() != null)
-                .filter(p -> p.getPlayer().getGameMode() != GameMode.SPECTATOR)
+                .filter(player -> player.getPlayer() != null)
+                .filter(player -> player.getPlayer().getGameMode() != GameMode.SPECTATOR)
                 .toList();
 
         for (UHCTeam team : new ArrayList<>(teams)) {
@@ -119,9 +118,9 @@ public class TeamManager {
 
     public void randomAvailable() {
         List<UHCPlayer> available = plugin.player.getOnlinePlayers().stream()
-                .filter(p -> p.getPlayer() != null)
-                .filter(p -> p.getPlayer().getGameMode() != GameMode.SPECTATOR)
-                .filter(p -> p.getTeam() == null)
+                .filter(player -> player.getPlayer() != null)
+                .filter(player -> player.getPlayer().getGameMode() != GameMode.SPECTATOR)
+                .filter(player -> player.getTeam() == null)
                 .toList();
 
         if (available.isEmpty()) return;
@@ -133,13 +132,13 @@ public class TeamManager {
 
     public void randomFill() {
         List<UHCPlayer> freeAgents = plugin.player.getOnlinePlayers().stream()
-                .filter(p -> p.getPlayer() != null)
-                .filter(p -> p.getPlayer().getGameMode() != GameMode.SPECTATOR)
-                .filter(p -> p.getTeam() == null)
+                .filter(player -> player.getPlayer() != null)
+                .filter(player -> player.getPlayer().getGameMode() != GameMode.SPECTATOR)
+                .filter(player -> player.getTeam() == null)
                 .collect(Collectors.toCollection(ArrayList::new));
 
         List<UHCTeam> manageable = new ArrayList<>(teams).stream()
-                .filter(t -> t.getMembersCount() <= teamLimit)
+                .filter(team -> team.getMembersCount() <= teamLimit)
                 .sorted(Comparator.comparingInt(UHCTeam::getMembersCount))
                 .collect(Collectors.toCollection(ArrayList::new));
 
@@ -190,14 +189,14 @@ public class TeamManager {
 
     private boolean distributeMembers(List<UHCPlayer> members, List<UHCTeam> teams, UHCTeam source, int teamLimit) {
         List<UHCTeam> targets = teams.stream()
-                .filter(t -> t != source)
-                .filter(t -> t.getMembersCount() < teamLimit)
+                .filter(team -> team != source)
+                .filter(team -> team.getMembersCount() < teamLimit)
                 .sorted(Comparator.comparingInt(UHCTeam::getMembersCount).reversed())
                 .collect(Collectors.toCollection(ArrayList::new));
 
         for (UHCPlayer member : members) {
             UHCTeam target = targets.stream()
-                    .filter(t -> t.getMembersCount() < teamLimit)
+                    .filter(team -> team.getMembersCount() < teamLimit)
                     .findFirst()
                     .orElse(null);
 

@@ -5,6 +5,7 @@ import lombok.Data;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
@@ -65,6 +66,13 @@ public class UHCPlayer {
     }
 
     public void updateDisplayName() {
+        Player player = getPlayer();
+        if (player == null) return;
+        player.displayName(getDisplayNameComponent());
+        player.playerListName(getDisplayNameComponent());
+    }
+
+    public void updateNametag() {
         plugin.info.nametag.updateText(this);
     }
 
@@ -77,12 +85,20 @@ public class UHCPlayer {
         return player.isOnline();
     }
 
+    public void setAlive() {
+        plugin.uhc.getAlivePlayers().add(this);
+    }
+
+    public boolean hasBeenScattered() {
+        return isPlaying() || isDead();
+    }
+
     public boolean isPlaying() {
-        return plugin.uhc.getAlivePlayers().stream().map(OfflinePlayer::getName).toList().contains(getName());
+        return plugin.uhc.getAlivePlayers().contains(this);
     }
 
     public boolean isDead() {
-        return plugin.uhc.getDeadPlayers().stream().map(OfflinePlayer::getName).toList().contains(getName());
+        return plugin.uhc.getDeadPlayers().contains(this);
     }
 
     public boolean isInTeamWith(UHCPlayer player) {

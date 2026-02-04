@@ -22,6 +22,9 @@ commands:
   testteams:
     description: Command used to test teams.
     permission: uhc.dev
+  testscatter:
+    description: Command used to test scattering.
+    permission: uhc.dev
   createworld:
     description: Used for creating overworld/nether/end worlds.
     permission: uhc.host

@@ -5,12 +5,15 @@ import us.polarismc.polarisuhc.Main;
 import us.polarismc.polarisuhc.commands.debug.*;
 import us.polarismc.polarisuhc.commands.host.legacy.CreateWorld;
 import us.polarismc.polarisuhc.commands.host.legacy.ToggleScenario;
+import us.polarismc.polarisuhc.managers.arena.ArenaManager;
 import us.polarismc.polarisuhc.managers.channel.ChannelManager;
+import us.polarismc.polarisuhc.managers.hub.HubManager;
 import us.polarismc.polarisuhc.managers.info.InfoManager;
 import us.polarismc.polarisuhc.managers.player.PlayerManager;
+import us.polarismc.polarisuhc.managers.game.GameFlowManager;
 import us.polarismc.polarisuhc.managers.team.TeamManager;
 import us.polarismc.polarisuhc.managers.team.commands.*;
-import us.polarismc.polarisuhc.managers.uhc.GameTimer;
+import us.polarismc.polarisuhc.managers.game.GameTimer;
 import us.polarismc.polarisuhc.managers.scenario.ScenarioManager;
 import us.polarismc.polarisuhc.managers.uhc.UHCManager;
 
@@ -41,6 +44,7 @@ public class StartThings {
         new GUI(plugin);
         new Hex(plugin);
         new TeamHex(plugin);
+        new TestScatter(plugin);
         new TestTeams(plugin);
         // Host commands (uhc.host)
         new CreateWorld(plugin);
@@ -71,6 +75,9 @@ public class StartThings {
         plugin.timer = new GameTimer(plugin);
         plugin.channel = new ChannelManager(plugin);
         plugin.info = new InfoManager(plugin);
+        plugin.game = new GameFlowManager(plugin);
+        plugin.arena = new ArenaManager(plugin);
+        plugin.hub = new HubManager(plugin);
     }
 
     public void registerLanguage() {

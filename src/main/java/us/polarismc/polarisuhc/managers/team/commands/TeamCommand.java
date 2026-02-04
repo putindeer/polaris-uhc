@@ -47,8 +47,6 @@ public class TeamCommand implements TabExecutor {
             case "leave" -> handleLeave(player);
             case "size" -> handleSize(player, args);
             case "limit" -> handleLimit(player, args);
-            case "enable" -> handleEnable(player);
-            case "disable" -> handleDisable(player);
             case "add" -> handleAdd(player, args);
             case "remove" -> handleRemove(player, args);
             case "random" -> handleRandom(player, args);
@@ -83,7 +81,7 @@ public class TeamCommand implements TabExecutor {
 
     private void handleInvite(Player inviter, String[] args) {
         if (isSpectating(inviter)) return;
-        if (managementIsNotEnabled(inviter)) return;
+        if (cantCreateNewTeams(inviter)) return;
 
         if (args.length < 2) {
             plugin.utils.message(inviter, SOUND_NO, "<red>Usage: <white>/team invite <player>");
@@ -135,7 +133,7 @@ public class TeamCommand implements TabExecutor {
 
     private void handleAccept(Player target, String[] args) {
         if (isSpectating(target)) return;
-        if (managementIsNotEnabled(target)) return;
+        if (cantCreateNewTeams(target)) return;
 
         if (args.length < 2) {
             plugin.utils.message(target, SOUND_NO, "<red>Usage: <white>/team accept <player>");
@@ -165,8 +163,16 @@ public class TeamCommand implements TabExecutor {
             return;
         }
 
-        if (targetUhc.getTeam() != null) {
-            targetUhc.getTeam().removeMember(targetUhc);
+        UHCTeam currentTeam = targetUhc.getTeam();
+        boolean started = plugin.uhc.isNotWaiting();
+
+        if (currentTeam != null && started && currentTeam.getScatteredUHCMembers().size() > 1) {
+            plugin.utils.message(target, SOUND_NO, "<red>You can't join a team if you already have been scattered with one after the UHC has started.");
+            return;
+        }
+
+        if (currentTeam != null) {
+            currentTeam.removeMember(targetUhc);
         }
 
         if (inviterTeam == null) {
@@ -183,7 +189,7 @@ public class TeamCommand implements TabExecutor {
     }
 
     private void handleLeave(Player player) {
-        if (plugin.uhc.hasStarted()) {
+        if (plugin.uhc.isNotWaiting()) {
             plugin.utils.message(player, SOUND_NO, "<red>You can't leave a team after the UHC has started.");
             return;
         }
@@ -202,28 +208,8 @@ public class TeamCommand implements TabExecutor {
         team.sendMessage(player, color + player.getName() + "<red> left your team.");
     }
 
-    private void handleEnable(Player host) {
-        if (doesntHasHostPermission(host)) return;
-        if (plugin.uhc.hasStarted()) {
-            plugin.utils.message(host, SOUND_NO, "<red>You can't toggle team management after start.");
-            return;
-        }
-        plugin.team.setManagementEnabled(true);
-        plugin.utils.broadcast(SOUND_OK, "<green>Team management has been enabled.");
-    }
-
-    private void handleDisable(Player host) {
-        if (doesntHasHostPermission(host)) return;
-        if (plugin.uhc.hasStarted()) {
-            plugin.utils.message(host, SOUND_NO, "<red>You can't toggle team management after start.");
-            return;
-        }
-        plugin.team.setManagementEnabled(false);
-        plugin.utils.broadcast(SOUND_OK, "<red>Team management has been disabled.");
-    }
-
     private void handleSize(Player host, String[] args) {
-        if (!doesntHasHostPermission(host)) return;
+        if (doesntHasHostPermission(host)) return;
 
         if (plugin.uhc.hasStarted()) {
             plugin.utils.message(host, SOUND_NO, "<red>You can't change team size after start.");
@@ -244,15 +230,15 @@ public class TeamCommand implements TabExecutor {
 
         plugin.team.setTeamSize(teamSize);
 
-        plugin.utils.broadcast("<green>Team size set to <white>" + plugin.team.getTeamSizeDisplayName() + "</white>.");
+        plugin.utils.broadcast("Team size set to <blue>" + plugin.team.getTeamSizeDisplayName() + "</blue>.");
         switch (teamSize) {
-            case RANDOM,TIMED_RANDOM -> plugin.utils.message(host, "<gray>Before you randomize, be sure to use <white>/team limit</white> to randomize teams with your desired team size.</gray>");
+            case RANDOM,TIMED_RANDOM -> plugin.utils.message(host, "Before you randomize, be sure to use <blue>/team limit</blue> to randomize teams with your desired team size.");
 
-            case CAPTAINS -> plugin.utils.message(host, "<gray>Use <white>/team limit</white> to set Double/Triple Captains.</gray>");
+            case CAPTAINS -> plugin.utils.message(host, "Use <blue>/team limit</blue> to set Double/Triple Captains.");
 
-            case AUCTION -> plugin.utils.message(host, "<gray>Use <white>/team limit</white> to set Double/Triple Auction.</gray>");
+            case AUCTION -> plugin.utils.message(host, "Use <blue>/team limit</blue> to set Double/Triple Auction.");
 
-            case INCAPTAINS -> plugin.utils.message(host, "<gray>Use <white>/team limit</white> to set Double/Triple Incaptains.</gray>");
+            case INCAPTAINS -> plugin.utils.message(host, "Use <blue>/team limit</blue> to set Double/Triple Incaptains.");
         }
     }
 
@@ -274,13 +260,13 @@ public class TeamCommand implements TabExecutor {
             plugin.utils.message(host, SOUND_NO, "<red>Invalid number.",
                     "<red>Usage: <white>/team limit <number></white>",
                     "<red>Remember that team limit works differently between Chosen-like teamsizes and Captains-like teamsizes.",
-                    "<gray>In Chosen-like teamsizes, it sets the maximum limit of players in each team.",
-                    "<gray>In Captains-like teamsizes, it sets the amount of players that are picked in each round.");
+                    "In Chosen-like teamsizes, it sets the maximum limit of players in each team.",
+                    "In Captains-like teamsizes, it sets the amount of players that are picked in each round.");
             return;
         }
 
         plugin.team.setTeamLimit(size);
-        plugin.utils.broadcast("<green>Team size set to <white>" + plugin.team.getTeamSizeDisplayName() + "</white>.");
+        plugin.utils.broadcast("Team size set to <blue>" + plugin.team.getTeamSizeDisplayName() + "</blue>.");
     }
 
     private void handleAdd(Player host, String[] args) {
@@ -309,7 +295,7 @@ public class TeamCommand implements TabExecutor {
         }
 
         team.addMember(targetUhc);
-        plugin.utils.message(host, SOUND_OK, "<green>Added <white>" + target.getName() + "</white> to <white>" + leader.getName() + "</white>'s team.");
+        plugin.utils.message(host, SOUND_OK, "<green>Added <blue>" + target.getName() + "</blue > to <white>" + leader.getName() + "</white>'s team.");
     }
 
     private void handleRemove(Player host, String[] args) {
@@ -411,9 +397,9 @@ public class TeamCommand implements TabExecutor {
         return false;
     }
 
-    private boolean managementIsNotEnabled(Player player) {
-        if (!plugin.team.isManagementEnabled()) {
-            plugin.utils.message(player, SOUND_NO, "<red>The team commands are disabled.");
+    private boolean cantCreateNewTeams(Player player) {
+        if (plugin.team.getTeamSize() != TeamSize.CHOSEN) {
+            plugin.utils.message(player, SOUND_NO, "<red>The team-size is not Chosen, so team management is disabled.");
             return true;
         }
         return false;
@@ -454,14 +440,19 @@ public class TeamCommand implements TabExecutor {
             case 1 -> {
                 list.addAll(List.of("help", "invite", "accept", "leave"));
                 if (host) {
-                    list.addAll(List.of("size", "enable", "disable", "add", "remove", "random", "check", "limit"));
+                    list.addAll(List.of("size", "add", "remove", "random", "check", "limit"));
                 }
             }
             case 2 -> {
                 switch (sub) {
                     case "invite" -> list.addAll(plugin.player.getOnlinePlayers().stream().map(UHCPlayer::getName).toList());
                     case "accept" -> list.addAll(uhcPlayer.getTeamInvites().stream().filter(UHCPlayer::isOnline).map(UHCPlayer::getName).toList());
-                    case "add", "remove" -> {
+                    case "add" -> {
+                        if (host) {
+                            list.addAll(plugin.player.getOnlinePlayers().stream().map(UHCPlayer::getName).toList());
+                        }
+                    }
+                    case "remove" -> {
                         if (host) {
                             list.addAll(plugin.player.getOnlinePlayers().stream().filter(UHCPlayer::hasTeam).map(UHCPlayer::getName).toList());
                         }

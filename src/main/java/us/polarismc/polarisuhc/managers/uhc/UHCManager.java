@@ -13,8 +13,11 @@ import us.polarismc.polarisuhc.config.potion.PotionManager;
 import us.polarismc.polarisuhc.config.rates.RatesManager;
 import us.polarismc.polarisuhc.config.toggle.ToggleManager;
 import us.polarismc.polarisuhc.config.world.WorldManager;
+import us.polarismc.polarisuhc.managers.player.UHCPlayer;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Getter
@@ -31,10 +34,10 @@ public class UHCManager {
     public final GUIManager ui;
     private UHCState state = UHCState.IDLE;
     private UUID host = null;
-    private int hostNumber;
-    private int number;
-    private List<OfflinePlayer> alivePlayers;
-    private List<OfflinePlayer> deadPlayers;
+    private int hostNumber = 0;
+    private int number = 0;
+    private List<UHCPlayer> alivePlayers = new ArrayList<>();
+    private List<UHCPlayer> deadPlayers = new ArrayList<>();
 
     public UHCManager(Main plugin) {
         this.plugin = plugin;
@@ -49,18 +52,26 @@ public class UHCManager {
     }
 
     public List<Player> getPlayingPlayers() {
-        return alivePlayers.stream().filter(OfflinePlayer::isOnline).map(OfflinePlayer::getPlayer).toList();
+        return alivePlayers.stream().map(UHCPlayer::getOfflinePlayer).filter(OfflinePlayer::isOnline).map(OfflinePlayer::getPlayer).filter(Objects::nonNull).toList();
     }
 
     public boolean isStarting() {
-        return state == UHCState.PRESTARTED || state == UHCState.SCATTERING || state == UHCState.SCATTERED;
+        return state.isStarting();
     }
 
     public boolean hasStarted() {
-        return state == UHCState.RUNNING || state == UHCState.FINISHED;
+        return state.isStarted();
+    }
+    
+    public boolean isScattering() {
+        return state == UHCState.SCATTERING;
+    }
+
+    public boolean isNotWaiting() {
+        return state != UHCState.IDLE;
     }
 
     public boolean isFinalized() {
-        return state == UHCState.FINISHED;
+        return state == UHCState.FINALIZED;
     }
 }

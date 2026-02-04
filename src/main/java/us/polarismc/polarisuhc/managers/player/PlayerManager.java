@@ -13,6 +13,7 @@ import us.polarismc.polarisuhc.Main;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @SuppressWarnings("FieldCanBeLocal")
@@ -31,6 +32,11 @@ public class PlayerManager implements Listener {
         if (getUHCPlayer(player) == null) {
             playerList.add(new UHCPlayer(event.getPlayer()));
         }
+    }
+
+    public void removeAllPassengers(Player player) {
+        TextDisplay display = getUHCPlayer(player).getNametag();
+        player.getPassengers().stream().filter(passenger -> passenger != display).toList().forEach(player::removePassenger);
     }
 
     public UHCPlayer getUHCPlayer(@NotNull Player player) {
@@ -57,6 +63,9 @@ public class PlayerManager implements Listener {
         return playerList.stream().filter(UHCPlayer::isOnline).filter(UHCPlayer::isPlaying).toList();
     }
 
+    public List<Player> getPlayingOnlinePlayersAsPlayers() {
+        return playerList.stream().filter(UHCPlayer::isOnline).filter(UHCPlayer::isPlaying).map(UHCPlayer::getPlayer).filter(Objects::nonNull).toList();
+    }
 
     public void removeAllDisplays() {
         for (UHCPlayer uhcPlayer : getOnlinePlayers()) {

@@ -1,11 +1,16 @@
 package us.polarismc.polarisuhc.util;
 
 import me.putindeer.api.util.PluginUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import us.polarismc.polarisuhc.Main;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Utils extends PluginUtils {
     public Utils(Main plugin, String prefix) {

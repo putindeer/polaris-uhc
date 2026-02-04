@@ -3,12 +3,12 @@ package us.polarismc.polarisuhc.config.world;
 import lombok.Getter;
 import lombok.Setter;
 import me.putindeer.api.util.builder.WorldBuilder;
-import org.bukkit.GameRules;
-import org.bukkit.World;
-import org.bukkit.WorldType;
+import org.bukkit.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import us.polarismc.polarisuhc.Main;
+
+import java.io.File;
 
 @Getter
 @Setter
@@ -43,6 +43,27 @@ public class WorldManager {
         endWorldString = config.getString("end");
         arenaWorldString = config.getString("arena");
         lobbyWorldString = config.getString("lobby");
+
+        uhcWorld = getWorldIfExists(uhcWorldString);
+        netherWorld = getWorldIfExists(netherWorldString);
+        endWorld = getWorldIfExists(endWorldString);
+        arenaWorld = getWorldIfExists(arenaWorldString);
+        lobbyWorld = getWorldIfExists(lobbyWorldString);
+    }
+
+
+    private World getWorldIfExists(String name) {
+        if (name == null || name.isBlank()) return null;
+
+        World world = Bukkit.getWorld(name);
+        if (world != null) return world;
+
+        File worldFolder = new File(Bukkit.getWorldContainer(), name);
+        if (worldFolder.exists() && worldFolder.isDirectory()) {
+            return Bukkit.createWorld(new WorldCreator(name));
+        }
+
+        return null;
     }
 
     public void setGlobalSeed(long l) {

@@ -18,6 +18,7 @@ public class CreateWorld implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String @NotNull [] args) {
+        //TODO - remove -a flag and replace it with Amplified scenario
         try {
             switch (args.length) {
                 case 1 -> {

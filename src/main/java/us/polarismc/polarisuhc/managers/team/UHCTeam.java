@@ -5,6 +5,7 @@ import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.scoreboard.Scoreboard;
@@ -39,6 +40,7 @@ public class UHCTeam {
     private final ChannelKey channel;
 
     @Setter private Inventory teamInventory;
+    @Setter private Location teamSpawn;
 
     @Setter private int kills = 0;
 
@@ -87,7 +89,7 @@ public class UHCTeam {
 
         player.playerListName(tag);
         player.displayName(tag);
-        plugin.player.getUHCPlayer(player).updateDisplayName();
+        plugin.player.getUHCPlayer(player).updateNametag();
     }
 
     private void updateAllPlayersDisplay() {
@@ -181,12 +183,16 @@ public class UHCTeam {
         return members.stream().filter(UHCPlayer::isOnline).map(UHCPlayer::getPlayer).toList();
     }
 
-    public List<UHCPlayer> getAliveMembers() {
+    public List<UHCPlayer> getAliveUHCMembers() {
         return members.stream().filter(UHCPlayer::isPlaying).toList();
     }
 
     public List<UHCPlayer> getOnlineUHCMembers() {
         return members.stream().filter(UHCPlayer::isOnline).toList();
+    }
+
+    public List<UHCPlayer> getScatteredUHCMembers() {
+        return members.stream().filter(UHCPlayer::hasBeenScattered).toList();
     }
 
     //TODO - find a way of implementing PREFIX.TEAM, PREFIX.GLOBAL to mcdev-utils

@@ -26,4 +26,14 @@ public class InfoManager {
         board = new ScoreboardManager(plugin);
         tab = new TabManager(plugin);
     }
+
+    public void restartAllTasks() {
+        bar.restartUpdateTask();
+    }
+
+    public void handleInfoStart() {
+        plugin.timer.run();
+        plugin.info.bar.setGlobalDefault(plugin.timer::remainingPvP);
+        plugin.info.restartAllTasks();
+    }
 }
