@@ -36,24 +36,25 @@ public class LocationFinderService {
         return findSafeScatterLocation();
     }
 
-    public @Nullable Location findSafeScatterLocation() {
+    public Location findSafeScatterLocation() {
         boolean isNether = plugin.scen.get(ScenarioType.HADES).isEnabled();
 
         World world = isNether ? plugin.uhc.world.getNetherWorld() : plugin.uhc.world.getUhcWorld();
         if (world == null) return null;
 
-        int radius = (isNether ? plugin.uhc.border.getNetherBorder() : plugin.uhc.border.getBorder()) / 2;
-        Random random = ThreadLocalRandom.current();
+        int radius = (isNether ? plugin.uhc.border.getCurrentNetherBorder() : plugin.uhc.border.getCurrentBorder()) / 2;
+
 
         for (int i = 0; i < 200; i++) {
-            Location loc = getScatterLocation(world, isNether, radius, random, false);
+            Location loc = getScatterLocation(world, isNether, radius, false);
             if (loc != null) return loc;
         }
 
-        return getScatterLocation(world, isNether, radius, random, true);
+        return getScatterLocation(world, isNether, radius, true);
     }
 
-    private @Nullable Location getScatterLocation(@NotNull World world, boolean isNether, int radius, @NotNull Random random, boolean isFallback) {
+    private @Nullable Location getScatterLocation(@NotNull World world, boolean isNether, int radius, boolean isFallback) {
+        Random random = ThreadLocalRandom.current();
         int x = random.nextInt(-radius, radius);
         int z = random.nextInt(-radius, radius);
 

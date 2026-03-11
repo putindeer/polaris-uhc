@@ -1,8 +1,11 @@
 package us.polarismc.polarisuhc.managers.game.timer;
 
+import io.papermc.paper.registry.keys.SoundEventKeys;
 import lombok.Getter;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import us.polarismc.polarisuhc.Main;
+import us.polarismc.polarisuhc.managers.scenario.ScenarioType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,11 +65,11 @@ public class GameTimer extends BukkitRunnable {
         int sec = elapsedSeconds % 60;
         formatted = String.format("%02d:%02d:%02d", hor, min, sec);
 
-        checkReminders(pvptime, pvpReminders, "<blue>PvP On<gray> is in <aqua>%s</aqua>");
-        checkReminders(pvptime + meetuptime, meetupReminders, "<gold>Meetup<gray> is in <yellow>%s</yellow>");
+        checkPvPReminders();
+        checkMeetupReminders();
 
         if (finalheal > 0 && elapsedSeconds == finalheal) {
-            plugin.game.finalHeal();
+            plugin.game.giveFinalHeal();
         }
         if (elapsedSeconds == pvptime) {
             plugin.game.startPvP();
@@ -133,15 +136,70 @@ public class GameTimer extends BukkitRunnable {
         }
     }
 
-    private void checkReminders(int targetSeconds, int[] milestones, String messageFormat) {
-        int remaining = targetSeconds - elapsedSeconds;
+    private void checkPvPReminders() {
+        if (plugin.uhc.hasPvPStarted()) return;
+        int remaining = pvptime - elapsedSeconds;
         if (remaining < 0) return;
 
-        for (int milestone : milestones) {
+        for (int milestone : pvpReminders) {
             if (remaining == milestone) {
-                plugin.utils.broadcast(messageFormat, formatDuration(milestone));
-                return;
+                plugin.utils.broadcast(SoundEventKeys.BLOCK_BEACON_POWER_SELECT,
+                        "<blue>PvP On<gray> is in <aqua>" + formatDuration(milestone) + "</aqua>");
             }
+        }
+    }
+
+    private void checkMeetupReminders() {
+        if (!plugin.uhc.hasPvPStarted()) return;
+        int remaining = (pvptime + meetuptime) - elapsedSeconds;
+        if (remaining < 0) return;
+
+        for (int milestone : meetupReminders) {
+            if (remaining == milestone) {
+                sendMeetupReminder(milestone);
+            }
+        }
+    }
+
+    private void sendMeetupReminder(int milestone) {
+        boolean goToHell = plugin.scen.get(ScenarioType.GO_TO_HELL).isEnabled();
+        boolean hades = plugin.scen.get(ScenarioType.HADES).isEnabled();
+        boolean nether = plugin.uhc.toggle.isNether();
+        boolean tpBorder = plugin.uhc.border.isTpBorder();
+
+        plugin.utils.broadcast(SoundEventKeys.BLOCK_BEACON_POWER_SELECT,
+                "<gold>Meetup<gray> is in <yellow>" + formatDuration(milestone) + "</yellow>");
+
+        if (!hades) {
+            int finalOver = plugin.uhc.border.getMeetupBorder() / 2;
+            if (tpBorder) {
+                int startOver = plugin.uhc.border.getBorderList().getFirst() / 2;
+                plugin.utils.broadcast("<aqua>At Meetup, the border will shrink to <white>" + finalOver + "x" + finalOver +
+                        "<aqua> and will start shrinking every <white>" + plugin.uhc.border.getBorderTimer() +
+                        "m<aqua> until it becomes <white>" + startOver + "x" + startOver);
+            } else {
+                plugin.utils.broadcast("<aqua>At Meetup, the border will shrink to <white>" + finalOver + "x" + finalOver +
+                        "<aqua> at <white>" + plugin.uhc.border.getBorderSpeed() + "<aqua> blocks per second.");
+            }
+        }
+
+        if (!nether) return;
+
+        String prefix = hades ? "At Meetup" : "Also";
+        if (goToHell || hades) {
+            int finalNether = plugin.uhc.border.getNetherMeetupBorder() / 2;
+            boolean netherTpBorder = plugin.uhc.border.isNetherTPBorder();
+            if (netherTpBorder) {
+                int startNether = plugin.uhc.border.getNetherBorderList().getFirst() / 2;
+                plugin.utils.broadcast("<aqua>" + prefix + ", the <red>nether<aqua> border will shrink to <white>" + startNether + "x" + startNether +
+                        "<aqua> and will start shrinking every <white>" + plugin.uhc.border.getNetherBorderTimer() +
+                        "m<aqua> until it becomes <white>" + finalNether + "x" + finalNether);
+            } else {
+                plugin.utils.broadcast("<aqua>" + prefix + ", the <red>nether<aqua> border will shrink to <white>" + finalNether + "x" + finalNether +
+                        "<aqua> at <white>" + plugin.uhc.border.getNetherBorderSpeed() + "<aqua> blocks per second.");
+            }
+        } else {
+            plugin.utils.broadcast("<gray>" + prefix + ", all the people in the <red>Nether</red> will be teleported to a random location in the Overworld.");
         }
     }
 
@@ -161,11 +219,11 @@ public class GameTimer extends BukkitRunnable {
         return builder.toString().trim();
     }
 
-    public String remainingNext() {
+    public String actionBarNext(Player player) {
         if (!plugin.uhc.hasPvPStarted()) return remainingPvP();
         if (!plugin.uhc.hasMeetupStarted()) return remainingMeetup();
-        if (plugin.uhc.isFinalized()) return "Finalized";
-        return "";
+
+        return "<aqua>WorldBorder <dark_gray>»</dark_gray> " + plugin.utils.getBorderSizeString(player);
     }
 
     public String remainingFinalHeal() {

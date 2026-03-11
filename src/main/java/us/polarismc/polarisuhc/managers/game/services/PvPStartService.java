@@ -7,7 +7,6 @@ import us.polarismc.polarisuhc.Main;
 import us.polarismc.polarisuhc.events.PvPStartEvent;
 import us.polarismc.polarisuhc.managers.scenario.ScenarioType;
 
-
 public class PvPStartService {
     private final Main plugin;
     public PvPStartService(Main plugin) {
