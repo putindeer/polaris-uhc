@@ -24,6 +24,7 @@ public class ToggleManager {
     private boolean advancements;
     private boolean antiBurn;
     private boolean autoLS;
+    private boolean autoMiningWarn;
     private boolean bookshelves;
     private boolean end;
     private boolean explosives;
@@ -42,22 +43,25 @@ public class ToggleManager {
         ConfigurationSection config = plugin.getConfig().getConfigurationSection("toggle");
         assert config != null;
         advancements = config.getBoolean("advancements");
-        antiBurn = config.getBoolean("antiburn");
-        autoLS = config.getBoolean("autols");
+        antiBurn = config.getBoolean("anti-burn");
+        autoLS = config.getBoolean("auto-ls");
+        autoMiningWarn = config.getBoolean("auto-mining-warn");
         bookshelves = config.getBoolean("bookshelves");
         end = config.getBoolean("end");
         explosives = config.getBoolean("explosives");
-        fireAspect = config.getBoolean("fireaspect");
+        fireAspect = config.getBoolean("fire-aspect");
         flame = config.getBoolean("flame");
         horses = config.getBoolean("horses");
         mobs = config.getBoolean("mobs");
-        nerfedStrength = config.getBoolean("nerfedstrength");
+        nerfedStrength = config.getBoolean("nerfed-strength");
         nether = config.getBoolean("nether");
         notch = config.getBoolean("notch");
-        starterBooks = config.getBoolean("starterbooks");
+        starterBooks = config.getBoolean("starter-books");
         stats = config.getBoolean("stats");
         trades = config.getBoolean("trades");
     }
+
+    //TODO - add auto mining implementation
 
     public void toggleSetting(Player p, ToggleSetting setting, BiFunction<Player, Main, FastInv> guiCreator) {
         setting.toggle(plugin);

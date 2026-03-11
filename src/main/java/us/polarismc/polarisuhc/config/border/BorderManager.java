@@ -16,27 +16,62 @@ public class BorderManager {
         initializeBorder();
     }
 
+    public int getCurrentBorder() {
+        if (plugin.uhc.hasMeetupStarted()) {
+            if (tpBorder && !borderList.isEmpty()) {
+                return borderList.get(currentBorderIndex);
+            }
+            return meetupBorder - netherScatterInset;
+        }
+        return border;
+    }
+
+    public int getCurrentNetherBorder() {
+        if (plugin.uhc.hasMeetupStarted()) {
+            if (netherTPBorder && !netherBorderList.isEmpty()) {
+                return netherBorderList.get(currentBorderIndex);
+            }
+            return netherMeetupBorder - netherScatterInset;
+        }
+        return netherBorder;
+    }
+
+    private int currentBorderIndex = 0;
+    public void advanceBorderIndex() {
+        if (currentBorderIndex < borderList.size() - 1) currentBorderIndex++;
+    }
+
     private int border;
-    private int netherBorder;
     private int meetupBorder;
-    private int netherMeetupBorder;
     private int borderTimer;
     private boolean tpBorder;
     private double borderSpeed;
     private List<Integer> borderList;
+
+    private int netherBorder;
+    private int netherMeetupBorder;
+    private int netherBorderTimer;
+    private boolean netherTPBorder;
+    private double netherBorderSpeed;
     private List<Integer> netherBorderList;
+    private int netherScatterInset;
 
     private void initializeBorder() {
         ConfigurationSection config = plugin.getConfig().getConfigurationSection("border");
         assert config != null;
         border = config.getInt("overworld");
-        netherBorder = config.getInt("nether");
         meetupBorder = config.getInt("meetup");
-        netherMeetupBorder = config.getInt("nethermeetup");
-        tpBorder = config.getBoolean("tpborder");
         borderTimer = config.getInt("timer");
+        tpBorder = config.getBoolean("tp-border");
         borderSpeed = config.getDouble("speed");
-        borderList = config.getIntegerList("borderlist");
-        netherBorderList = config.getIntegerList("netherborderlist");
+        borderList = config.getIntegerList("border-list");
+
+        netherBorder = config.getInt("nether");
+        netherMeetupBorder = config.getInt("nether-meetup");
+        netherBorderTimer = config.getInt("nether-timer");
+        netherTPBorder = config.getBoolean("nether-tp-border");
+        netherBorderSpeed = config.getDouble("nether-speed");
+        netherBorderList = config.getIntegerList("nether-border-list");
+        netherScatterInset = config.getInt("nether-scatter-inset");
     }
 }

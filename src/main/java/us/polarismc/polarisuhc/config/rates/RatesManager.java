@@ -22,7 +22,7 @@ public class RatesManager {
     private void initializeRates() {
         ConfigurationSection config = plugin.getConfig().getConfigurationSection("rates");
         assert config != null;
-        xpKillRate = config.getInt("xpkill");
+        xpKillRate = config.getInt("xp-kill");
         flintRate = config.getInt("flint");
         appleRate = config.getInt("apple");
         glassRate = config.getInt("glass");

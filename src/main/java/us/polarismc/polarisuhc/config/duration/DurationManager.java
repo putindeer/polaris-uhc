@@ -14,18 +14,6 @@ public class DurationManager {
         initializeDuration();
     }
 
-    public void handleFinalHeal() {
-        plugin.utils.broadcast("FINAL HEAL");
-    }
-
-    public void handlePvpEnable() {
-        plugin.utils.broadcast("PVP ENABLED");
-    }
-
-    public void handleMeetup() {
-        plugin.utils.broadcast("MEETUP ON");
-    }
-
     private int pvpTime;
     private int meetupTime;
     private int finalHealTime;
@@ -35,6 +23,6 @@ public class DurationManager {
         assert config != null;
         pvpTime = config.getInt("pvp");
         meetupTime = config.getInt("meetup");
-        finalHealTime = config.getInt("finalheal");
+        finalHealTime = config.getInt("final-heal");
     }
 }

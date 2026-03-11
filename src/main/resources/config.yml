@@ -10,38 +10,39 @@ worlds:
 # Default toggleable configurations
 toggle:
   advancements: false
-  antiburn: true
-  autols: true
+  anti-burn: true
+  auto-ls: true
+  auto-mining-warn: true
   bookshelves: true
   end: false
   explosives: true
-  fireaspect: false
+  fire-aspect: false
   flame: true
   horses: true
   mobs: false
-  nerfedstrength: true
+  nerfed-strength: true
   nether: false
   notch: true
-  starterbooks: true
+  starter-books: true
   stats: true
   trades: true
   potions: # Three possible values: ON, OFF or TIER1
     poison: ON
     swiftness: ON
-    fireresistance: ON
-    turtlemaster: ON
+    fire-resistance: ON
+    turtle-master: ON
     slowness: ON
     invisibility: ON
     regeneration: OFF
     strength: TIER1
     healing: OFF
     harming: ON
-    waterbreathing: ON
+    water-breathing: ON
     weakness: ON
     leaping: ON
-    slowfalling: ON
+    slow-falling: ON
     infestation: ON
-    windcharging: ON
+    wind-charging: ON
     oozing: ON
     weaving: ON
   customcrafts:
@@ -57,32 +58,39 @@ toggle:
     lectern: true
 # Default border configurations
 border:
-  guidefaultlist:
+  gui-default-list:
     overworld: [600, 1000, 1600, 2000, 3000, 4000]
     nether: [500, 1000, 1500, 2000]
   overworld: 2000
-  nether: 1500
   meetup: 200
-  nethermeetup: 100
-  tpborder: true
   timer: 5 # minutes
+  tp-border: true
   speed: 2.0 # blocks per minute
-  borderlist:
+  border-list:
     - 1000
     - 500
     - 200
-  netherborderlist:
+  nether: 1500
+  nether-meetup: 100
+  nether-timer: 5 # minutes
+  nether-tp-border: true
+  nether-speed: 2.0 # blocks per minute
+  nether-border-list:
     - 750
     - 375
     - 150
+  # When a player is teleported from the Nether to the Overworld at Meetup start,
+  # this value is subtracted from the border size to avoid scattering them too close
+  # to the edge while it's moving. Only applies when tpborder is disabled.
+  nether-scatter-inset: 100
 # Default durations
 duration: # in minutes
   pvp: 15
   meetup: 15
-  finalheal: 0
+  final-heal: 0
 # Default rates
 rates:
-  xpkill: 3 # levels
+  xp-kill: 3 # levels
   flint: 30 # %
   apple: 2 # %
   glass: 40 # %

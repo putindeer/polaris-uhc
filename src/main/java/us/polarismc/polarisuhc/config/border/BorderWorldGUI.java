@@ -18,8 +18,8 @@ public class BorderWorldGUI extends FastInv {
         this.player = player;
         this.plugin = plugin;
 
-        BorderGUIHandler overworld = new BorderGUIHandler(plugin, "border.guidefaultlist.overworld", player, plugin.uhc.border::getBorder, plugin.uhc.border::setBorder, BorderWorldGUI::new);
-        BorderGUIHandler nether = new BorderGUIHandler(plugin, "border.guidefaultlist.nether", player, plugin.uhc.border::getNetherBorder, plugin.uhc.border::setNetherBorder, BorderWorldGUI::new);
+        BorderGUIHandler overworld = new BorderGUIHandler(plugin, "border.gui-default-list.overworld", player, plugin.uhc.border::getBorder, plugin.uhc.border::setBorder, BorderWorldGUI::new);
+        BorderGUIHandler nether = new BorderGUIHandler(plugin, "border.gui-default-list.nether", player, plugin.uhc.border::getNetherBorder, plugin.uhc.border::setNetherBorder, BorderWorldGUI::new);
 
         int[] glass = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 16, 17, 18, 19, 20, 25, 26, 27, 29, 34, 35, 36, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 50, 51, 52};
         setItems(glass, plugin.utils.ib(Material.LIGHT_BLUE_STAINED_GLASS_PANE).name("").hideTooltip().build());

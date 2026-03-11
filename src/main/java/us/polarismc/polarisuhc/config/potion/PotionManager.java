@@ -57,20 +57,20 @@ public class PotionManager {
         assert potions != null;
         poisonPotion = PotionBoolean.valueOf(potions.getString("poison", "FALSE").toUpperCase());
         swiftnessPotion = PotionBoolean.valueOf(potions.getString("swiftness", "FALSE").toUpperCase());
-        fireResistancePotion = PotionBoolean.valueOf(potions.getString("fireresistance", "FALSE").toUpperCase());
-        turtleMasterPotion = PotionBoolean.valueOf(potions.getString("turtlemaster", "FALSE").toUpperCase());
+        fireResistancePotion = PotionBoolean.valueOf(potions.getString("fire-resistance", "FALSE").toUpperCase());
+        turtleMasterPotion = PotionBoolean.valueOf(potions.getString("turtle-master", "FALSE").toUpperCase());
         slownessPotion = PotionBoolean.valueOf(potions.getString("slowness", "FALSE").toUpperCase());
         invisibilityPotion = PotionBoolean.valueOf(potions.getString("invisibility", "FALSE").toUpperCase());
         regenerationPotion = PotionBoolean.valueOf(potions.getString("regeneration", "FALSE").toUpperCase());
         strengthPotion = PotionBoolean.valueOf(potions.getString("strength", "FALSE").toUpperCase());
         healingPotion = PotionBoolean.valueOf(potions.getString("healing", "FALSE").toUpperCase());
         harmingPotion = PotionBoolean.valueOf(potions.getString("harming", "FALSE").toUpperCase());
-        waterBreathingPotion = PotionBoolean.valueOf(potions.getString("waterbreathing", "FALSE").toUpperCase());
+        waterBreathingPotion = PotionBoolean.valueOf(potions.getString("water-breathing", "FALSE").toUpperCase());
         weaknessPotion = PotionBoolean.valueOf(potions.getString("weakness", "FALSE").toUpperCase());
         leapingPotion = PotionBoolean.valueOf(potions.getString("leaping", "FALSE").toUpperCase());
-        slowFallingPotion = PotionBoolean.valueOf(potions.getString("slowfalling", "FALSE").toUpperCase());
+        slowFallingPotion = PotionBoolean.valueOf(potions.getString("slow-falling", "FALSE").toUpperCase());
         infestationPotion = PotionBoolean.valueOf(potions.getString("infestation", "FALSE").toUpperCase());
-        windChargingPotion = PotionBoolean.valueOf(potions.getString("windcharging", "FALSE").toUpperCase());
+        windChargingPotion = PotionBoolean.valueOf(potions.getString("wind-charging", "FALSE").toUpperCase());
         oozingPotion = PotionBoolean.valueOf(potions.getString("oozing", "FALSE").toUpperCase());
         weavingPotion = PotionBoolean.valueOf(potions.getString("weaving", "FALSE").toUpperCase());
     }
