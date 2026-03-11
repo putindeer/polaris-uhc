@@ -33,7 +33,7 @@ public class InfoManager {
 
     public void handleInfoStart() {
         plugin.timer.run();
-        plugin.info.bar.setGlobalDefault(plugin.timer::remainingPvP);
+        plugin.info.bar.setGlobalDefault(plugin.timer::remainingNext);
         plugin.info.restartAllTasks();
     }
 }

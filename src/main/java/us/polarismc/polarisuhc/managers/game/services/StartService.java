@@ -11,6 +11,7 @@ import java.util.List;
 import net.kyori.adventure.sound.Sound;
 import us.polarismc.polarisuhc.events.UHCPlayerStartEvent;
 import us.polarismc.polarisuhc.events.UHCStartEvent;
+import us.polarismc.polarisuhc.managers.game.timer.EventAnchor;
 import us.polarismc.polarisuhc.managers.player.UHCPlayer;
 import us.polarismc.polarisuhc.managers.uhc.UHCState;
 
@@ -54,12 +55,16 @@ public class StartService {
                 Sound.sound(SoundEventKeys.BLOCK_ANCIENT_DEBRIS_BREAK, Sound.Source.MASTER, 10, 1),
                 plugin.utils.timesFromTicks(10, 40, 10));
         UHCStartEvent startEvent = new UHCStartEvent(plugin.player.getPlayingPlayers(), uhcPlayers);
+        //TODO - add autols in hubmanager
         Bukkit.getPluginManager().callEvent(startEvent);
         uhcPlayers.forEach(player -> {
             UHCPlayerStartEvent playerStartEvent = new UHCPlayerStartEvent(player, plugin);
             Bukkit.getPluginManager().callEvent(playerStartEvent);
             playerStartEvent.give();
         });
+
+        plugin.timer.addEvent(EventAnchor.PRE_PVP, 60,
+                () -> plugin.utils.broadcast("Send /helpop if someone is stalking you. | Manda /helpop si te están stalkeando."));
 
         //TODO - add starter books implementation
 
@@ -85,7 +90,7 @@ public class StartService {
                         default -> "<green>";
                     };
 
-                    plugin.utils.broadcast(Sound.sound(SoundEventKeys.BLOCK_NOTE_BLOCK_HARP, Sound.Source.MASTER, 1, 1),
+                    plugin.utils.broadcast(SoundEventKeys.BLOCK_NOTE_BLOCK_HARP,
                             color + time + "<dark_gray> seconds until the UHC starts...");
                     plugin.utils.broadcastTitle(color + time);
                     return;

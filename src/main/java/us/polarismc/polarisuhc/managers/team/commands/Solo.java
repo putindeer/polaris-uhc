@@ -27,7 +27,7 @@ public class Solo implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length == 0) {
             makeEveryoneSolo();
-            plugin.utils.broadcast(Sound.sound(SoundEventKeys.BLOCK_NOTE_BLOCK_PLING, Sound.Source.MASTER, 1f, 1f),
+            plugin.utils.broadcast(SoundEventKeys.BLOCK_NOTE_BLOCK_PLING,
                     "<yellow>All non-team players were added to one.");
             return true;
         }

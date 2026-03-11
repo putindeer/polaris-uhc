@@ -154,7 +154,7 @@ public class UHCPlayer {
         if (isOnline()) {
             Player player = getPlayer();
             if (player == null) return;
-            plugin.utils.message(player, Sound.sound(SoundEventKeys.ENTITY_ELDER_GUARDIAN_CURSE, Sound.Source.MASTER, 1, 1),
+            plugin.utils.message(player, SoundEventKeys.ENTITY_ELDER_GUARDIAN_CURSE,
                     "<red>You were warned. <dark_gray>(<aqua>" + warnAmount + "</aqua> / 2)",
                     "<red>Reason: <blue>" + reason);
             plugin.utils.title(player, "<red>You were warned!", "<red>Reason: <blue>" + reason,

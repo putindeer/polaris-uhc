@@ -161,6 +161,13 @@ public class GameTimer extends BukkitRunnable {
         return builder.toString().trim();
     }
 
+    public String remainingNext() {
+        if (!plugin.uhc.hasPvPStarted()) return remainingPvP();
+        if (!plugin.uhc.hasMeetupStarted()) return remainingMeetup();
+        if (plugin.uhc.isFinalized()) return "Finalized";
+        return "";
+    }
+
     public String remainingFinalHeal() {
         return remainingUntil("Final Heal", finalheal);
     }
