@@ -12,7 +12,6 @@ import us.polarismc.polarisuhc.managers.game.services.util.LocationFinderService
 import java.util.*;
 
 public class GameFlowManager implements Listener {
-    private final Main plugin;
     private final PreStartService preStart;
     private final ScatterService scatter;
     private final StartService start;
@@ -24,7 +23,6 @@ public class GameFlowManager implements Listener {
     public final LocationFinderService locationService;
 
     public GameFlowManager(@NotNull Main plugin) {
-        this.plugin = plugin;
         this.preStart = new PreStartService(plugin);
         this.scatter = new ScatterService(plugin);
         this.finalHeal = new FinalHealService(plugin);

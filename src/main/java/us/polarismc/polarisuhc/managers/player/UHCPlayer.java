@@ -2,10 +2,8 @@ package us.polarismc.polarisuhc.managers.player;
 
 import io.papermc.paper.registry.keys.SoundEventKeys;
 import lombok.Data;
-import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;

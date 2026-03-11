@@ -1,7 +1,6 @@
 package us.polarismc.polarisuhc.managers.team.commands;
 
 import io.papermc.paper.registry.keys.SoundEventKeys;
-import net.kyori.adventure.sound.Sound;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
