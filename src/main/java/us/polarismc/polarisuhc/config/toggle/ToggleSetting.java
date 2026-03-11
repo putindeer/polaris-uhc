@@ -1,63 +1,60 @@
 package us.polarismc.polarisuhc.config.toggle;
 
+import lombok.Getter;
 import org.bukkit.Material;
 import me.putindeer.api.util.builder.ItemBuilder;
 import us.polarismc.polarisuhc.Main;
+import us.polarismc.polarisuhc.config.toggle.handlers.*;
 
-import java.util.function.BiConsumer;
-import java.util.function.Function;
 
 public enum ToggleSetting {
-    ADVANCEMENTS(Material.WRITABLE_BOOK, "Advancements", ToggleManager::isAdvancements, ToggleManager::setAdvancements),
-    ANTIBURN(Material.LAVA_BUCKET, "Anti Burn", ToggleManager::isAntiBurn, ToggleManager::setAntiBurn),
-    AUTOLS(Material.PLAYER_HEAD, "Auto Late Scatter", ToggleManager::isAutoLS, ToggleManager::setAutoLS),
-    BOOKSHELVES(Material.BOOKSHELF, "Bookshelves", ToggleManager::isBookshelves, ToggleManager::setBookshelves),
-    END(Material.END_STONE, "End", ToggleManager::isEnd, ToggleManager::setEnd),
-    EXPLOSIVES(Material.TNT, "Explosives", ToggleManager::isExplosives, ToggleManager::setExplosives),
-    FIRE_ASPECT(Material.IRON_SWORD, "Fire Aspect", ToggleManager::isFireAspect, ToggleManager::setFireAspect),
-    FLAME(Material.BOW, "Flame", ToggleManager::isFlame, ToggleManager::setFlame),
-    HORSES(Material.HORSE_SPAWN_EGG, "Horses", ToggleManager::isHorses, ToggleManager::setHorses),
-    MOBS(Material.ZOMBIE_SPAWN_EGG, "Mobs", ToggleManager::isMobs, ToggleManager::setMobs),
-    NETHER(Material.CRIMSON_NYLIUM, "Nether", ToggleManager::isNether, ToggleManager::setNether),
-    NOTCH(Material.ENCHANTED_GOLDEN_APPLE, "Notch Apples", ToggleManager::isNotch, ToggleManager::setNotch),
-    STARTER_BOOKS(Material.BOOK, "Starter Books", ToggleManager::isStarterBooks, ToggleManager::setStarterBooks),
-    STATS(Material.KNOWLEDGE_BOOK, "Stats", ToggleManager::isStats, ToggleManager::setStats),
-    NERFED_STRENGTH(Material.POTION, "Nerfed Strength", ToggleManager::isNerfedStrength, ToggleManager::setNerfedStrength),
-    TRADES(Material.VILLAGER_SPAWN_EGG, "Trades", ToggleManager::isTrades, ToggleManager::setTrades);
+    ADVANCEMENTS(Advancements.class),
+    ANTIBURN(AntiBurn.class),
+    AUTOLS(AutoLateScatter.class),
+    AUTO_MINING_WARN(AutoMiningWarn.class),
+    BOOKSHELVES(Bookshelves.class),
+    END(End.class),
+    EXPLOSIVES(Explosives.class),
+    FIRE_ASPECT(FireAspect.class),
+    FLAME(Flame.class),
+    HORSES(Horses.class),
+    MOBS(Mobs.class),
+    NERFED_STRENGTH(NerfedStrength.class),
+    NETHER(Nether.class),
+    NOTCH(Notch.class),
+    STARTER_BOOKS(StarterBooks.class),
+    STATS(Stats.class),
+    TRADES(Trades.class);
 
-    private final Material icon;
-    private final String name;
-    private final Function<ToggleManager, Boolean> getter;
-    private final BiConsumer<ToggleManager, Boolean> setter;
+    private final Class<? extends ToggleHandler> handlerClass;
+    @Getter private final ToggleInfo info;
 
-    ToggleSetting(Material icon, String name, Function<ToggleManager, Boolean> getter, BiConsumer<ToggleManager, Boolean> setter) {
-        this.icon = icon;
-        this.name = name;
-        this.getter = getter;
-        this.setter = setter;
+    ToggleSetting(Class<? extends ToggleHandler> handlerClass) {
+        this.handlerClass = handlerClass;
+        this.info = handlerClass.getAnnotation(ToggleInfo.class);
+        if (info == null) {
+            throw new IllegalStateException("Missing @ToggleInfo on " + handlerClass.getSimpleName());
+        }
     }
 
-    public boolean get(Main plugin) {
-        return getter.apply(plugin.uhc.getToggle());
+    public ToggleHandler create() {
+        try {
+            return handlerClass.getDeclaredConstructor().newInstance();
+        } catch (ReflectiveOperationException e) {
+            throw new IllegalStateException("Invalid handler class: " + handlerClass.getName(), e);
+        }
     }
 
-    public void set(Main plugin, boolean value) {
-        setter.accept(plugin.uhc.getToggle(), value);
-    }
-
-    public void toggle(Main plugin) {
-        set(plugin, !get(plugin));
-    }
-
-    public ItemBuilder buildIcon(Main plugin) {
-        boolean enabled = get(plugin);
+    public ItemBuilder buildIcon(Main plugin, boolean enabled) {
         String lore = enabled
                 ? "Click to toggle <red>OFF</red> this setting."
                 : "Click to toggle <green>ON</green> this setting.";
-        return plugin.utils.ib(icon).customName((enabled ? "<green>" : "<red>") + name).lore(lore);
+        return plugin.utils.ib(info.icon())
+                .customName((enabled ? "<green>" : "<red>") + info.displayName())
+                .lore(lore);
     }
 
-    public ItemBuilder buildToggleGlass(Main plugin) {
-        return plugin.utils.ib(get(plugin) ? Material.LIME_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE).hideTooltip();
+    public ItemBuilder buildToggleGlass(Main plugin, boolean enabled) {
+        return plugin.utils.ib(enabled ? Material.LIME_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE).hideTooltip();
     }
 }

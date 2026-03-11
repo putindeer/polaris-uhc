@@ -5,73 +5,64 @@ import io.papermc.paper.registry.keys.SoundEventKeys;
 import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.sound.Sound;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import us.polarismc.polarisuhc.Main;
 
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.function.BiFunction;
 
 @Getter
 @Setter
 public class ToggleManager {
     private final Main plugin;
+    private final Map<ToggleSetting, ToggleHandler> handlers = new EnumMap<>(ToggleSetting.class);
 
     public ToggleManager(Main plugin) {
         this.plugin = plugin;
-        initializeToggle();
-    }
 
-    private boolean advancements;
-    private boolean antiBurn;
-    private boolean autoLS;
-    private boolean autoMiningWarn;
-    private boolean bookshelves;
-    private boolean end;
-    private boolean explosives;
-    private boolean fireAspect;
-    private boolean flame;
-    private boolean horses;
-    private boolean mobs;
-    private boolean nerfedStrength;
-    private boolean nether;
-    private boolean notch;
-    private boolean starterBooks;
-    private boolean stats;
-    private boolean trades;
-
-    private void initializeToggle() {
-        ConfigurationSection config = plugin.getConfig().getConfigurationSection("toggle");
-        assert config != null;
-        advancements = config.getBoolean("advancements");
-        antiBurn = config.getBoolean("anti-burn");
-        autoLS = config.getBoolean("auto-ls");
-        autoMiningWarn = config.getBoolean("auto-mining-warn");
-        bookshelves = config.getBoolean("bookshelves");
-        end = config.getBoolean("end");
-        explosives = config.getBoolean("explosives");
-        fireAspect = config.getBoolean("fire-aspect");
-        flame = config.getBoolean("flame");
-        horses = config.getBoolean("horses");
-        mobs = config.getBoolean("mobs");
-        nerfedStrength = config.getBoolean("nerfed-strength");
-        nether = config.getBoolean("nether");
-        notch = config.getBoolean("notch");
-        starterBooks = config.getBoolean("starter-books");
-        stats = config.getBoolean("stats");
-        trades = config.getBoolean("trades");
-    }
-
-    //TODO - add auto mining implementation
-
-    public void toggleSetting(Player p, ToggleSetting setting, BiFunction<Player, Main, FastInv> guiCreator) {
-        setting.toggle(plugin);
-
-        if (setting.get(plugin)) {
-            p.playSound(Sound.sound(SoundEventKeys.BLOCK_STONE_BUTTON_CLICK_ON, Sound.Source.MASTER, 10, 1));
-        } else {
-            p.playSound(Sound.sound(SoundEventKeys.BLOCK_STONE_BUTTON_CLICK_OFF, Sound.Source.MASTER, 10, 1));
+        for (ToggleSetting setting : ToggleSetting.values()) {
+            ToggleHandler handler = setting.create();
+            if (handler.isEnabled()) {
+                handler.enable();
+            }
+            handlers.put(setting, handler);
         }
-
-        guiCreator.apply(p, plugin);
     }
+
+    public void toggle(ToggleSetting setting) {
+        ToggleHandler handler = handlers.get(setting);
+        handler.toggle();
+    }
+
+    public void toggleSetting(Player player, ToggleSetting setting, BiFunction<Player, Main, FastInv> guiCreator) {
+        toggle(setting);
+        boolean nowEnabled = isEnabled(setting);
+        player.playSound(Sound.sound(
+                nowEnabled ? SoundEventKeys.BLOCK_STONE_BUTTON_CLICK_ON : SoundEventKeys.BLOCK_STONE_BUTTON_CLICK_OFF,
+                Sound.Source.MASTER, 10, 1));
+        guiCreator.apply(player, plugin);
+    }
+
+    public boolean isEnabled(ToggleSetting setting) {
+        return handlers.get(setting).isEnabled();
+    }
+
+    public boolean isAdvancements() { return isEnabled(ToggleSetting.ADVANCEMENTS); }
+    public boolean isAntiBurn() { return isEnabled(ToggleSetting.ANTIBURN); }
+    public boolean isAutoLS() { return isEnabled(ToggleSetting.AUTOLS); }
+    public boolean isAutoMiningWarn() { return isEnabled(ToggleSetting.AUTO_MINING_WARN); }
+    public boolean isBookshelves() { return isEnabled(ToggleSetting.BOOKSHELVES); }
+    public boolean isEnd() { return isEnabled(ToggleSetting.END); }
+    public boolean isExplosives() { return isEnabled(ToggleSetting.EXPLOSIVES); }
+    public boolean isFireAspect() { return isEnabled(ToggleSetting.FIRE_ASPECT); }
+    public boolean isFlame() { return isEnabled(ToggleSetting.FLAME); }
+    public boolean isHorses() { return isEnabled(ToggleSetting.HORSES); }
+    public boolean isMobs() { return isEnabled(ToggleSetting.MOBS); }
+    public boolean isNether() { return isEnabled(ToggleSetting.NETHER); }
+    public boolean isNotch() { return isEnabled(ToggleSetting.NOTCH); }
+    public boolean isStarterBooks() { return isEnabled(ToggleSetting.STARTER_BOOKS); }
+    public boolean isStats() { return isEnabled(ToggleSetting.STATS); }
+    public boolean isNerfedStrength() { return isEnabled(ToggleSetting.NERFED_STRENGTH); }
+    public boolean isTrades() { return isEnabled(ToggleSetting.TRADES); }
 }
