@@ -48,8 +48,8 @@ public class GameFlowManager implements Listener {
         start.start(host);
     }
 
-    public void finalHeal() {
-        finalHeal.giveFinalheal();
+    public void giveFinalHeal() {
+        finalHeal.giveFinalHeal();
     }
 
     public void startPvP() {

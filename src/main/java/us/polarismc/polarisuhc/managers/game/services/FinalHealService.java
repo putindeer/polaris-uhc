@@ -8,7 +8,8 @@ public class FinalHealService {
         this.plugin = plugin;
     }
 
-    public void giveFinalheal() {
-
+    public void giveFinalHeal() {
+        plugin.uhc.getPlayingPlayers().forEach(player -> plugin.utils.setMaxHealth(player));
+        plugin.utils.broadcast("<green>All players has been healed.");
     }
 }
