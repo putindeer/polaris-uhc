@@ -9,6 +9,7 @@ public enum ScenarioType {
     FORTUNE_BABIES(FortuneBabies.class),
     FORTUNE_BOYS(FortuneBoys.class),
     FORTUNE_BOYS_PLUS(FortuneBoysPlus.class),
+    GO_TO_HELL(GoToHell.class),
     HADES(Hades.class),
     HASTEY_BABIES(HasteyBabies.class),
     HASTEY_BOYS(HasteyBoys.class),
