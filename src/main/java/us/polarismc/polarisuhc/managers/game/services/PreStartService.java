@@ -50,6 +50,10 @@ public class PreStartService {
     //TODO - reset effects + attributes
 
     private void applyPreStartEffects(Player player) {
+        player.setHealth(20);
+        player.setFoodLevel(20);
+        player.setLevel(0);
+        player.setExp(0.0f);
         player.getInventory().clear();
 
         Arrays.stream(prestartAttributes).map(player::getAttribute).filter(Objects::nonNull).forEach(attribute -> attribute.setBaseValue(0.0D));
