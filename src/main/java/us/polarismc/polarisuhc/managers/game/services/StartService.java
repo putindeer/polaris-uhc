@@ -56,6 +56,7 @@ public class StartService {
                 plugin.utils.timesFromTicks(10, 40, 10));
         UHCStartEvent startEvent = new UHCStartEvent(plugin.player.getPlayingPlayers(), uhcPlayers);
         //TODO - add autols in hubmanager
+        //TODO - add stats
         Bukkit.getPluginManager().callEvent(startEvent);
         uhcPlayers.forEach(player -> {
             UHCPlayerStartEvent playerStartEvent = new UHCPlayerStartEvent(player, plugin);
