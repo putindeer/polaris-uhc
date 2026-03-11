@@ -56,18 +56,26 @@ public class UHCManager {
     }
 
     public boolean isStarting() {
-        return state.isStarting();
+        return state.getPriority() >= UHCState.PRESTARTED.getPriority() && state.getPriority() < UHCState.STARTED.getPriority();
     }
 
     public boolean hasStarted() {
-        return state.isStarted();
+        return state.getPriority() >= UHCState.STARTED.getPriority();
+    }
+
+    public boolean hasPvPStarted() {
+        return state.getPriority() >= UHCState.PVP.getPriority();
+    }
+
+    public boolean hasMeetupStarted() {
+        return state.getPriority() >= UHCState.MEETUP.getPriority();
     }
     
     public boolean isScattering() {
         return state == UHCState.SCATTERING;
     }
 
-    public boolean isNotWaiting() {
+    public boolean isNotIdle() {
         return state != UHCState.IDLE;
     }
 

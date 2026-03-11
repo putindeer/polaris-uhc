@@ -164,7 +164,7 @@ public class TeamCommand implements TabExecutor {
         }
 
         UHCTeam currentTeam = targetUhc.getTeam();
-        boolean started = plugin.uhc.isNotWaiting();
+        boolean started = plugin.uhc.isNotIdle();
 
         if (currentTeam != null && started && currentTeam.getScatteredUHCMembers().size() > 1) {
             plugin.utils.message(target, SOUND_NO, "<red>You can't join a team if you already have been scattered with one after the UHC has started.");
@@ -189,7 +189,7 @@ public class TeamCommand implements TabExecutor {
     }
 
     private void handleLeave(Player player) {
-        if (plugin.uhc.isNotWaiting()) {
+        if (plugin.uhc.isNotIdle()) {
             plugin.utils.message(player, SOUND_NO, "<red>You can't leave a team after the UHC has started.");
             return;
         }
