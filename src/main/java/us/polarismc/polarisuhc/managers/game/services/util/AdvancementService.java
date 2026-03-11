@@ -1,4 +1,4 @@
-package us.polarismc.polarisuhc.managers.game.services;
+package us.polarismc.polarisuhc.managers.game.services.util;
 
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;

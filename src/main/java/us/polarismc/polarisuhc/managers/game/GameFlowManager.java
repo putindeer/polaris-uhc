@@ -5,6 +5,9 @@ import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 import us.polarismc.polarisuhc.Main;
 import us.polarismc.polarisuhc.managers.game.services.*;
+import us.polarismc.polarisuhc.managers.game.services.util.AdvancementService;
+import us.polarismc.polarisuhc.managers.game.services.util.LateScatterService;
+import us.polarismc.polarisuhc.managers.game.services.util.LocationFinderService;
 
 import java.util.*;
 
