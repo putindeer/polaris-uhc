@@ -11,6 +11,7 @@ public class LateScatterService {
     }
 
     public void lateScatterTeleport(Player player) {
+        //TODO - port this
         Location target = plugin.game.locationService.getScatterLocationFor(player);
         if (target == null) return;
         player.teleport(target);

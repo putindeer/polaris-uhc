@@ -11,6 +11,7 @@ import us.polarismc.polarisuhc.managers.player.UHCPlayer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 public abstract class UHCPlayerLoadoutEvent extends UHCEvent {
@@ -33,6 +34,31 @@ public abstract class UHCPlayerLoadoutEvent extends UHCEvent {
 
     public void addItems(Collection<ItemStack> items) {
         this.items.addAll(items);
+    }
+
+    public void removeItem(Material material) {
+        items.removeIf(item -> item != null && item.getType() == material);
+    }
+
+    public void removeItems(Collection<Material> materials) {
+        items.removeIf(item -> item != null && materials.contains(item.getType()));
+    }
+
+    public void replaceItem(Material material, ItemStack replacement) {
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i) != null && items.get(i).getType() == material) {
+                items.set(i, replacement);
+            }
+        }
+    }
+
+    public void replaceItems(Map<Material, ItemStack> replacements) {
+        for (int i = 0; i < items.size(); i++) {
+            ItemStack item = items.get(i);
+            if (item != null && replacements.containsKey(item.getType())) {
+                items.set(i, replacements.get(item.getType()));
+            }
+        }
     }
 
     public void addPotionEffect(PotionEffect effect) {
