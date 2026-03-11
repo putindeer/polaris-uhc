@@ -43,11 +43,13 @@ public abstract class CustomCraft {
     protected abstract Recipe buildRecipe();
 
     public final void enable() {
+        if (enabled) return;
         enabled = true;
         register();
     }
 
     public final void disable() {
+        if (!enabled) return;
         enabled = false;
         unregister();
     }
