@@ -13,7 +13,7 @@ import us.polarismc.polarisuhc.managers.player.PlayerManager;
 import us.polarismc.polarisuhc.managers.game.GameFlowManager;
 import us.polarismc.polarisuhc.managers.team.TeamManager;
 import us.polarismc.polarisuhc.managers.team.commands.*;
-import us.polarismc.polarisuhc.managers.game.GameTimer;
+import us.polarismc.polarisuhc.managers.game.timer.GameTimer;
 import us.polarismc.polarisuhc.managers.scenario.ScenarioManager;
 import us.polarismc.polarisuhc.managers.uhc.UHCManager;
 
