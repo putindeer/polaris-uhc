@@ -21,7 +21,7 @@ public class CustomCraftManager {
             if (craft.isEnabled()) {
                 craft.enable();
             }
-            crafts.put(setting, setting.create());
+            crafts.put(setting, craft);
         }
     }
 
