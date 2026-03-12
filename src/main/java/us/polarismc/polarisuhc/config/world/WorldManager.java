@@ -9,6 +9,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import us.polarismc.polarisuhc.Main;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,6 +19,22 @@ public class WorldManager {
     public WorldManager(Main plugin) {
         this.plugin = plugin;
         initializeWorlds();
+    }
+
+    public List<World> getPlayingWorlds() {
+        List<World> worlds = new ArrayList<>();
+
+        if (uhcWorld != null) worlds.add(uhcWorld);
+
+        if (plugin.uhc.toggle.isNether() && netherWorld != null) worlds.add(netherWorld);
+
+        if (plugin.uhc.toggle.isEnd() && endWorld != null) worlds.add(endWorld);
+
+        return worlds;
+    }
+
+    public <T> void applyGameruleToPlayingWorlds(GameRule<T> rule, T value) {
+        getPlayingWorlds().forEach(world -> world.setGameRule(rule, value));
     }
 
     private String arenaWorldString;
@@ -50,7 +68,6 @@ public class WorldManager {
         arenaWorld = getWorldIfExists(arenaWorldString);
         lobbyWorld = getWorldIfExists(lobbyWorldString);
     }
-
 
     private World getWorldIfExists(String name) {
         if (name == null || name.isBlank()) return null;

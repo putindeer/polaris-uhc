@@ -30,13 +30,13 @@ public class ToggleManager {
         }
     }
 
-    public void toggle(ToggleSetting setting) {
+    public void toggleSetting(ToggleSetting setting) {
         ToggleHandler handler = handlers.get(setting);
         handler.toggle();
     }
 
-    public void toggleSetting(Player player, ToggleSetting setting, BiFunction<Player, Main, FastInv> guiCreator) {
-        toggle(setting);
+    public void toggleSettingFromUI(Player player, ToggleSetting setting, BiFunction<Player, Main, FastInv> guiCreator) {
+        toggleSetting(setting);
         boolean nowEnabled = isEnabled(setting);
         player.playSound(Sound.sound(
                 nowEnabled ? SoundEventKeys.BLOCK_STONE_BUTTON_CLICK_ON : SoundEventKeys.BLOCK_STONE_BUTTON_CLICK_OFF,
@@ -47,6 +47,8 @@ public class ToggleManager {
     public boolean isEnabled(ToggleSetting setting) {
         return handlers.get(setting).isEnabled();
     }
+
+    // Helpers
 
     public boolean isAdvancements() { return isEnabled(ToggleSetting.ADVANCEMENTS); }
     public boolean isAntiBurn() { return isEnabled(ToggleSetting.ANTIBURN); }
@@ -59,10 +61,10 @@ public class ToggleManager {
     public boolean isFlame() { return isEnabled(ToggleSetting.FLAME); }
     public boolean isHorses() { return isEnabled(ToggleSetting.HORSES); }
     public boolean isMobs() { return isEnabled(ToggleSetting.MOBS); }
+    public boolean isNerfedStrength() { return isEnabled(ToggleSetting.NERFED_STRENGTH); }
     public boolean isNether() { return isEnabled(ToggleSetting.NETHER); }
     public boolean isNotch() { return isEnabled(ToggleSetting.NOTCH); }
     public boolean isStarterBooks() { return isEnabled(ToggleSetting.STARTER_BOOKS); }
     public boolean isStats() { return isEnabled(ToggleSetting.STATS); }
-    public boolean isNerfedStrength() { return isEnabled(ToggleSetting.NERFED_STRENGTH); }
     public boolean isTrades() { return isEnabled(ToggleSetting.TRADES); }
 }

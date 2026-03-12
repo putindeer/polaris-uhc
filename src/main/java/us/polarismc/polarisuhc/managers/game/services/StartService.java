@@ -9,6 +9,7 @@ import us.polarismc.polarisuhc.Main;
 import java.util.List;
 
 import net.kyori.adventure.sound.Sound;
+import us.polarismc.polarisuhc.config.toggle.ToggleSetting;
 import us.polarismc.polarisuhc.events.UHCPlayerStartEvent;
 import us.polarismc.polarisuhc.events.UHCStartEvent;
 import us.polarismc.polarisuhc.managers.game.timer.EventAnchor;
@@ -105,30 +106,26 @@ public class StartService {
     }
 
     private void prepareWorlds(Player host) {
-        World world = plugin.uhc.world.getUhcWorld();
+        plugin.uhc.world.getPlayingWorlds().forEach(world -> {
+            world.setGameRule(GameRules.PVP, false);
+            world.setGameRule(GameRules.SHOW_ADVANCEMENT_MESSAGES, plugin.uhc.toggle.isAdvancements());
+            world.setGameRule(GameRules.NATURAL_HEALTH_REGENERATION, false);
+            world.setGameRule(GameRules.SPAWN_PHANTOMS, false);
+            world.setGameRule(GameRules.SPAWN_MOBS, plugin.uhc.toggle.isMobs());
+            world.setHardcore(true);
+            world.setDifficulty(Difficulty.HARD);
+            world.setTime(1000);
+        });
 
-        world.setGameRule(GameRules.PVP, false);
-        world.setGameRule(GameRules.SHOW_ADVANCEMENT_MESSAGES, plugin.uhc.toggle.isAdvancements());
-        world.setGameRule(GameRules.NATURAL_HEALTH_REGENERATION, false);
-        world.setGameRule(GameRules.SPAWN_PHANTOMS, false);
-        world.setGameRule(GameRules.SPAWN_MOBS, plugin.uhc.toggle.isMobs());
-        world.setHardcore(true);
-        world.setDifficulty(Difficulty.HARD);
+        World world = plugin.uhc.world.getUhcWorld();
         world.getWorldBorder().setSize(plugin.uhc.border.getBorder());
 
         if (plugin.uhc.toggle.isNether()) {
             World netherWorld = plugin.uhc.world.getNetherWorld();
             if (netherWorld == null) {
-                plugin.uhc.toggle.setNether(false);
+                plugin.uhc.toggle.toggleSetting(ToggleSetting.NETHER);
                 plugin.utils.message(host, "Nether <red>disabled</red> because the nether world was <red>not created</red>.");
             } else {
-                netherWorld.setGameRule(GameRules.PVP, false);
-                netherWorld.setGameRule(GameRules.SHOW_ADVANCEMENT_MESSAGES, plugin.uhc.toggle.isAdvancements());
-                netherWorld.setGameRule(GameRules.NATURAL_HEALTH_REGENERATION, false);
-                netherWorld.setGameRule(GameRules.SPAWN_PHANTOMS, false);
-                netherWorld.setGameRule(GameRules.SPAWN_MOBS, plugin.uhc.toggle.isMobs());
-                netherWorld.setHardcore(true);
-                netherWorld.setDifficulty(Difficulty.HARD);
                 netherWorld.getWorldBorder().setSize(plugin.uhc.border.getNetherBorder());
             }
         }

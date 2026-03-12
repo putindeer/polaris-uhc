@@ -48,7 +48,7 @@ public class ToggleGUI extends FastInv {
         boolean enabled = plugin.uhc.toggle.isEnabled(setting);
         ItemBuilder ib = setting.buildIcon(plugin, enabled);
         iconConfig.accept(ib);
-        setItem(slot, ib.build(), e -> plugin.uhc.toggle.toggleSetting(player, setting, ToggleGUI::new));
-        setItem(slot + 9, setting.buildToggleGlass(plugin, enabled).build(), e -> plugin.uhc.toggle.toggleSetting(player, setting, ToggleGUI::new));
+        setItem(slot, ib.build(), e -> plugin.uhc.toggle.toggleSettingFromUI(player, setting, ToggleGUI::new));
+        setItem(slot + 9, setting.buildToggleGlass(plugin, enabled).build(), e -> plugin.uhc.toggle.toggleSettingFromUI(player, setting, ToggleGUI::new));
     }
 }
