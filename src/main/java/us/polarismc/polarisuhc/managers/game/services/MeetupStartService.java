@@ -26,7 +26,7 @@ public class MeetupStartService {
         broadcastMeetupStart(hades, goToHell, nether);
         applyWorldBorders(hades, goToHell, nether);
         scatterNetherPlayers(hades, goToHell, nether);
-        Bukkit.getPluginManager().callEvent(new MeetupStartEvent());
+        Bukkit.getPluginManager().callEvent(new MeetupStartEvent(plugin.uhc.getAlivePlayers()));
     }
 
     private void broadcastMeetupStart(boolean hades, boolean goToHell, boolean nether) {
