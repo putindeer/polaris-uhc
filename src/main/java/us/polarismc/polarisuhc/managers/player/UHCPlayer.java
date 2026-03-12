@@ -147,17 +147,18 @@ public class UHCPlayer {
         return minedResources.getOrDefault(resource, 0);
     }
 
-    public void warn(String reason) {
+    public void warn(WarnReason reason) {
+        String displayName = reason.getDisplayName();
         warnAmount++;
         if (isOnline()) {
             Player player = getPlayer();
             if (player == null) return;
             plugin.utils.message(player, SoundEventKeys.ENTITY_ELDER_GUARDIAN_CURSE,
                     "<red>You were warned. <dark_gray>(<aqua>" + warnAmount + "</aqua> / 2)",
-                    "<red>Reason: <blue>" + reason);
-            plugin.utils.title(player, "<red>You were warned!", "<red>Reason: <blue>" + reason,
+                    "<red>Reason: " + displayName);
+            plugin.utils.title(player, "<red>You were warned!", "<red>Reason: " + displayName,
                     plugin.utils.timesFromTicks(10, 40, 10));
-            plugin.utils.broadcast("<red>" + getName() + " <dark_gray>(<aqua>" + warnAmount + "</aqua> / 2)<red> was warned for <blue>" + reason + ".");
+            plugin.utils.broadcast("<red>" + getName() + " <dark_gray>(<aqua>" + warnAmount + "</aqua> / 2)<red> was warned for " + displayName + ".");
             if (warnAmount >= 2) {
                 player.damage(10000);
             }
