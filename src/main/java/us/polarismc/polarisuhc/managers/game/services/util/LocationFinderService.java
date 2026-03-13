@@ -7,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import us.polarismc.polarisuhc.Main;
 import us.polarismc.polarisuhc.managers.player.UHCPlayer;
-import us.polarismc.polarisuhc.managers.scenario.ScenarioType;
 import us.polarismc.polarisuhc.managers.team.UHCTeam;
 
 import java.util.Random;

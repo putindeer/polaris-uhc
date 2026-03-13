@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import us.polarismc.polarisuhc.Main;
-import us.polarismc.polarisuhc.managers.game.StartStep;
 import us.polarismc.polarisuhc.managers.uhc.UHCState;
 
 import java.util.*;
