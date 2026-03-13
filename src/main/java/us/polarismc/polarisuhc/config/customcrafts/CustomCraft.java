@@ -19,12 +19,13 @@ public abstract class CustomCraft {
     protected final Main plugin = Main.getInstance();
     protected final NamespacedKey key;
     protected final Recipe recipe;
+    private final CraftInfo info;
     @Getter private boolean enabled = false;
     private final Map<NamespacedKey, List<Recipe>> vanillaBackup = new HashMap<>();
     private final Set<NamespacedKey> overriddenVanilla = new HashSet<>();
 
     protected CustomCraft() {
-        CraftInfo info = getClass().getAnnotation(CraftInfo.class);
+        info = getClass().getAnnotation(CraftInfo.class);
         if (info == null) {
             throw new IllegalStateException("Missing @CraftInfo on " + getClass().getSimpleName());
         }
@@ -43,14 +44,15 @@ public abstract class CustomCraft {
     protected abstract Recipe buildRecipe();
 
     public final void enable() {
-        if (enabled) return;
         enabled = true;
+        plugin.utils.broadcast(info.displayName() + " Custom Craft has been <blue>enabled</blue>.");
         register();
     }
 
     public final void disable() {
         if (!enabled) return;
         enabled = false;
+        plugin.utils.broadcast(info.displayName() + " Custom Craft has been <blue>disabled</blue>.");
         unregister();
     }
 
@@ -58,6 +60,7 @@ public abstract class CustomCraft {
         ConfigurationSection config = plugin.getConfig().getConfigurationSection("toggle.customcrafts");
         if (config == null) return;
         enabled = config.getBoolean(info.id());
+        if (enabled) enable();
     }
 
     private void removeVanillaRecipe(NamespacedKey key) {

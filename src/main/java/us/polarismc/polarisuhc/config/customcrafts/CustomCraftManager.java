@@ -18,9 +18,6 @@ public class CustomCraftManager {
 
         for (CustomCraftSetting setting : CustomCraftSetting.values()) {
             CustomCraft craft = setting.create();
-            if (craft.isEnabled()) {
-                craft.enable();
-            }
             crafts.put(setting, craft);
         }
     }
