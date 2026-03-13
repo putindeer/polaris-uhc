@@ -46,6 +46,9 @@ commands:
   manualstart:
     description: Used to start the UHC manually.
     permission: uhc.host
+  toggle:
+    description: Used to toggle UHC features.
+    permission: uhc.host
   bookstuff:
     description: Send the book-related items you have on your inventory to your teammates.
     aliases: bs
