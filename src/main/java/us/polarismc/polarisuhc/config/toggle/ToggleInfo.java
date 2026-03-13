@@ -15,4 +15,5 @@ public @interface ToggleInfo {
     String displayName();
     String[] lore() default {};
     boolean listener() default true;
+    boolean listenerWhenDisabled() default false;
 }

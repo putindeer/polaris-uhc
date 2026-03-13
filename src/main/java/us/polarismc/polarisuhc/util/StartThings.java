@@ -5,6 +5,8 @@ import us.polarismc.polarisuhc.Main;
 import us.polarismc.polarisuhc.commands.debug.*;
 import us.polarismc.polarisuhc.commands.host.legacy.CreateWorld;
 import us.polarismc.polarisuhc.commands.host.legacy.ToggleScenario;
+import us.polarismc.polarisuhc.config.toggle.ToggleSetting;
+import us.polarismc.polarisuhc.config.toggle.handlers.NerfedStrength;
 import us.polarismc.polarisuhc.managers.arena.ArenaManager;
 import us.polarismc.polarisuhc.managers.channel.ChannelManager;
 import us.polarismc.polarisuhc.managers.hub.HubManager;
@@ -36,6 +38,8 @@ public class StartThings {
         plugin.team.disableAndDeleteTeams();
         plugin.uhc.crafts.disableAll();
         plugin.player.removeAllDisplays();
+        NerfedStrength strength = (NerfedStrength) plugin.uhc.toggle.getHandler(ToggleSetting.NERFED_STRENGTH);
+        strength.removeAllStrengthNerfs();
     }
 
     public void registerCommands() {

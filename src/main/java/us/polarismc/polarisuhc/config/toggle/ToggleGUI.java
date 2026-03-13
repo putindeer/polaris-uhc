@@ -24,22 +24,24 @@ public class ToggleGUI extends FastInv {
         setItems(glass, plugin.utils.ib(Material.LIGHT_BLUE_STAINED_GLASS_PANE).name("").hideTooltip().build());
         setItem(49, plugin.utils.goBack(), e -> new UHCGUI(player, plugin));
 
-        addToggle(2, ToggleSetting.BOOKSHELVES, ib -> {});
+        addToggle(1, ToggleSetting.FLETCHERS);
+        addToggle(2, ToggleSetting.BOOKSHELVES);
         addToggle(3, ToggleSetting.AUTOLS, ib -> ib.profile(player));
-        addToggle(4, ToggleSetting.ADVANCEMENTS, ib -> {});
-        addToggle(5, ToggleSetting.STATS, ib -> {});
-        addToggle(6, ToggleSetting.HORSES, ib -> {});
-        addToggle(18, ToggleSetting.STARTER_BOOKS, ib -> {});
-        addToggle(20, ToggleSetting.MOBS, ib -> {});
-        addToggle(21, ToggleSetting.TRADES, ib -> {});
-        addToggle(22, ToggleSetting.EXPLOSIVES, ib -> {});
-        addToggle(23, ToggleSetting.FLAME, ib -> {});
-        addToggle(24, ToggleSetting.FIRE_ASPECT, ib -> {});
-        addToggle(26, ToggleSetting.ANTIBURN, ib -> {});
-        addToggle(38, ToggleSetting.END, ib -> {});
+        addToggle(4, ToggleSetting.ADVANCEMENTS);
+        addToggle(5, ToggleSetting.STATS);
+        addToggle(6, ToggleSetting.HORSES);
+        addToggle(7, ToggleSetting.GHAST_DROP);
+        addToggle(19, ToggleSetting.STARTER_BOOKS);
+        addToggle(20, ToggleSetting.MOBS);
+        addToggle(21, ToggleSetting.TRADES);
+        addToggle(22, ToggleSetting.EXPLOSIVES);
+        addToggle(23, ToggleSetting.FLAME);
+        addToggle(24, ToggleSetting.FIRE_ASPECT);
+        addToggle(25, ToggleSetting.ANTI_ITEM_DESTRUCTION);
+        addToggle(38, ToggleSetting.END);
         addToggle(39, ToggleSetting.NERFED_STRENGTH, ib -> ib.potionType(PotionType.STRENGTH).hidePotionEffects());
-        addToggle(41, ToggleSetting.NOTCH, ib -> {});
-        addToggle(42, ToggleSetting.NETHER, ib -> {});
+        addToggle(41, ToggleSetting.NOTCH);
+        addToggle(42, ToggleSetting.NETHER);
 
         open(player);
     }
@@ -50,5 +52,9 @@ public class ToggleGUI extends FastInv {
         iconConfig.accept(ib);
         setItem(slot, ib.build(), e -> plugin.uhc.toggle.toggleSettingFromUI(player, setting, ToggleGUI::new));
         setItem(slot + 9, setting.buildToggleGlass(plugin, enabled).build(), e -> plugin.uhc.toggle.toggleSettingFromUI(player, setting, ToggleGUI::new));
+    }
+
+    private void addToggle(int slot, ToggleSetting setting) {
+        addToggle(slot, setting, ib -> {});
     }
 }

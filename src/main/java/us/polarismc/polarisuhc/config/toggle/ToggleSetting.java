@@ -9,7 +9,7 @@ import us.polarismc.polarisuhc.config.toggle.handlers.*;
 
 public enum ToggleSetting {
     ADVANCEMENTS(Advancements.class),
-    ANTIBURN(AntiBurn.class),
+    ANTI_ITEM_DESTRUCTION(AntiItemDestruction.class),
     AUTOLS(AutoLateScatter.class),
     AUTO_MINING_WARN(AutoMiningWarn.class),
     BOOKSHELVES(Bookshelves.class),
@@ -17,6 +17,8 @@ public enum ToggleSetting {
     EXPLOSIVES(Explosives.class),
     FIRE_ASPECT(FireAspect.class),
     FLAME(Flame.class),
+    FLETCHERS(Fletchers.class),
+    GHAST_DROP(GhastDrop.class),
     HORSES(Horses.class),
     MOBS(Mobs.class),
     NERFED_STRENGTH(NerfedStrength.class),

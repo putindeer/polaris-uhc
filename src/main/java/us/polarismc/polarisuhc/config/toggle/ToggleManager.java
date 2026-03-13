@@ -23,11 +23,12 @@ public class ToggleManager {
 
         for (ToggleSetting setting : ToggleSetting.values()) {
             ToggleHandler handler = setting.create();
-            if (handler.isEnabled()) {
-                handler.enable();
-            }
             handlers.put(setting, handler);
         }
+    }
+
+    public ToggleHandler getHandler(ToggleSetting setting) {
+        return handlers.get(setting);
     }
 
     public void toggleSetting(ToggleSetting setting) {
@@ -51,7 +52,7 @@ public class ToggleManager {
     // Helpers
 
     public boolean isAdvancements() { return isEnabled(ToggleSetting.ADVANCEMENTS); }
-    public boolean isAntiBurn() { return isEnabled(ToggleSetting.ANTIBURN); }
+    public boolean isAntiItemDestruction() { return isEnabled(ToggleSetting.ANTI_ITEM_DESTRUCTION); }
     public boolean isAutoLS() { return isEnabled(ToggleSetting.AUTOLS); }
     public boolean isAutoMiningWarn() { return isEnabled(ToggleSetting.AUTO_MINING_WARN); }
     public boolean isBookshelves() { return isEnabled(ToggleSetting.BOOKSHELVES); }

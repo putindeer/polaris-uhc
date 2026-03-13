@@ -7,4 +7,5 @@ import us.polarismc.polarisuhc.config.toggle.ToggleInfo;
 @ToggleInfo(id = "stats", icon = Material.KNOWLEDGE_BOOK, displayName = "Stats",
         listener = false)
 public class Stats extends ToggleHandler {
+    //todo - check if there is something to do here when stats module is complete
 }

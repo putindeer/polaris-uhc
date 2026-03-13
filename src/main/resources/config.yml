@@ -10,7 +10,7 @@ worlds:
 # Default toggleable configurations
 toggle:
   advancements: false
-  anti-burn: true
+  anti-item-destruction: true
   auto-ls: true
   auto-mining-warn: true
   bookshelves: true
@@ -18,6 +18,8 @@ toggle:
   explosives: true
   fire-aspect: false
   flame: true
+  fletchers: true
+  ghast-drop: true
   horses: true
   mobs: false
   nerfed-strength: true

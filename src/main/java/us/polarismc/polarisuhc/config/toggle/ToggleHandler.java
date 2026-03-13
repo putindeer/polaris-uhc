@@ -21,20 +21,24 @@ public abstract class ToggleHandler implements Listener {
     }
 
     public final void enable() {
-        if (enabled) return;
         enabled = true;
-        if (info.listener()) {
+        if (info.listener() && !info.listenerWhenDisabled()) {
             Bukkit.getPluginManager().registerEvents(this, plugin);
+        } else if (info.listener()) {
+            HandlerList.unregisterAll(this);
         }
+        plugin.utils.broadcast(info.displayName() + " has been <blue>enabled</blue>.");
         onEnable();
     }
 
     public final void disable() {
-        if (!enabled) return;
         enabled = false;
-        if (info.listener()) {
+        if (info.listener() && info.listenerWhenDisabled()) {
+            Bukkit.getPluginManager().registerEvents(this, plugin);
+        } else if (info.listener()) {
             HandlerList.unregisterAll(this);
         }
+        plugin.utils.broadcast(info.displayName() + " has been <blue>disabled</blue>.");
         onDisable();
     }
 
@@ -47,6 +51,11 @@ public abstract class ToggleHandler implements Listener {
         ConfigurationSection config = plugin.getConfig().getConfigurationSection("toggle");
         if (config == null) return;
         enabled = config.getBoolean(info.id());
+        if (enabled && !info.listenerWhenDisabled()) {
+            enable();
+        } else if (info.listenerWhenDisabled() && !enabled) {
+            disable();
+        }
     }
 
     protected void onEnable() {}
