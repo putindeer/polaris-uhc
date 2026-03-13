@@ -59,7 +59,7 @@ public class Debug implements CommandExecutor {
 
     private void actionBar(CommandSender sender) {
         if (!(sender instanceof Player player)) return;
-        plugin.info.bar.setDefault(player, p -> "Timer: " + plugin.timer.getFormatted());
+        plugin.info.bar.setDefault(player, p -> plugin.timer::getFormatted);
         plugin.utils.delay(40, () -> plugin.info.bar.sendTemporary(player, "Este es un mensaje temporal de 3 segundos", 3));
         plugin.utils.delay(200, () -> plugin.info.bar.sendTemporary(player, "Este es un mensaje temporal de 2 segundos con variable" + player.getName(), 2));
         plugin.utils.delay(2000, () -> plugin.info.bar.clear(player));
@@ -91,7 +91,7 @@ public class Debug implements CommandExecutor {
                 "",
                 "=== TOGGLE ===",
                 "Advancements: " + plugin.uhc.toggle.isAdvancements(),
-                "Anti Burn: " + plugin.uhc.toggle.isAntiBurn(),
+                "Anti Item Destruction: " + plugin.uhc.toggle.isAntiItemDestruction(),
                 "Auto LS: " + plugin.uhc.toggle.isAutoLS(),
                 "Bookshelves: " + plugin.uhc.toggle.isBookshelves(),
                 "End: " + plugin.uhc.toggle.isEnd(),
