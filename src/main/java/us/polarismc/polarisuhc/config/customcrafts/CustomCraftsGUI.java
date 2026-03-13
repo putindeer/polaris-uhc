@@ -24,16 +24,16 @@ public class CustomCraftsGUI extends FastInv {
         setItems(glass, plugin.utils.ib(Material.LIGHT_BLUE_STAINED_GLASS_PANE).name("").hideTooltip().build());
         setItem(49, plugin.utils.goBack(), e -> new UHCGUI(player, plugin));
 
-        addToggle(2, CustomCraftSetting.TOTEM_CRAFT, ib -> {});
-        addToggle(3, CustomCraftSetting.SPECTRAL_ARROW_CRAFT, ib -> {});
-        addToggle(4, CustomCraftSetting.GLISTERING_MELON_CRAFT, ib -> {});
-        addToggle(5, CustomCraftSetting.TNT_MINECART_CRAFT, ib -> {});
-        addToggle(6, CustomCraftSetting.LECTERN_CRAFT, ib -> {});
-        addToggle(29, CustomCraftSetting.GOLDEN_HEAD_CRAFT, ib -> {});
-        addToggle(30, CustomCraftSetting.TRIDENT_CRAFT, ib -> {});
-        addToggle(31, CustomCraftSetting.ELYTRA_CRAFT, ib -> {});
-        addToggle(32, CustomCraftSetting.MACE_CRAFT, ib -> {});
-        addToggle(33, CustomCraftSetting.BREEZE_ROD_CRAFT, ib -> {});
+        addToggle(2, CustomCraftSetting.TOTEM_CRAFT);
+        addToggle(3, CustomCraftSetting.SPECTRAL_ARROW_CRAFT);
+        addToggle(4, CustomCraftSetting.GLISTERING_MELON_CRAFT);
+        addToggle(5, CustomCraftSetting.TNT_MINECART_CRAFT);
+        addToggle(6, CustomCraftSetting.LECTERN_CRAFT);
+        addToggle(29, CustomCraftSetting.GOLDEN_HEAD_CRAFT);
+        addToggle(30, CustomCraftSetting.TRIDENT_CRAFT);
+        addToggle(31, CustomCraftSetting.ELYTRA_CRAFT);
+        addToggle(32, CustomCraftSetting.MACE_CRAFT);
+        addToggle(33, CustomCraftSetting.BREEZE_ROD_CRAFT);
 
         addClickHandler(e -> e.setCancelled(true));
         open(player);
@@ -62,5 +62,9 @@ public class CustomCraftsGUI extends FastInv {
             plugin.uhc.getCrafts().toggle(setting);
             new CustomCraftsGUI(player, plugin);
         });
+    }
+    
+    private void addToggle(int slot, CustomCraftSetting setting) {
+        addToggle(slot, setting, ib -> {});
     }
 }

@@ -23,24 +23,24 @@ public class PotionsGUI extends FastInv {
         setItems(glass, plugin.utils.ib(Material.LIGHT_BLUE_STAINED_GLASS_PANE).name("").hideTooltip().build());
         setItem(49, plugin.utils.goBack(), e -> new UHCGUI(player, plugin));
 
-        addPotion(3, PotionSetting.POISON, ib -> {});
-        addPotion(4, PotionSetting.SWIFTNESS, ib -> {});
-        addPotion(5, PotionSetting.FIRE_RESISTANCE, ib -> {});
-        addPotion(18, PotionSetting.TURTLE_MASTER, ib -> {});
-        addPotion(19, PotionSetting.SLOWNESS, ib -> {});
-        addPotion(20, PotionSetting.INVISIBILITY, ib -> {});
-        addPotion(21, PotionSetting.REGENERATION, ib -> {});
-        addPotion(22, PotionSetting.STRENGTH, ib -> {});
-        addPotion(23, PotionSetting.HEALING, ib -> {});
-        addPotion(24, PotionSetting.HARMING, ib -> {});
-        addPotion(25, PotionSetting.SLOW_FALLING, ib -> {});
-        addPotion(26, PotionSetting.WEAKNESS, ib -> {});
-        addPotion(37, PotionSetting.LEAPING, ib -> {});
-        addPotion(38, PotionSetting.WATER_BREATHING, ib -> {});
-        addPotion(39, PotionSetting.INFESTATION, ib -> {});
-        addPotion(41, PotionSetting.WIND_CHARGING, ib -> {});
-        addPotion(42, PotionSetting.OOZING, ib -> {});
-        addPotion(43, PotionSetting.WEAVING, ib -> {});
+        addPotion(3, PotionSetting.POISON);
+        addPotion(4, PotionSetting.SWIFTNESS);
+        addPotion(5, PotionSetting.FIRE_RESISTANCE);
+        addPotion(18, PotionSetting.TURTLE_MASTER);
+        addPotion(19, PotionSetting.SLOWNESS);
+        addPotion(20, PotionSetting.INVISIBILITY);
+        addPotion(21, PotionSetting.REGENERATION);
+        addPotion(22, PotionSetting.STRENGTH);
+        addPotion(23, PotionSetting.HEALING);
+        addPotion(24, PotionSetting.HARMING);
+        addPotion(25, PotionSetting.SLOW_FALLING);
+        addPotion(26, PotionSetting.WEAKNESS);
+        addPotion(37, PotionSetting.LEAPING);
+        addPotion(38, PotionSetting.WATER_BREATHING);
+        addPotion(39, PotionSetting.INFESTATION);
+        addPotion(41, PotionSetting.WIND_CHARGING);
+        addPotion(42, PotionSetting.OOZING);
+        addPotion(43, PotionSetting.WEAVING);
 
         addClickHandler(e -> e.setCancelled(true));
         open(player);
@@ -51,5 +51,9 @@ public class PotionsGUI extends FastInv {
         iconConfig.accept(ib);
         setItem(slot, ib.build(), e -> plugin.uhc.potion.togglePotion(player, setting, PotionsGUI::new));
         setItem(slot + 9, setting.buildToggleGlass(plugin).build(), e -> plugin.uhc.potion.togglePotion(player, setting, PotionsGUI::new));
+    }
+    
+    private void addPotion(int slot, PotionSetting setting) {
+        addPotion(slot, setting, ib -> {});
     }
 }
