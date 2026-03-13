@@ -8,8 +8,9 @@ import org.bukkit.potion.PotionEffectType;
 import us.polarismc.polarisuhc.Main;
 import us.polarismc.polarisuhc.events.MeetupStartEvent;
 import us.polarismc.polarisuhc.managers.game.timer.EventAnchor;
-import us.polarismc.polarisuhc.managers.scenario.ScenarioType;
+import us.polarismc.polarisuhc.managers.player.UHCPlayer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MeetupStartService {
@@ -18,21 +19,23 @@ public class MeetupStartService {
         this.plugin = plugin;
     }
 
+    private final List<UHCPlayer> teleportedPlayers = new ArrayList<>();
+
     public void startMeetup() {
-        boolean goToHell = plugin.scen.get(ScenarioType.GO_TO_HELL).isEnabled();
-        boolean hades = plugin.scen.get(ScenarioType.HADES).isEnabled();
+        boolean disabledOverworld = plugin.scen.hasDisabledOverworld();
+        boolean enablesNetherInMeetup = plugin.scen.hasEnabledNetherInMeetup();
         boolean nether = plugin.uhc.toggle.isNether();
 
-        broadcastMeetupStart(hades, goToHell, nether);
-        applyWorldBorders(hades, goToHell, nether);
-        scatterNetherPlayers(hades, goToHell, nether);
-        Bukkit.getPluginManager().callEvent(new MeetupStartEvent(plugin.uhc.getAlivePlayers()));
+        broadcastMeetupStart(disabledOverworld, enablesNetherInMeetup, nether);
+        applyWorldBorders(disabledOverworld, enablesNetherInMeetup, nether);
+        scatterNetherPlayers(disabledOverworld, enablesNetherInMeetup, nether);
+        Bukkit.getPluginManager().callEvent(new MeetupStartEvent(plugin.uhc.getAlivePlayers(), teleportedPlayers));
     }
 
-    private void broadcastMeetupStart(boolean hades, boolean goToHell, boolean nether) {
+    private void broadcastMeetupStart(boolean disabledOverworld, boolean enablesNetherInMeetup, boolean nether) {
         boolean tpBorder = plugin.uhc.border.isTpBorder();
 
-        if (!hades) {
+        if (!disabledOverworld) {
             int finalOW = plugin.uhc.border.getMeetupBorder() / 2;
             if (tpBorder) {
                 int startOW = plugin.uhc.border.getBorderList().getFirst() / 2;
@@ -49,8 +52,8 @@ public class MeetupStartService {
 
         if (!nether) return;
 
-        String prefix = hades ? "Meetup has started! The" : "Also, the";
-        if (goToHell || hades) {
+        String prefix = disabledOverworld ? "Meetup has started! The" : "Also, the";
+        if (enablesNetherInMeetup || disabledOverworld) {
             int finalNether = plugin.uhc.border.getNetherMeetupBorder() / 2;
             boolean netherTpBorder = plugin.uhc.border.isNetherTPBorder();
             if (netherTpBorder) {
@@ -65,22 +68,23 @@ public class MeetupStartService {
         }
     }
 
-    private void scatterNetherPlayers(boolean hades, boolean goToHell, boolean nether) {
-        if (!nether || hades || goToHell) return;
+    private void scatterNetherPlayers(boolean disabledOverworld, boolean enablesNetherInMeetup, boolean nether) {
+        if (!nether || disabledOverworld || enablesNetherInMeetup) return;
 
         World netherWorld = plugin.uhc.world.getNetherWorld();
-        Bukkit.getOnlinePlayers().stream().filter(player -> player.getWorld().equals(netherWorld)).forEach(player -> {
+        plugin.uhc.getPlayingPlayers().stream().filter(player -> player.getWorld().equals(netherWorld)).forEach(player -> {
             Location loc = plugin.game.locationService.findSafeScatterLocation();
             player.teleport(loc);
+            teleportedPlayers.add(plugin.player.getUHCPlayer(player));
             plugin.utils.message(player, "<red>You have been teleported to a random location!");
         });
     }
 
-    private void applyWorldBorders(boolean hades, boolean goToHell, boolean nether) {
+    private void applyWorldBorders(boolean disablesOverworld, boolean enablesNetherInMeetup, boolean nether) {
         boolean tpBorder = plugin.uhc.border.isTpBorder();
         boolean netherTpBorder = plugin.uhc.border.isNetherTPBorder();
 
-        if (!hades) {
+        if (!disablesOverworld) {
             if (tpBorder) {
                 executeTPBorder(false);
             } else {
@@ -92,7 +96,7 @@ public class MeetupStartService {
             }
         }
 
-        if (nether && (goToHell || hades)) {
+        if (nether && (enablesNetherInMeetup || disablesOverworld)) {
             if (netherTpBorder) {
                 executeTPBorder(true);
             } else {
@@ -106,14 +110,15 @@ public class MeetupStartService {
     }
 
     private void executeTPBorder(boolean isNether) {
-        List<Integer> wbList = isNether ? plugin.uhc.border.getNetherBorderList() : plugin.uhc.border.getBorderList();
+        List<Integer> borderList = isNether ? plugin.uhc.border.getNetherBorderList() : plugin.uhc.border.getBorderList();
         int borderTimer = isNether ? plugin.uhc.border.getNetherBorderTimer() : plugin.uhc.border.getBorderTimer();
 
         World world = isNether ? plugin.uhc.world.getNetherWorld() : plugin.uhc.world.getUhcWorld();
-        world.getWorldBorder().setSize(wbList.getFirst());
+        world.getWorldBorder().setSize(borderList.getFirst());
+        teleportAllPlayersToNearestLocation(borderList.getFirst() / 2, isNether, true);
 
-        for (int i = 1; i < wbList.size(); i++) {
-            int border = wbList.get(i);
+        for (int i = 1; i < borderList.size(); i++) {
+            int border = borderList.get(i);
             int offsetSeconds = borderTimer * 60 * i;
             int radius = border / 2;
 
@@ -134,15 +139,22 @@ public class MeetupStartService {
                         : "<aqua>The border has shrunk to <white>" + radius + "x" + radius;
                 plugin.utils.broadcast(message);
 
-                plugin.uhc.getPlayingPlayers().forEach(player -> {
-                    if (isNether != (player.getWorld().getEnvironment() == World.Environment.NETHER)) return;
-                    Location loc = player.getLocation();
-                    if (loc.getBlockX() >= radius || loc.getBlockX() < -radius || loc.getBlockZ() >= radius || loc.getBlockZ() < -radius) {
-                        teleportToNearestLocation(radius, player);
-                    }
-                });
+                teleportAllPlayersToNearestLocation(radius, isNether, false);
             });
         }
+    }
+
+    private void teleportAllPlayersToNearestLocation(int radius, boolean isNether, boolean first) {
+        plugin.uhc.getPlayingPlayers().forEach(player -> {
+            if (isNether != (player.getWorld().getEnvironment() == World.Environment.NETHER)) return;
+            Location loc = player.getLocation();
+            if (loc.getBlockX() >= radius || loc.getBlockX() < -radius || loc.getBlockZ() >= radius || loc.getBlockZ() < -radius) {
+                teleportToNearestLocation(radius, player);
+            }
+            if (first) {
+                teleportedPlayers.add(plugin.player.getUHCPlayer(player));
+            }
+        });
     }
 
     private void teleportToNearestLocation(int radius, Player player) {

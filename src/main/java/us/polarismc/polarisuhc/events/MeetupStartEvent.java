@@ -7,8 +7,10 @@ import java.util.List;
 
 @Getter
 public class MeetupStartEvent extends UHCEvent {
-    List<UHCPlayer> alivePlayers;
-    public MeetupStartEvent(List<UHCPlayer> alivePlayers) {
+    private final List<UHCPlayer> alivePlayers;
+    private final List<UHCPlayer> teleportedPlayers;
+    public MeetupStartEvent(List<UHCPlayer> alivePlayers, List<UHCPlayer> teleportedPlayers) {
         this.alivePlayers = alivePlayers;
+        this.teleportedPlayers = teleportedPlayers;
     }
 }

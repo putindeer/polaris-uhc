@@ -27,11 +27,6 @@ public class StartService {
     }
 
     public void start(Player host) {
-        if (plugin.uhc.hasStarted()) {
-            plugin.utils.message(host, "<red>The UHC has already started.");
-            return;
-        }
-
         countdown(host);
     }
 
@@ -71,6 +66,8 @@ public class StartService {
         //TODO - add starter books implementation
 
         cancelCountdown();
+
+        plugin.game.finalizeStep(host);
     }
 
     private void countdown(Player host) {

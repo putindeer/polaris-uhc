@@ -90,6 +90,18 @@ public abstract class BaseScenario implements Listener {
         return new ItemStack(annotation.icon());
     }
 
+    public final boolean enablesNetherInMeetup() {
+        return annotation.enablesNetherInMeetup();
+    }
+
+    public final boolean disablesOverworld() {
+        return annotation.disablesOverworld();
+    }
+
+    public final boolean enablesMiningInMeetup() {
+        return annotation.enablesMiningInMeetup();
+    }
+
     public final void enable() {
         if (enabled) return;
 

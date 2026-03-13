@@ -12,6 +12,8 @@ import us.polarismc.polarisuhc.managers.scenario.Scenario;
                 "Blackstone veins may contain <aqua>Gilded Blackstone</aqua>.",
                 "The <red>Nether</red> has no lava.",
                 "You start with a <white>stone pickaxe</white>."},
+        enablesNetherInMeetup = true,
+        disablesOverworld = true,
         inDevelopment = true)
 public class Hades extends BaseScenario {
 }

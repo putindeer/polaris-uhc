@@ -40,6 +40,12 @@ commands:
   solo:
     description: Used for giving a team to a player or making a solo team for every player without a team.
     permission: uhc.host
+  quickstart:
+    description: Used to start the UHC automatically.
+    permission: uhc.host
+  manualstart:
+    description: Used to start the UHC manually.
+    permission: uhc.host
   bookstuff:
     description: Send the book-related items you have on your inventory to your teammates.
     aliases: bs

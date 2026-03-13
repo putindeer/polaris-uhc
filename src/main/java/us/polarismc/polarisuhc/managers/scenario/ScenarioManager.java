@@ -14,6 +14,18 @@ public class ScenarioManager {
         loadScenarios();
     }
 
+    public boolean hasEnabledNetherInMeetup() {
+        return scenarios.values().stream().anyMatch(BaseScenario::enablesNetherInMeetup);
+    }
+
+    public boolean hasDisabledOverworld() {
+        return scenarios.values().stream().anyMatch(BaseScenario::disablesOverworld);
+    }
+
+    public boolean hasEnabledMiningInMeetup() {
+        return scenarios.values().stream().anyMatch(BaseScenario::enablesMiningInMeetup);
+    }
+
     private void loadScenarios() {
         for (ScenarioType type : ScenarioType.values()) {
             Class<?> scenarioClass = type.getScenarioClass();

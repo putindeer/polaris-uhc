@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import us.polarismc.polarisuhc.Main;
+import us.polarismc.polarisuhc.managers.game.StartStep;
 import us.polarismc.polarisuhc.managers.uhc.UHCState;
 
 import java.util.*;
@@ -24,15 +25,6 @@ public class PreStartService {
     }
 
     public void preStart(Player host) {
-        if (plugin.uhc.isStarting()) {
-            plugin.utils.message(host, "<red>The UHC is already starting.");
-            return;
-        }
-        if (plugin.uhc.hasStarted()) {
-            plugin.utils.message(host, "<red>The UHC has already started.");
-            return;
-        }
-
         plugin.utils.broadcast("<gray>The scatter is going to start soon...");
 
         if (plugin.arena.isEnabled()) {
@@ -43,6 +35,8 @@ public class PreStartService {
 
         Bukkit.getOnlinePlayers().stream().filter(onlinePlayer -> onlinePlayer.getGameMode() == GameMode.SURVIVAL).forEach(this::applyPreStartEffects);
         plugin.game.advancementService.startResetTask(5L);
+
+        plugin.game.finalizeStep(host);
     }
 
     @Getter private final Attribute[] prestartAttributes = {Attribute.ATTACK_DAMAGE, Attribute.JUMP_STRENGTH, Attribute.MOVEMENT_SPEED, Attribute.BLOCK_BREAK_SPEED};

@@ -39,8 +39,6 @@ public class ScatterService implements Listener {
     private final AtomicBoolean waitingPrinted = new AtomicBoolean(false);
 
     public void scatter(Player host) {
-        if (alreadyScattered(host)) return;
-
         plugin.uhc.setState(UHCState.SCATTERING);
         clearData();
 
@@ -63,6 +61,8 @@ public class ScatterService implements Listener {
                     task.cancel();
                     plugin.uhc.setState(UHCState.SCATTERED);
                     plugin.utils.broadcast(line, "<gray>Scatter concluded.", line);
+
+                    plugin.game.finalizeStep(host);
                 }
                 return;
             }
@@ -114,22 +114,6 @@ public class ScatterService implements Listener {
                 }
             });
         }, 0L, 5L);
-    }
-
-    private boolean alreadyScattered(Player host) {
-        if (plugin.uhc.getState() == UHCState.SCATTERING) {
-            plugin.utils.message(host, "<red>Scatter is already running.");
-            return true;
-        }
-        if (plugin.uhc.getState() == UHCState.SCATTERED) {
-            plugin.utils.message(host, "<red>You have already scattered.");
-            return true;
-        }
-        if (plugin.uhc.hasStarted()) {
-            plugin.utils.message(host, "<red>You can't do another scatter after the UHC has started.");
-            return true;
-        }
-        return false;
     }
 
     private void clearData() {

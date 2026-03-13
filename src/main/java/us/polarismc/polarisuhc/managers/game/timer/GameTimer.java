@@ -5,7 +5,6 @@ import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import us.polarismc.polarisuhc.Main;
-import us.polarismc.polarisuhc.managers.scenario.ScenarioType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -162,15 +161,15 @@ public class GameTimer extends BukkitRunnable {
     }
 
     private void sendMeetupReminder(int milestone) {
-        boolean goToHell = plugin.scen.get(ScenarioType.GO_TO_HELL).isEnabled();
-        boolean hades = plugin.scen.get(ScenarioType.HADES).isEnabled();
+        boolean enabledNetherInMeetup = plugin.scen.hasEnabledNetherInMeetup();
+        boolean disabledOverworld = plugin.scen.hasDisabledOverworld();
         boolean nether = plugin.uhc.toggle.isNether();
         boolean tpBorder = plugin.uhc.border.isTpBorder();
 
         plugin.utils.broadcast(SoundEventKeys.BLOCK_BEACON_POWER_SELECT,
                 "<gold>Meetup<gray> is in <yellow>" + formatDuration(milestone) + "</yellow>");
 
-        if (!hades) {
+        if (!disabledOverworld) {
             int finalOver = plugin.uhc.border.getMeetupBorder() / 2;
             if (tpBorder) {
                 int startOver = plugin.uhc.border.getBorderList().getFirst() / 2;
@@ -185,8 +184,8 @@ public class GameTimer extends BukkitRunnable {
 
         if (!nether) return;
 
-        String prefix = hades ? "At Meetup" : "Also";
-        if (goToHell || hades) {
+        String prefix = disabledOverworld ? "At Meetup" : "Also";
+        if (enabledNetherInMeetup || disabledOverworld) {
             int finalNether = plugin.uhc.border.getNetherMeetupBorder() / 2;
             boolean netherTpBorder = plugin.uhc.border.isNetherTPBorder();
             if (netherTpBorder) {

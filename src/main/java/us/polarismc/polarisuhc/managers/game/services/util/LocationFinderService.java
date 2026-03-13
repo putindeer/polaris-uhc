@@ -37,20 +37,20 @@ public class LocationFinderService {
     }
 
     public Location findSafeScatterLocation() {
-        boolean isNether = plugin.scen.get(ScenarioType.HADES).isEnabled();
+        boolean disabledOverworld = plugin.scen.hasDisabledOverworld();
 
-        World world = isNether ? plugin.uhc.world.getNetherWorld() : plugin.uhc.world.getUhcWorld();
+        World world = disabledOverworld ? plugin.uhc.world.getNetherWorld() : plugin.uhc.world.getUhcWorld();
         if (world == null) return null;
 
-        int radius = (isNether ? plugin.uhc.border.getCurrentNetherBorder() : plugin.uhc.border.getCurrentBorder()) / 2;
+        int radius = (disabledOverworld ? plugin.uhc.border.getCurrentNetherBorder() : plugin.uhc.border.getCurrentBorder()) / 2;
 
 
         for (int i = 0; i < 200; i++) {
-            Location loc = getScatterLocation(world, isNether, radius, false);
+            Location loc = getScatterLocation(world, disabledOverworld, radius, false);
             if (loc != null) return loc;
         }
 
-        return getScatterLocation(world, isNether, radius, true);
+        return getScatterLocation(world, disabledOverworld, radius, true);
     }
 
     private @Nullable Location getScatterLocation(@NotNull World world, boolean isNether, int radius, boolean isFallback) {
