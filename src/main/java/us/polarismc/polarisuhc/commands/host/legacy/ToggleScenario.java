@@ -1,9 +1,6 @@
 package us.polarismc.polarisuhc.commands.host.legacy;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
+import org.bukkit.command.*;
 import org.jetbrains.annotations.NotNull;
 import us.polarismc.polarisuhc.Main;
 import us.polarismc.polarisuhc.managers.scenario.BaseScenario;
@@ -13,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public class ToggleScenario implements CommandExecutor, TabCompleter {
+public class ToggleScenario implements TabExecutor {
     private final Main plugin;
 
     public ToggleScenario(Main plugin) {
