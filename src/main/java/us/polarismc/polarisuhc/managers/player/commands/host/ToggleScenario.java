@@ -1,4 +1,4 @@
-package us.polarismc.polarisuhc.commands.host.legacy;
+package us.polarismc.polarisuhc.managers.player.commands.host;
 
 import org.bukkit.command.*;
 import org.jetbrains.annotations.NotNull;

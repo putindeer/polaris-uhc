@@ -2,9 +2,9 @@ package us.polarismc.polarisuhc.util;
 
 import fr.mrmicky.fastinv.FastInvManager;
 import us.polarismc.polarisuhc.Main;
-import us.polarismc.polarisuhc.commands.debug.*;
-import us.polarismc.polarisuhc.commands.host.legacy.CreateWorld;
-import us.polarismc.polarisuhc.commands.host.legacy.ToggleScenario;
+import us.polarismc.polarisuhc.debug.*;
+import us.polarismc.polarisuhc.managers.player.commands.host.CreateWorld;
+import us.polarismc.polarisuhc.managers.player.commands.host.ToggleScenario;
 import us.polarismc.polarisuhc.config.toggle.ToggleSetting;
 import us.polarismc.polarisuhc.config.toggle.handlers.NerfedStrength;
 import us.polarismc.polarisuhc.managers.arena.ArenaManager;

@@ -1,4 +1,4 @@
-package us.polarismc.polarisuhc.commands.debug;
+package us.polarismc.polarisuhc.debug;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

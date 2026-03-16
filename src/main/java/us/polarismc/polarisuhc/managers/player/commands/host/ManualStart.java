@@ -1,4 +1,4 @@
-package us.polarismc.polarisuhc.commands.host;
+package us.polarismc.polarisuhc.managers.player.commands.host;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -9,11 +9,11 @@ import us.polarismc.polarisuhc.Main;
 
 import java.util.Objects;
 
-public class QuickStart implements CommandExecutor {
+public class ManualStart implements CommandExecutor {
     private final Main plugin;
-    public QuickStart(Main plugin) {
+    public ManualStart(Main plugin) {
         this.plugin = plugin;
-        Objects.requireNonNull(plugin.getCommand("quickstart")).setExecutor(this);
+        Objects.requireNonNull(plugin.getCommand("manualstart")).setExecutor(this);
     }
 
     @Override
@@ -22,7 +22,7 @@ public class QuickStart implements CommandExecutor {
             plugin.utils.message(sender, "You can't use this command in the console!");
             return false;
         }
-        plugin.game.quickStart(player);
+        plugin.game.manualStart(player);
         return true;
     }
 }
