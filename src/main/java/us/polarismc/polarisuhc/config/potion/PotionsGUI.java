@@ -9,6 +9,7 @@ import us.polarismc.polarisuhc.Main;
 import us.polarismc.polarisuhc.managers.uhc.UHCGUI;
 
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 public class PotionsGUI extends FastInv {
     private final Main plugin;
@@ -19,8 +20,7 @@ public class PotionsGUI extends FastInv {
         this.plugin = plugin;
         this.player = player;
 
-        int[] glass = new int[]{0, 1, 2, 6, 7, 8, 9, 10, 11, 15, 16, 17, 36, 40, 44, 45, 53};
-        setItems(glass, plugin.utils.ib(Material.LIGHT_BLUE_STAINED_GLASS_PANE).name("").hideTooltip().build());
+        setItems(0, 53, plugin.utils.ib(Material.LIGHT_BLUE_STAINED_GLASS_PANE).name("").hideTooltip().build());
         setItem(49, plugin.utils.goBack(), e -> new UHCGUI(player, plugin));
 
         addPotion(3, PotionSetting.POISON);

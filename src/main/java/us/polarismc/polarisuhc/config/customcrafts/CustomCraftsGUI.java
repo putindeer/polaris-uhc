@@ -9,6 +9,7 @@ import us.polarismc.polarisuhc.Main;
 import us.polarismc.polarisuhc.managers.uhc.UHCGUI;
 
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 public class CustomCraftsGUI extends FastInv {
 
@@ -20,8 +21,7 @@ public class CustomCraftsGUI extends FastInv {
         this.plugin = plugin;
         this.player = player;
 
-        int[] glass = new int[]{0, 1, 7, 8, 9, 10, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 34, 35, 36, 37, 43, 44, 45, 46, 47, 48, 50, 51, 52, 53};
-        setItems(glass, plugin.utils.ib(Material.LIGHT_BLUE_STAINED_GLASS_PANE).name("").hideTooltip().build());
+        setItems(0, 53, plugin.utils.ib(Material.LIGHT_BLUE_STAINED_GLASS_PANE).name("").hideTooltip().build());
         setItem(49, plugin.utils.goBack(), e -> new UHCGUI(player, plugin));
 
         addToggle(2, CustomCraftSetting.TOTEM_CRAFT);

@@ -9,6 +9,7 @@ import us.polarismc.polarisuhc.managers.uhc.UHCGUI;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.IntStream;
 
 public class DurationRatesGUI extends FastInv {
     private final Main plugin;
@@ -19,8 +20,7 @@ public class DurationRatesGUI extends FastInv {
         this.plugin = plugin;
         this.player = player;
 
-        int[] border = {0, 2, 3, 4, 5, 6, 8, 12, 14, 18, 20, 24, 26, 30, 31, 32, 36, 38, 39, 40, 41, 42, 44, 48, 50};
-        setItems(border, plugin.utils.ib(Material.LIGHT_BLUE_STAINED_GLASS_PANE).name("").hideTooltip().build());
+        setItems(0, 53, plugin.utils.ib(Material.LIGHT_BLUE_STAINED_GLASS_PANE).name("").hideTooltip().build());
         boolean isFinalHeal = plugin.uhc.duration.getFinalHealTime() > 0;
 
         placeControl(1, plugin.uhc.rates::getAppleRate, plugin.uhc.rates::setAppleRate, Material.APPLE,
