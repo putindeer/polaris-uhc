@@ -3,8 +3,11 @@ package us.polarismc.polarisuhc.util;
 import fr.mrmicky.fastinv.FastInvManager;
 import us.polarismc.polarisuhc.Main;
 import us.polarismc.polarisuhc.debug.*;
-import us.polarismc.polarisuhc.managers.player.commands.host.CreateWorld;
-import us.polarismc.polarisuhc.managers.player.commands.host.ToggleScenario;
+import us.polarismc.polarisuhc.managers.player.commands.host.ManualStart;
+import us.polarismc.polarisuhc.managers.player.commands.host.QuickStart;
+import us.polarismc.polarisuhc.managers.player.commands.host.legacy.CreateWorld;
+import us.polarismc.polarisuhc.managers.player.commands.host.legacy.Toggle;
+import us.polarismc.polarisuhc.managers.player.commands.host.legacy.ToggleScenario;
 import us.polarismc.polarisuhc.config.toggle.ToggleSetting;
 import us.polarismc.polarisuhc.config.toggle.handlers.NerfedStrength;
 import us.polarismc.polarisuhc.managers.arena.ArenaManager;
@@ -43,15 +46,20 @@ public class StartThings {
     }
 
     public void registerCommands() {
-        // Dev commands (uhc.dev)
+        // Dev commands (uhc.debug)
         new Debug(plugin);
         new GUI(plugin);
         new Hex(plugin);
         new TeamHex(plugin);
         new TestScatter(plugin);
         new TestTeams(plugin);
-        // Host commands (uhc.host)
+        // Player commands (uhc.managers.player.commands)
+        // Host commands (uhc.managers.player.commands.host)
+        new ManualStart(plugin);
+        new QuickStart(plugin);
+        // Host config-related commands (uhc.managers.player.commands.host.legacy)
         new CreateWorld(plugin);
+        new Toggle(plugin);
         new ToggleScenario(plugin);
         // Team commands (uhc.managers.team)
         new BookStuff(plugin);
