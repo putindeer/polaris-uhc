@@ -5,6 +5,7 @@ import us.polarismc.polarisuhc.Main;
 import us.polarismc.polarisuhc.debug.*;
 import us.polarismc.polarisuhc.managers.player.commands.host.ManualStart;
 import us.polarismc.polarisuhc.managers.player.commands.host.QuickStart;
+import us.polarismc.polarisuhc.managers.player.commands.host.WorldC;
 import us.polarismc.polarisuhc.managers.player.commands.host.legacy.CreateWorld;
 import us.polarismc.polarisuhc.managers.player.commands.host.legacy.Toggle;
 import us.polarismc.polarisuhc.managers.player.commands.host.legacy.ToggleScenario;
@@ -53,10 +54,12 @@ public class StartThings {
         new TeamHex(plugin);
         new TestScatter(plugin);
         new TestTeams(plugin);
+        new NametagTest(plugin);
         // Player commands (uhc.managers.player.commands)
         // Host commands (uhc.managers.player.commands.host)
         new ManualStart(plugin);
         new QuickStart(plugin);
+        new WorldC(plugin);
         // Host config-related commands (uhc.managers.player.commands.host.legacy)
         new CreateWorld(plugin);
         new Toggle(plugin);

@@ -30,14 +30,7 @@ public class NametagManager implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        Player player = event.getPlayer();
-        UHCPlayer uhcPlayer = plugin.player.getUHCPlayer(player);
-
-        TextDisplay display = uhcPlayer.getNametag();
-        if (display != null && display.isValid()) {
-            display.remove();
-        }
-        uhcPlayer.setNametag(null);
+        removeNametag(event.getPlayer());
     }
 
     public void ensureDisplay(Player player) {
@@ -48,14 +41,30 @@ public class NametagManager implements Listener {
         }
 
         TextDisplay display = uhcPlayer.getNametag();
+
         if (display == null || !display.isValid()) {
             display = spawn(player);
             uhcPlayer.setNametag(display);
         }
 
+        if (display.getWorld() != player.getWorld()) {
+            display.teleport(player);
+            player.addPassenger(display);
+        }
+
         applyState(display, player.isSneaking());
         display.text(uhcPlayer.getDisplayNameComponent());
         applyVisibilityForOwner(player, display);
+    }
+
+    public void removeNametag(Player player) {
+        UHCPlayer uhcPlayer = plugin.player.getUHCPlayer(player);
+
+        TextDisplay display = uhcPlayer.getNametag();
+        if (display != null && display.isValid()) {
+            display.remove();
+        }
+        uhcPlayer.setNametag(null);
     }
 
     public void updateText(UHCPlayer uhcPlayer) {
@@ -76,15 +85,11 @@ public class NametagManager implements Listener {
 
     @EventHandler
     public void onDeath(PlayerDeathEvent event) {
-        UHCPlayer uhcPlayer = plugin.player.getUHCPlayer(event.getEntity());
-        TextDisplay display = uhcPlayer.getNametag();
-        display.remove();
-        uhcPlayer.setNametag(null);
+        removeNametag(event.getPlayer());
     }
 
     @EventHandler
     public void onRespawn(PlayerRespawnEvent event) {
-        UHCPlayer uhcPlayer = plugin.player.getUHCPlayer(event.getPlayer());
         ensureDisplay(event.getPlayer());
     }
 
@@ -128,6 +133,11 @@ public class NametagManager implements Listener {
                 viewer.showEntity(plugin, display);
             }
         }
+    }
+
+    @EventHandler
+    public void onWorldChange(PlayerChangedWorldEvent event) {
+        ensureDisplay(event.getPlayer());
     }
 
     private void applyVisibilityForOwner(Player owner, TextDisplay display) {

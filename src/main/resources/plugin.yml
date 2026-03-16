@@ -25,6 +25,9 @@ commands:
   testscatter:
     description: Command used to test scattering.
     permission: uhc.dev
+  nametag:
+    description: Command used to test nametags
+    permission: uhc.dev
   createworld:
     description: Used for creating overworld/nether/end worlds.
     permission: uhc.host
@@ -48,6 +51,9 @@ commands:
     permission: uhc.host
   toggle:
     description: Used to toggle UHC features.
+    permission: uhc.host
+  world:
+    description: Used to teleport yourself to other worlds.
     permission: uhc.host
   bookstuff:
     description: Send the book-related items you have on your inventory to your teammates.

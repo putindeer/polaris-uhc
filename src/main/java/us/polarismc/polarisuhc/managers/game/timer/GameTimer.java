@@ -1,6 +1,5 @@
 package us.polarismc.polarisuhc.managers.game.timer;
 
-import io.papermc.paper.registry.keys.SoundEventKeys;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -21,7 +20,7 @@ public class GameTimer extends BukkitRunnable {
 
     @Getter private String formatted;
 
-    private final int[] pvpReminders    = { 60*60, 30*60, 15*60, 10*60, 5*60, 60 };
+    private final int[] pvpReminders = { 60*60, 30*60, 15*60, 10*60, 5*60, 60 };
     private final int[] meetupReminders = { 60*60, 30*60, 15*60, 10*60, 5*60, 60 };
 
     private final List<GameEvent> events = new ArrayList<>();
@@ -32,7 +31,6 @@ public class GameTimer extends BukkitRunnable {
 
     public void start() {
         if (running) return;
-        running = true;
         elapsedSeconds = 0;
 
         finalheal = plugin.uhc.duration.getFinalHealTime() * 60;
@@ -44,6 +42,7 @@ public class GameTimer extends BukkitRunnable {
         meetuptime = plugin.uhc.duration.getMeetupTime() * 60;
         if (meetuptime <= 0) meetuptime = 1;
 
+        running = true;
         this.runTaskTimer(plugin, 20L, 20L);
     }
 
@@ -142,8 +141,7 @@ public class GameTimer extends BukkitRunnable {
 
         for (int milestone : pvpReminders) {
             if (remaining == milestone) {
-                plugin.utils.broadcast(SoundEventKeys.BLOCK_BEACON_POWER_SELECT,
-                        "<blue>PvP On<gray> is in <aqua>" + formatDuration(milestone) + "</aqua>");
+                plugin.utils.broadcast("<blue>PvP On<gray> is in <aqua>" + formatDuration(milestone) + "</aqua>");
             }
         }
     }
@@ -166,8 +164,7 @@ public class GameTimer extends BukkitRunnable {
         boolean nether = plugin.uhc.toggle.isNether();
         boolean tpBorder = plugin.uhc.border.isTpBorder();
 
-        plugin.utils.broadcast(SoundEventKeys.BLOCK_BEACON_POWER_SELECT,
-                "<gold>Meetup<gray> is in <yellow>" + formatDuration(milestone) + "</yellow>");
+        plugin.utils.broadcast("<gold>Meetup<gray> is in <yellow>" + formatDuration(milestone) + "</yellow>");
 
         if (!disabledOverworld) {
             int finalOver = plugin.uhc.border.getMeetupBorder() / 2;
@@ -240,7 +237,7 @@ public class GameTimer extends BukkitRunnable {
     private String remainingUntil(String label, int targetSeconds) {
         int remaining = Math.max(0, targetSeconds - elapsedSeconds);
 
-        int hours   = remaining / 3600;
+        int hours = remaining / 3600;
         int minutes = (remaining % 3600) / 60;
         int seconds = remaining % 60;
 

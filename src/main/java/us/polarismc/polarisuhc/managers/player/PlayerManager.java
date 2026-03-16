@@ -1,12 +1,15 @@
 package us.polarismc.polarisuhc.managers.player;
 
 import lombok.Getter;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import us.polarismc.polarisuhc.Main;
@@ -15,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class PlayerManager implements Listener {
@@ -31,6 +35,14 @@ public class PlayerManager implements Listener {
         Player player = event.getPlayer();
         if (getUHCPlayer(player) == null) {
             playerList.add(new UHCPlayer(event.getPlayer()));
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        if (player.isInvulnerable()) {
+            player.setInvulnerable(false);
         }
     }
 
@@ -74,6 +86,40 @@ public class PlayerManager implements Listener {
                 display.remove();
                 uhcPlayer.setNametag(null);
             }
+        }
+    }
+
+    // These methods are necessary since Paper doesn't support cross-world teleportation with passengers, if you use
+    // the default teleport() or teleportAsync() then the teleportation will not work.
+
+    public void teleport(Player player, Location location) {
+        UHCPlayer uhcPlayer = getUHCPlayer(player);
+        TextDisplay nametag = uhcPlayer.getNametag();
+
+        boolean crossWorld = nametag != null && !player.getWorld().equals(location.getWorld());
+
+        if (crossWorld) {
+            player.eject();
+            player.teleport(location);
+        } else {
+            player.teleport(location);
+        }
+    }
+
+    public CompletableFuture<Boolean> teleportAsync(Player player, Location location) {
+        UHCPlayer uhcPlayer = getUHCPlayer(player);
+        TextDisplay nametag = uhcPlayer.getNametag();
+
+        boolean crossWorld = nametag != null && !player.getWorld().equals(location.getWorld());
+
+        if (crossWorld) {
+            player.eject();
+            return player.teleportAsync(location).thenApply(ok -> {
+                if (ok) Bukkit.getScheduler().runTask(plugin, () -> plugin.info.nametag.ensureDisplay(player));
+                return ok;
+            });
+        } else {
+            return player.teleportAsync(location);
         }
     }
 }

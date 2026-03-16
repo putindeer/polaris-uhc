@@ -1,5 +1,8 @@
 package us.polarismc.polarisuhc.managers.game;
 
+import org.bukkit.attribute.Attributable;
+import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import us.polarismc.polarisuhc.Main;
@@ -43,8 +46,8 @@ public class GameFlowManager implements Listener {
             return;
         }
         String isManual = isManualStart ? "re-" : "";
-        if (!isManualStart) {
-            isManualStart = true;
+        if (isManualStart) {
+            isManualStart = false;
         }
         plugin.utils.message(host,
                 "Quickstart has been " + isManual + "started. You can use <aqua>/manualstart</aqua> to stop it.");
@@ -67,7 +70,10 @@ public class GameFlowManager implements Listener {
         switch (currentStep) {
             case PRESTART -> currentStep = StartStep.PRESTART_DONE;
             case SCATTER -> currentStep = StartStep.SCATTER_DONE;
-            case START -> currentStep = StartStep.START_DONE;
+            case START -> {
+                currentStep = StartStep.START_DONE;
+                return;
+            }
         }
         if (isManualStart) {
             plugin.utils.message(host, "The current step has finalized. You may start the next one with <aqua>/manualstart</aqua>.");
@@ -120,6 +126,12 @@ public class GameFlowManager implements Listener {
     }
 
     public void resetPrestartAttributes(Player player) {
-        Arrays.stream(preStart.getPrestartAttributes()).map(player::getAttribute).filter(Objects::nonNull).forEach(attribute -> attribute.setBaseValue(attribute.getDefaultValue()));
+        Attributable defaults = EntityType.PLAYER.getDefaultAttributes();
+        Arrays.stream(preStart.getPrestartAttributes()).forEach(attribute -> {
+            AttributeInstance instance = player.getAttribute(attribute);
+            AttributeInstance defaultInstance = defaults.getAttribute(attribute);
+            if (instance == null || defaultInstance == null) return;
+            instance.setBaseValue(defaultInstance.getBaseValue());
+        });
     }
 }

@@ -43,8 +43,11 @@ public class StartService {
         players.forEach(player -> {
             player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
             plugin.game.resetPrestartAttributes(player);
-            player.setInvulnerable(false);
-            //TODO - add immunity for 5 seconds
+            plugin.utils.delay(300, () -> {
+                if (!player.isOnline()) return;
+                player.setInvulnerable(false);
+                plugin.utils.message(player, "<red>You are now vulnerable to damage.");
+            });
         });
 
         plugin.utils.broadcastTitle("<gold>The UHC has started", "<green>GL!",
@@ -90,7 +93,7 @@ public class StartService {
                     };
 
                     plugin.utils.broadcast(SoundEventKeys.BLOCK_NOTE_BLOCK_HARP,
-                            color + time + "<dark_gray> seconds until the UHC starts...");
+                            color + time + "<gray> seconds until the UHC starts...");
                     plugin.utils.broadcastTitle(color + time);
                     return;
                 }

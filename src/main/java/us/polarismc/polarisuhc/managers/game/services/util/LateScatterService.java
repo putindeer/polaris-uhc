@@ -50,7 +50,7 @@ public class LateScatterService {
     private void lateScatterTeleport(Player player) {
         Location target = plugin.game.locationService.getScatterLocationFor(player);
         if (target == null) return;
-        player.teleport(target);
+        plugin.player.teleport(player, target);
     }
 }
 

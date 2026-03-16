@@ -32,7 +32,7 @@ public class InfoManager {
     }
 
     public void handleInfoStart() {
-        plugin.timer.run();
+        plugin.timer.start();
         plugin.info.bar.setGlobalDefault(player -> () -> plugin.timer.actionBarNext(player));
         plugin.info.restartAllTasks();
     }

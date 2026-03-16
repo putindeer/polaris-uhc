@@ -1,11 +1,13 @@
 package us.polarismc.polarisuhc.debug;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import us.polarismc.polarisuhc.Main;
+import us.polarismc.polarisuhc.config.customcrafts.CustomCraftSetting;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -124,9 +126,35 @@ public class Debug implements CommandExecutor {
                 "Nether Border List: " + plugin.uhc.border.getNetherBorderList().toString(),
                 "",
                 "=== RATES ===",
-                "XP Kill Rate: " + plugin.uhc.rates.getXpKillRate() + "x",
+                "XP Kill Rate: " + plugin.uhc.rates.getXpKillRate() + " levels",
                 "Flint Rate: " + plugin.uhc.rates.getFlintRate() + "%",
                 "Apple Rate: " + plugin.uhc.rates.getAppleRate() + "%",
-                "Glass Rate: " + plugin.uhc.rates.getGlassRate() + "%");
+                "Glass Rate: " + plugin.uhc.rates.getGlassRate() + "%",
+                "=== SCENARIOS ===",
+                plugin.scen.getAll().values().stream()
+                        .map(baseScenario -> baseScenario.getName() + ": " + baseScenario.isEnabled())
+                        .collect(java.util.stream.Collectors.joining(", ")),
+                "",
+                "=== CUSTOM CRAFTS ===",
+                Arrays.stream(CustomCraftSetting.values())
+                        .map(s -> s.getInfo().displayName() + ": " + plugin.uhc.getCrafts().isEnabled(s))
+                        .collect(java.util.stream.Collectors.joining(", ")),
+                "",
+                "=== TIMER ===",
+                "Running: " + plugin.timer.isRunning(),
+                "Formatted: " + plugin.timer.getFormatted(),
+                "PvP Started: " + plugin.uhc.hasPvPStarted(),
+                "Meetup Started: " + plugin.uhc.hasMeetupStarted(),
+                "",
+                "=== PLAYERS ===",
+                "Online: " + Bukkit.getOnlinePlayers().size(),
+                "Playing: " + plugin.player.getPlayingPlayers().size(),
+                "Playing Online: " + plugin.player.getPlayingOnlinePlayers().size(),
+                "",
+                "=== SCATTER ===",
+                "State: " + plugin.uhc.getState(),
+                "Scattering: " + plugin.uhc.isScattering(),
+                "Current Border: " + plugin.uhc.border.getCurrentBorder(),
+                "Current Nether Border: " + plugin.uhc.border.getCurrentNetherBorder());
     }
 }

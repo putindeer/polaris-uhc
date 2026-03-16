@@ -9,6 +9,7 @@ import us.polarismc.polarisuhc.Main;
 import us.polarismc.polarisuhc.events.MeetupStartEvent;
 import us.polarismc.polarisuhc.managers.game.timer.EventAnchor;
 import us.polarismc.polarisuhc.managers.player.UHCPlayer;
+import us.polarismc.polarisuhc.managers.uhc.UHCState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ public class MeetupStartService {
     private final List<UHCPlayer> teleportedPlayers = new ArrayList<>();
 
     public void startMeetup() {
+        plugin.uhc.setState(UHCState.MEETUP);
         boolean disabledOverworld = plugin.scen.hasDisabledOverworld();
         boolean enablesNetherInMeetup = plugin.scen.hasEnabledNetherInMeetup();
         boolean nether = plugin.uhc.toggle.isNether();
@@ -74,7 +76,7 @@ public class MeetupStartService {
         World netherWorld = plugin.uhc.world.getNetherWorld();
         plugin.uhc.getPlayingPlayers().stream().filter(player -> player.getWorld().equals(netherWorld)).forEach(player -> {
             Location loc = plugin.game.locationService.findSafeScatterLocation();
-            player.teleport(loc);
+            plugin.player.teleport(player, loc);
             teleportedPlayers.add(plugin.player.getUHCPlayer(player));
             plugin.utils.message(player, "<red>You have been teleported to a random location!");
         });
@@ -135,8 +137,8 @@ public class MeetupStartService {
                 plugin.uhc.border.advanceBorderIndex();
 
 
-                String message = isNether ? "<aqua>The <red>nether<aqua> border has shrunk to <white>" + radius + "x" + radius
-                        : "<aqua>The border has shrunk to <white>" + radius + "x" + radius;
+                String message = isNether ? "<aqua>The <red>nether<aqua> border has shrunk to <white>" + radius + "x" + radius + "."
+                        : "<aqua>The border has shrunk to <white>" + radius + "x" + radius + ".";
                 plugin.utils.broadcast(message);
 
                 teleportAllPlayersToNearestLocation(radius, isNether, false);
@@ -165,8 +167,8 @@ public class MeetupStartService {
         int z = loc.getBlockZ();
         int y;
 
-        double halfWb = (double) radius - 1;
-        double negHalfWb = -halfWb + 2;
+        double halfWb = (double) radius - 0.5;
+        double negHalfWb = -halfWb;
 
         if (x >= halfWb) loc.setX(halfWb);
         if (x <= negHalfWb) loc.setX(negHalfWb);
@@ -215,6 +217,6 @@ public class MeetupStartService {
             player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 200, 0));
         }
 
-        player.teleport(loc);
+        plugin.player.teleport(player, loc);
     }
 }

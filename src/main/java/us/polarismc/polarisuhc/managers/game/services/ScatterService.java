@@ -92,26 +92,30 @@ public class ScatterService implements Listener {
 
             plugin.utils.broadcast("<dark_gray>[<gray>" + now + "</gray>/<gray>" + totalDynamic.get() + "</gray>] <aqua>" + player.getName());
 
-            player.teleportAsync(targetLocation).whenComplete((ok, ex) -> {
+            plugin.player.teleportAsync(player, targetLocation).whenComplete((ok, ex) -> {
                 pending.decrementAndGet();
 
                 if (ex == null && Boolean.TRUE.equals(ok)) {
                     Bukkit.getScheduler().runTask(plugin, () -> plugin.player.getUHCPlayer(player).setAlive());
+                    return;
                 }
 
                 // The code should never reach this part but it's here in case something goes wrong.
 
                 else if (ex != null) {
-                    Bukkit.getScheduler().runTask(plugin, () ->
-                            plugin.utils.broadcast("<dark_gray>[<red><strikethrough>" + started.decrementAndGet() + "</strikethrough></red>/<gray>" + totalDynamic.decrementAndGet() + "</gray>] "
-                                    + "<red><strikethrough>" + player.getName() + "</strikethrough></red> <gray>(invalid scatter)</gray>"));
                     plugin.utils.warning("Teleport failed for " + player.getName() + ": " + ex.getMessage());
                 } else {
-                    Bukkit.getScheduler().runTask(plugin, () ->
-                            plugin.utils.broadcast("<dark_gray>[<red><strikethrough>" + started.decrementAndGet() + "</strikethrough></red>/<gray>" + totalDynamic.decrementAndGet() + "</gray>] "
-                                    + "<red><strikethrough>" + player.getName() + "</strikethrough></red> <gray>(invalid scatter)</gray>"));
-                    plugin.utils.warning("Teleport failed for " + player.getName() + ": returned false");
+                    plugin.utils.warning("Teleport returned false for " + player.getName() + " at " + targetLocation.getWorld().getName() + " " + targetLocation.getX() + " " + targetLocation.getY() + " " + targetLocation.getZ());
                 }
+
+                Bukkit.getScheduler().runTask(plugin, () -> {
+                    plugin.utils.broadcast("<dark_gray>[<red><strikethrough>" + started.decrementAndGet() + "</strikethrough></red>/<gray>" + totalDynamic.decrementAndGet() + "</gray>] "
+                            + "<red><strikethrough>" + player.getName() + "</strikethrough></red> <gray>(invalid scatter)</gray>");
+                    if (player.isOnline()) {
+                        plugin.game.resetPrestartAttributes(player);
+                        player.setInvulnerable(false);
+                    }
+                });
             });
         }, 0L, 5L);
     }

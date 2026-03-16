@@ -16,6 +16,9 @@ public class AutoMiningWarn extends ToggleHandler {
         if (plugin.scen.hasEnabledMiningInMeetup()) return;
         event.getAlivePlayers().stream().filter(player -> !event.getTeleportedPlayers().contains(player))
                 .filter(player -> Objects.requireNonNull(player.getPlayer()).getLocation().getBlockY() < 50)
-                .forEach(player -> player.warn(WarnReason.MINING));
+                .forEach(player -> plugin.utils.delay(200, () -> {
+                    if (!player.isOnline() || player.getPlayer().getLocation().getBlockY() >= 50) return;
+                    player.warn(WarnReason.MINING);
+                }));
     }
 }
